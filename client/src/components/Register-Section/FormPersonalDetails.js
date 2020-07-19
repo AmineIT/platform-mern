@@ -1,18 +1,21 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Dropzone from 'react-dropzone'
 import axios from 'axios'
 
-import { RegistreForm, Label, RadioLabel, DragAndDropSection, DragAndDropContent, SelectFile } from './style'
-import PrimaryBotton from '../Primary-Button'
+import { RegisterForm, Label, RadioLabel, DragAndDropSection, DragAndDropContent, SelectFile } from './style'
+import PrimaryButton from '../Primary-Button'
 import { FiUploadCloud } from 'react-icons/fi'
+// import { Ring } from 'react-spinners-css'
 
-const FormPersonalDetails = ({customHandleChange, prevStep, formik}) => {
+const FormPersonalDetails = ({customHandleChange, nextStep, prevStep, formik}) => {
 
-    const { handleChange, errors, handleBlur, values, touched } = formik;
+    const { handleChange, values, setFieldError, errors } = formik;
 
     const prev = () => {
         prevStep()
     }
+
+    const [fileName, setFileName] = useState('')
 
     const imageMaxSize = 5242880 // 5MB
     const acceptedFileTypes = 'image/x-png, image/png, image/jpg, image/jpeg'
@@ -43,23 +46,45 @@ const FormPersonalDetails = ({customHandleChange, prevStep, formik}) => {
         if (files && files.length > 0){
             const isVerified = verifyFile(files)
             if (isVerified){
+                let formData = new FormData()
+                const config = {
+                    header: {'content-typy' : 'multipart/form-data'}
+                }
+
                 const currentFile = files[0]
-                customHandleChange(values.role === 'employer' ? 'companyLogo' : 'photoProfile', currentFile.path)
+
+                formData.append('profileImage', currentFile)
+
+                axios.post('/users/uploads/userImage', formData, config)
+                     .then(response => {
+                         if (response.data.success) {
+                            customHandleChange('profileImage', response.data.image)
+                            setFileName(currentFile.path)
+                         } else {
+                             alert('Failed to save the image, please try again.')
+                         }
+                     })
             }
         }
     }
 
-    const registreUser = () => {
-        axios.post('/users/registre', values)
-             .then(res => console.log(res.data.message))
-             .catch(error => console.log(error.response.data))
+    const RegisterUser = () => {
+        if (values.profileImage === '') {
+            setFieldError('profileImage', 'Please upload an image.')
+            return
+        }
+
+        axios.post('/users/register', values)
+             .then(res => res)
+             .catch(error => error)
+        
+        nextStep()
     }
 
     return (
-        <RegistreForm>
+        <RegisterForm>
 
             {values.role === 'employer' ? (<Label required>Company Logo</Label>) : (<Label>Photo Profile</Label>)}
-
             <Dropzone onDrop={handleOnDrop} accept={acceptedFileTypes} multiple={false}>
                 {({getRootProps, getInputProps}) => (
                     <DragAndDropSection {...getRootProps()}>
@@ -67,17 +92,18 @@ const FormPersonalDetails = ({customHandleChange, prevStep, formik}) => {
                         <DragAndDropContent>
                             <FiUploadCloud size="2em" className="mr-4"/> <span>Drag and Drop to upload 
                                 <br />
-                                {values.role === 'employer' ? values.companyLogo : values.photoProfile}
+                                {fileName}
                             </span>
                             <SelectFile>Select File</SelectFile>
                         </DragAndDropContent>
                     </DragAndDropSection>
                 )}
             </Dropzone>
+            {errors.profileImage ? <p className="help is-danger mt-1">{errors.profileImage}</p> : null}
 
             {values.role === 'employer' ? (
                 <>
-                    <Label>What's Your Role?</Label>
+                    <Label className="mt-4">What's Your Role?</Label>
                     <div className="control mt-4">
                         <label className="radio" style={{width: '240px'}}>
                             <div style={{display: 'flex', alignItems: 'center'}}>
@@ -129,7 +155,7 @@ const FormPersonalDetails = ({customHandleChange, prevStep, formik}) => {
                 </>
             ) : (
                 <>
-                    <Label>About You</Label>
+                    <Label className="mt-4">About You</Label>
                     <textarea 
                         className="textarea mt-4" 
                         placeholder="Tell us more about yourself"
@@ -139,9 +165,9 @@ const FormPersonalDetails = ({customHandleChange, prevStep, formik}) => {
                 </>
             )}
 
-            <PrimaryBotton className="mr-4 mt-4" onClick={prev} size="medium" text="Previous" transparent />
-            <PrimaryBotton onClick={registreUser} size="medium" text="Get Started" />
-        </RegistreForm>
+            <PrimaryButton className="mr-4 mt-4" onClick={prev} size="medium" text="Previous" transparent />
+            <PrimaryButton onClick={RegisterUser} size="medium" text="Get Started" />
+        </RegisterForm>
     )
 }
 

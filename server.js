@@ -14,7 +14,8 @@ const app = express();
 app.use(bodyParser.json());
 app.use(cors());
 app.use(passport.initialize());
-app.use(morgan('dev'))
+app.use(morgan('dev'));
+app.use('/uploads', express.static('uploads'))
 
 const PORT = process.env.PORT || 5000
 app.listen(PORT, () => { console.log(`listening on port ${PORT}`) });

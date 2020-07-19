@@ -39,17 +39,17 @@ const UserSchema = new mongoose.Schema({
         type: String,
         default: null
     },
-    companyLogo: {
+    profileImage: {
         type: String,
         require: true,
-    },
-    photoProfile: {
-        type: String,
-        default: null
     },
     createdAt: {
         type: Date,
         default: Date.now
+    },
+    isVerified: {
+        type: Boolean,
+        default: false
     },
     jobsCreated: [
         {

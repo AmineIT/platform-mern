@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 
-import { RegistreForm, Label, AccountType, Type, Loginlink } from './style'
+import { RegisterForm, Label, AccountType, Type, Loginlink } from './style'
 import PrimaryBotton from '../Primary-Button'
-import { EmployerIcon } from '../../images/registre-page/employerIcon'
-import { CandidateIcon } from '../../images/registre-page/candidateIcon'
+import { EmployerIcon } from '../../images/register-page/employerIcon'
+import { CandidateIcon } from '../../images/register-page/candidateIcon'
 
 const FormAccountType = ({nextStep, customHandleChange, formik}) => {
 
@@ -21,7 +21,7 @@ const FormAccountType = ({nextStep, customHandleChange, formik}) => {
     }
 
     return (
-        <RegistreForm>
+        <RegisterForm>
 
             <Label required>Who is this account for?</Label>
 
@@ -38,7 +38,7 @@ const FormAccountType = ({nextStep, customHandleChange, formik}) => {
             <PrimaryBotton onClick={next} size="medium" text="Next" />
 
             <Loginlink>You have an account already? <a href="/" >Login</a></Loginlink>
-        </RegistreForm>
+        </RegisterForm>
     )
 }
 

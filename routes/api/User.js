@@ -5,11 +5,39 @@ const passportConfig = require('../../passport');
 const Joi = require('joi');
 const JWT = require('jsonwebtoken');
 const User = require('../../models/User');
+const multer = require('multer');
+
+const storage = multer.diskStorage({
+    destination: function(req, file, cb) {
+        cb(null, './uploads/usersFiles/');
+    },
+    filename: function(req, file, cb) {
+        cb(null, `${new Date().getTime().toString()}_${file.originalname}`)
+    },
+    fileFilter: (req, file, cb) => {
+        const ext = path.extname(file.originalname)
+        if (ext !== '.png' || ext !== '.jpg' || ext !== '.jpeg') {
+            cb(null, false)
+        } else {
+            cb(null, true)
+        }
+    }
+})
+
+const upload = multer({ storage, limits: { fileSize: 5242880 }}).single('profileImage')
+
+// Setup the upload files route
+userRouter.post('/uploads/userImage', (req, res) => {
+    upload(req, res, err => {
+        if (err) return res.json({success: false, err})
+        return res.json({success: true, image: res.req.file.path, fileName: res.req.file.filename})
+    })
+})
 
 // Setup the registration route
-userRouter.post('/registre', (req, res) => {
+userRouter.post('/register', (req, res) => {
+
     // Extract the user data from the request body
-    console.log(req.body)
     const {fullName, email, password, role, ...data} = req.body;
     // Check if this email is already exist if the database
 
@@ -59,6 +87,7 @@ userRouter.post('/registre', (req, res) => {
         // If there's no such an email then add it to the database
         else {
             const newUser = new User({fullName, email, password, role, ...data});
+            console.log({...data})
             newUser.save(error => {
                 // Check if there's an error while we're sending this request
                 if (error) {

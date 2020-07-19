@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components'
 import theme from '../../theme'
-import CheckIcon from '../../images/registre-page/checkIcon.svg'
+import CheckIcon from '../../images/register-page/checkIcon.svg'
 
 export const RegisterContainer = styled.div`
     width: 100%;
@@ -127,7 +127,7 @@ export const StepsDisplay = styled.div`
     }
 `
 
-export const RegistreColOne = styled.div`
+export const RegisterColOne = styled.div`
     width: 30vw;
     height: 100%;
     background-color: ${theme.colors.lightBlue};
@@ -142,7 +142,7 @@ export const LogoContainer = styled.div`
     }
 `
 
-export const RegistreAssetSection = styled.div`
+export const RegisterAssetSection = styled.div`
     width: fit-content;
     margin-top: 60px;
 
@@ -151,28 +151,28 @@ export const RegistreAssetSection = styled.div`
     }
 `
 
-export const RegistreColTwo = styled.div`
+export const RegisterColTwo = styled.div`
     height: 100%;
     padding-left: 60px;
     width: 800px;
 `
 
-export const RegistreContent = styled.div`
-    margin-top: 120px;
+export const RegisterContent = styled.div`
+    margin-top: 40px;
 `
 
-export const RegistreHeading = styled.h1`
+export const RegisterHeading = styled.h1`
     font-size: 34px;
     margin: 0;
 `
 
-export const RegistreSubtext = styled.p`
+export const RegisterSubtext = styled.p`
     font-size: 20px;
     color: #828282;
     margin-top: 10px;
 `
 
-export const RegistreForm = styled.div`
+export const RegisterForm = styled.div`
     margin-top: 80px;
 
     & .inputRadio {
@@ -267,7 +267,7 @@ export const DragAndDropSection = styled.div`
     display: flex;
     align-content: center;
     padding: 40px;
-    margin: 20px 0;
+    margin: 20px 0 0;
     color: ${theme.colors.primaryColor};
 
     & span {
@@ -289,6 +289,13 @@ export const SelectFile = styled.div`
     align-items: center;
     justify-content: center;
     cursor: pointer;
+`
+
+export const VerificationText = styled.p`
+    font-size: 16px;
+    color: #8588A1;
+    margin-top: 10px;
+    width: 80%
 `
 
 const requiredMark = css`

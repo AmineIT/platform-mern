@@ -4,32 +4,41 @@ import * as Yup from 'yup'
 
 import { 
     RegisterContainer, 
-    RegistreColOne, 
+    RegisterColOne, 
     LogoContainer, 
-    RegistreAssetSection, 
-    RegistreColTwo, 
-    RegistreContent, 
-    RegistreHeading,
-    RegistreSubtext,
+    RegisterAssetSection, 
+    RegisterColTwo, 
+    RegisterContent, 
+    RegisterHeading,
+    RegisterSubtext,
     StepsDisplay} from './style'
 
 import Logo from '../../images/selfstarter-logo/selfstarter-logo.svg'
-import RegistreAsset from '../../images/registre-page/registre-asset.svg'
+import RegisterAsset from '../../images/register-page/register-asset.svg'
 
 import FormUserDetails from './FormUserDetails'
 import FormPersonalDetails from './FormPersonalDetails'
 import FormAccountType from './FormAccountType'
+import RegisterSuccess from './RegistreSuccess'
 
-const RegistreComponent = () => {
+const RegisterComponent = () => {
 
-    const registreForm = useRef()
+    const [step, setStep] = useState(1)
+
+    const Form = useRef()
     
     const validationSchema = Yup.object({
         fullName: Yup.string().trim().required('Please type your full name.'),
         email: Yup.string().trim().email('Please enter a valid email address.').required('Please type your valid email address.'),
         password: Yup.string().trim().required('Please type your password').min(6, 'Password must be more than 6 characters long.'),
-        companyName: Yup.string().trim().required('Please type your company name.'),
-        companyWebsite: Yup.string().matches('^([a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?.)+[a-zA-Z]{2,6}$','Please type a valid url.').required('Please type your company website.'),
+        companyName: Yup.string().when('role', {
+            is: 'employer',
+            then: Yup.string().trim().required('Please type your company name.')
+        }),
+        companyWebsite: Yup.string().when('role', {
+            is: 'employer',
+            then: Yup.string().matches('^([a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?.)+[a-zA-Z]{2,6}$','Please type a valid url.').required('Please type your company website.')
+        }),
         phoneNumber: Yup.number().positive('Type a valid phone number.').required('Type a valid phone number.')
     })
 
@@ -41,20 +50,14 @@ const RegistreComponent = () => {
             role: 'employer',
             companyName: '',
             companyWebsite: '',
-            phoneNumber: '+971',
+            phoneNumber: '',
             currentJobRole: '',
-            companyLogo: '',
-            photoProfile: '',
+            profileImage: '',
             aboutMe: ''
-        }, 
-        onSubmit: values => {
-            return values
         },
         validationSchema,
         validateOnMount: true
     })
-
-    const [step, setStep] = useState(1)
 
     const nextStep = () => {
         setStep(step + 1)
@@ -65,6 +68,7 @@ const RegistreComponent = () => {
     }
 
     const { handleSubmit } = formik;
+    
 
     const customHandleChange = (key, value) => {
         formik.setFieldValue(key, value)
@@ -89,7 +93,7 @@ const RegistreComponent = () => {
                             nextStep={nextStep} 
                             prevStep={prevStep}
                             customHandleChange={customHandleChange}
-                            registreForm={registreForm}
+                            Form={Form}
                             formik={formik} />
                     </div>
                 )
@@ -98,9 +102,14 @@ const RegistreComponent = () => {
                     <div className={`${step === 3 ? 'fade-component-three' : null}`}>
                         <FormPersonalDetails
                             prevStep={prevStep}
+                            nextStep={nextStep} 
                             customHandleChange={customHandleChange}
                             formik={formik} />
                     </div>
+                )
+            case 4: 
+                return (
+                    <RegisterSuccess formik={formik}/>
                 )
             default : return null
         }
@@ -108,33 +117,37 @@ const RegistreComponent = () => {
 
     return (
         <RegisterContainer>
-            <StepsDisplay>
-                <span className='step1 active'></span>
-                <span className={'step2 ' + (step === 2 || step === 3 ? 'active' : '') }></span>
-                <span className={'step3 ' + (step === 3 ? 'active' : '') }></span>
-                <span>Step {step}/3</span>
-            </StepsDisplay>
-            <RegistreColOne>
+            {step !== 4 ? (
+                <StepsDisplay>
+                    <span className='step1 active'></span>
+                    <span className={'step2 ' + (step === 2 || step === 3 ? 'active' : '') }></span>
+                    <span className={'step3 ' + (step === 3 ? 'active' : '') }></span>
+                    <span>Step {step}/3</span>
+                </StepsDisplay>
+            ) : null}
+            <RegisterColOne>
                 <LogoContainer>
                     <img src={Logo} alt="Selfstarter Logo" />
                 </LogoContainer>
-                <RegistreAssetSection>
-                    <img src={RegistreAsset} alt="Selfstarter Registre Asset" />
-                </RegistreAssetSection>
-            </RegistreColOne>
+                <RegisterAssetSection>
+                    <img src={RegisterAsset} alt="Selfstarter Register Asset" />
+                </RegisterAssetSection>
+            </RegisterColOne>
         
-            <RegistreColTwo>
-                <RegistreContent>
-                    <RegistreHeading>Get Your Account in Few Seconds!</RegistreHeading>
-                    <RegistreSubtext>This information will help us serve you better.</RegistreSubtext>
-                </RegistreContent>
+            <RegisterColTwo>
+                {step !== 4 ? (
+                    <RegisterContent>
+                        <RegisterHeading>Get Your Account in Few Seconds!</RegisterHeading>
+                        <RegisterSubtext>This information will help us serve you better.</RegisterSubtext>
+                    </RegisterContent>
+                ) : null}
 
-                <form ref={registreForm}>
+                <form ref={Form}>
                     {renderSwitch(step)}
                 </form>
-            </RegistreColTwo>
+            </RegisterColTwo>
         </RegisterContainer>
     )
 }
 
-export default RegistreComponent
+export default RegisterComponent

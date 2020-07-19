@@ -1,6 +1,6 @@
 import React from 'react'
 
-import RegistreComponent from '../components/Registre-Section'
+import RegistreComponent from '../components/Register-Section'
 
 const RegistrePage = () => {
     return (
