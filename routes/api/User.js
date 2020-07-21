@@ -6,6 +6,12 @@ const Joi = require('joi');
 const JWT = require('jsonwebtoken');
 const User = require('../../models/User');
 const multer = require('multer');
+const sgMail = require('@sendgrid/mail');
+const crypto = require('crypto');
+
+
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
 
 const storage = multer.diskStorage({
     destination: function(req, file, cb) {
@@ -86,14 +92,20 @@ userRouter.post('/register', (req, res) => {
         }
         // If there's no such an email then add it to the database
         else {
-            const newUser = new User({fullName, email, password, role, ...data});
-            console.log({...data})
-            newUser.save(error => {
+            const newUser = new User({
+                fullName, 
+                email, 
+                password, 
+                role,
+                emailToken: crypto.randomBytes(64).toString('hex'),
+                ...data});
+            
+            newUser.save((error, user) => {
                 // Check if there's an error while we're sending this request
                 if (error) {
                     res.status(500).json({
                         message: {
-                            msgBody: 'Error has occured.',
+                            msgBody: 'Error has occured while creating the user.',
                             msgError: true,
                         }
                     })
@@ -104,13 +116,73 @@ userRouter.post('/register', (req, res) => {
                         message: {
                             msgBody: 'Account successfully created.',
                             msgError: false,
+                            user: user
                         }
                     })
+
+                    const msg = {
+                        to: 'amine@selfstarter.app',
+                        from: 'support@selfstarter.app',
+                        subject: 'Confirmation Email From Selfstarter',
+                        template_id: process.env.SENDGRID_TEMPLATE_ID,
+                        dynamic_template_data: {
+                            name: user.fullName,
+                            link: `http://${req.headers.host}/users/verify-email?token=${user.emailToken}`
+                        }
+                    };
+
+                    sgMail.send(msg)
                 }
             })
         }
     })
 });
+
+// Setup the email verification route
+userRouter.get('/verify-email', (req, res) => {
+
+    const token = req.query.token;
+
+    User.findOne({emailToken: token}, (error, user) => {
+        // Check if there's an error while we're sending this request
+        if (error) {
+            res.status(500).json({
+                message: {
+                    msgBody: 'Error has occured.',
+                    msgError: true,
+                }
+            })
+        }
+
+        // Check if there's no user with the given token
+        if (!user) {
+            res.status(400).json({
+                message: {
+                    msgBody: 'Token is invalid. Please contact us for assistance.',
+                    isValid: false,
+                }
+            })
+            return
+        }
+
+        else {
+            User.updateOne({emailToken: token}, {emailToken: null, isVerified: true}, (error) => {
+                if (error) {
+                    res.status(500).json({
+                        message: {
+                            msgBody: 'Error has occured.',
+                            msgError: true,
+                        }
+                    })
+                    return false
+                } else {
+                    res.redirect(`http://localhost:3000/verify-email?token=${token}`)
+                }
+            })
+        }
+
+    })
+})
 
 // Setup the login route using passport local middleware
 // JWT Payload
@@ -127,11 +199,19 @@ const signToken = userID => {
 } 
 
 userRouter.post('/login', passport.authenticate('local', {session: false}) ,(req, res) => {
-    // isAuthenticated it's a function from passport middleware that returs true or false if the user is loged in
+    // isAuthenticated it's a function from passport middleware that returs true or false if the user is logged in
     if (req.isAuthenticated()) { // once the user is authenticated then the code below will run
         // Extract the ID, fullName and role from the req.user ofject
-        const {_id, fullName, role} = req.user;
-        console.log(req.user)
+        const {_id, fullName, role, isVerified} = req.user;
+
+        if (isVerified !== true) {
+            res.status(500).json({
+                isVerified: false,
+                msgBody: 'We sent out a verification email, please check out your inbox.'
+            })
+            return false
+        }
+        console.log(req.user.isVerified)
         // Create the JWT token
         const token = signToken(_id);
         // Add the JWT token to the cookie

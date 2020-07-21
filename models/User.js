@@ -51,6 +51,9 @@ const UserSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
+    emailToken: {
+        type: String
+    },
     jobsCreated: [
         {
             type: mongoose.Schema.Types.ObjectId,
