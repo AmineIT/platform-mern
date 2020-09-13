@@ -1,4 +1,7 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
+import { connect } from 'react-redux'
+import { userAuth } from '../../actions/authActions'
+
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 
@@ -21,7 +24,17 @@ import FormPersonalDetails from './FormPersonalDetails'
 import FormAccountType from './FormAccountType'
 import RegisterSuccess from './RegistreSuccess'
 
-const RegisterComponent = () => {
+const RegisterComponent = ({history, userAuth, user, isAuthenticated, token}) => {
+
+    useEffect(() => {
+        userAuth()
+        if (isAuthenticated && user != null && user.role === 'employer' && token != null) {
+            history.push('/company-dashboard')
+        }
+        if (isAuthenticated && user != null  && user.role === 'candidate' && token != null) {
+            history.push('/employee-dashboard')
+        }
+    }, [userAuth, user, isAuthenticated, token, history])
 
     const [step, setStep] = useState(1)
 
@@ -109,7 +122,7 @@ const RegisterComponent = () => {
                 )
             case 4: 
                 return (
-                    <RegisterSuccess formik={formik}/>
+                    <RegisterSuccess formik={formik} history={history}/>
                 )
             default : return null
         }
@@ -150,4 +163,13 @@ const RegisterComponent = () => {
     )
 }
 
-export default RegisterComponent
+const mapStateToProps = (state) => {
+    return {
+        user: state.auth.user,
+        isAuthenticated: state.auth.isAuthenticated,
+        error: state.error,
+        token: state.auth.token
+    }
+}
+
+export default connect(mapStateToProps, { userAuth })(RegisterComponent)

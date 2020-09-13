@@ -6,7 +6,7 @@ const Joi = require('joi');
 const Job = require('../../models/Job');
 
 // Create a job
-jobRouter.post('/create-job', (req, res) => {
+jobRouter.post('/create-job', passport.authenticate('jwt', {session: false}), (req, res) => {
     // Extract the job data from the body request
     const { jobTitle, jobDescription, jobDepartment, createdBy } = req.body;
 
@@ -37,7 +37,7 @@ jobRouter.post('/create-job', (req, res) => {
 })
 
 // Get Jobs
-jobRouter.get('/', (res, req) => {
+jobRouter.get('/', passport.authenticate('jwt'), (res, req) => {
     Job.find().populate('createdBy').exec((error, jobs) => {
         if (error) {
             req.status(500).json({

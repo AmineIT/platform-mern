@@ -10,6 +10,11 @@ export const RegisterContainer = styled.div`
     align-items: center;
     position: relative;
 
+    @media screen and (max-width: ${theme.breakpoints.md}){
+        display: block;
+        height: auto;
+    }
+
     & .fade-component-one {
         animation: fadeComponentOne .4s ease-in-out;
     }
@@ -76,8 +81,13 @@ export const RegisterContainer = styled.div`
 
 export const StepsDisplay = styled.div`
     position: absolute;
-    top: 60px;
+    top: 75px;
     right: 60px;
+
+    @media screen and (max-width: ${theme.breakpoints.xs}){
+        top: 65px;
+        right: 20px;
+    }
 
     & .step1 {
         position: absolute;
@@ -131,23 +141,62 @@ export const RegisterColOne = styled.div`
     width: 30vw;
     height: 100%;
     background-color: ${theme.colors.lightBlue};
+
+    @media screen and (max-width: 1230px){
+        width: 40vw;
+    }
+
+    @media screen and (max-width: ${theme.breakpoints.md}){
+        width: 80%;
+        height: 130px;
+        border-bottom-right-radius: 30px;
+    }
+
+    @media screen and (max-width: ${theme.breakpoints.sm}){
+        width: 70%;
+        height: 100px;
+    }
+
+    @media screen and (max-width: ${theme.breakpoints.xs}){
+        width: 50%;
+    }
 `
 
 export const LogoContainer = styled.div`
     padding: 40px;
     width: fit-content;
 
+    @media screen and (max-width: ${theme.breakpoints.md}){
+        padding-left: 60px;
+    }
+
+    @media screen and (max-width: ${theme.breakpoints.sm}){
+        padding-top: 30px;
+    }
+
+    @media screen and (max-width: ${theme.breakpoints.xs}){
+        padding-left: 15px;
+    }
+
     & img {
-        width: 100%;
+        width: 220px;
+
+        @media screen and (max-width: ${theme.breakpoints.sm}){
+            width: 180px;
+        }
     }
 `
 
 export const RegisterAssetSection = styled.div`
     width: fit-content;
-    margin-top: 60px;
+    margin-top: 120px;
+
+    @media screen and (max-width: ${theme.breakpoints.md}){
+        display: none;
+    }
 
     & img {
-        width: 100%
+        width: 90%
     }
 `
 
@@ -155,15 +204,47 @@ export const RegisterColTwo = styled.div`
     height: 100%;
     padding-left: 60px;
     width: 800px;
+
+    @media screen and (max-width: 1230px){
+        width: 1000px
+    }
+
+    @media screen and (max-width: ${theme.breakpoints.md}){
+        width: 100%;
+        padding-right: 60px;
+        padding-bottom: 60px;
+    }
+
+    @media screen and (max-width: ${theme.breakpoints.xs}){
+        width: 80%;
+        padding-right: 0%;
+        padding-left: 15px
+    }
 `
 
 export const RegisterContent = styled.div`
     margin-top: 40px;
 `
 
+export const SuccessContent = styled.div`
+    display: flex;
+    align-items: center;
+    height: 90vh;
+
+    @media screen and (max-width: ${theme.breakpoints.md}){
+        height: 100%;
+        display: block;
+        margin-top: 80px;
+    }
+`
+
 export const RegisterHeading = styled.h1`
     font-size: 34px;
     margin: 0;
+
+    @media screen and (max-width: ${theme.breakpoints.md}){
+        font-size: 28px;
+    }
 `
 
 export const RegisterSubtext = styled.p`
@@ -175,10 +256,26 @@ export const RegisterSubtext = styled.p`
 export const RegisterForm = styled.div`
     margin-top: 80px;
 
+    @media screen and (max-width: ${theme.breakpoints.md}){
+        margin-top: 40px;
+    }
+
     & .inputRadio {
         width: 20px;
         height: 20px;
         margin-right: 10px;
+    }
+
+    & .radio+.radio {
+        @media screen and (max-width: ${theme.breakpoints.sm}){
+            margin-left: 0px
+        }
+    }
+
+    & .control:nth-of-type(3) {
+        @media screen and (max-width: ${theme.breakpoints.sm}){
+            margin-top: 0px !important;
+        }
     }
 `
 
@@ -232,6 +329,14 @@ export const AccountType = styled.div`
     &::before {
         ${({active}) => active ? CheckedIcon : null}
     }
+
+    @media screen and (max-width: ${theme.breakpoints.sm}){
+        width: 500px
+    }
+
+    @media screen and (max-width: ${theme.breakpoints.xs}){
+        width: 100%
+    }
 `
 
 export const Type = styled.p`
@@ -273,11 +378,32 @@ export const DragAndDropSection = styled.div`
     & span {
         margin-right: 8em;
     }
+
+    @media screen and (max-width: ${theme.breakpoints.sm}){
+        width: 470px;
+        padding: 20px
+    }
+
+    @media screen and (max-width: ${theme.breakpoints.xs}){
+        width: 100%;
+        display: block;
+        height: auto;
+    }
 `
 
 export const DragAndDropContent = styled.div`
     display: flex;
     align-items: center;
+
+    @media screen and (max-width: ${theme.breakpoints.xs}){
+        display: block;
+    }
+
+    & svg, span {
+        @media screen and (max-width: ${theme.breakpoints.xs}){
+            display: none;
+        }
+    }
 `
 
 export const SelectFile = styled.div`
@@ -289,13 +415,22 @@ export const SelectFile = styled.div`
     align-items: center;
     justify-content: center;
     cursor: pointer;
+
+    @media screen and (max-width: ${theme.breakpoints.sm}){
+        width: 190px;
+        margin-right: 40px
+    }
+
+    @media screen and (max-width: ${theme.breakpoints.xs}){
+        width: 100%;
+    }
 `
 
 export const VerificationText = styled.p`
     font-size: 16px;
     color: #8588A1;
     margin-top: 10px;
-    width: 80%
+    width: 80%;
 `
 
 const requiredMark = css`

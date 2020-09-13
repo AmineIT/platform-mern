@@ -8,6 +8,7 @@ const User = require('../../models/User');
 const multer = require('multer');
 const sgMail = require('@sendgrid/mail');
 const crypto = require('crypto');
+require('dotenv').config();
 
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
@@ -113,11 +114,8 @@ userRouter.post('/register', (req, res) => {
                 else {
                     // When the user is successfully created
                     res.status(201).json({
-                        message: {
-                            msgBody: 'Account successfully created.',
-                            msgError: false,
-                            user: user
-                        }
+                        msgBody: 'Account successfully created.',
+                        user: user
                     })
 
                     const msg = {
@@ -195,33 +193,25 @@ const payload = (userID) => {
 
 // Create the JWT with the Payload, Secret Key and expiration date as an option
 const signToken = userID => {
-    return JWT.sign(payload(userID), 'Selfstarter_Will_Succeed', {expiresIn: '1h'});
+    return JWT.sign(payload(userID), process.env.JWT_SECRET_KEY);
 } 
 
 userRouter.post('/login', passport.authenticate('local', {session: false}) ,(req, res) => {
     // isAuthenticated it's a function from passport middleware that returs true or false if the user is logged in
-    if (req.isAuthenticated()) { // once the user is authenticated then the code below will run
-        // Extract the ID, fullName and role from the req.user ofject
-        const {_id, fullName, role, isVerified} = req.user;
+    if (req.isAuthenticated()) { 
+        const user = req.user._doc
+        user.password = null
 
-        if (isVerified !== true) {
-            res.status(500).json({
-                isVerified: false,
-                msgBody: 'We sent out a verification email, please check out your inbox.'
-            })
-            return false
-        }
-        console.log(req.user.isVerified)
         // Create the JWT token
-        const token = signToken(_id);
+        const token = signToken(user._id);
+
         // Add the JWT token to the cookie
-        res.cookie('access_token', token, { httpOnly: true, sameSite: true });
+        // res.cookie('access_token', token, { httpOnly: true, sameSite: true });
+
         res.status(200).json({
-            // Return this object back
+            token,
             isAuthenticated: true,
-            user: {
-                fullName, role
-            }
+            user
         })
     }
 });
@@ -229,13 +219,20 @@ userRouter.post('/login', passport.authenticate('local', {session: false}) ,(req
 // Setup the logout route using passport middleware
 userRouter.get('/logout' ,(req,res) => {
     req.logout();
-    res.clearCookie('access_token');
-    res.json({user:{username : "", role : ""},success : true});
+    res.json({
+        user: {
+            username : "",
+            role : ""
+        }, 
+        success : true
+    });
 });
 
-userRouter.get('/authenticated', passport.authenticate('jwt',{session : false}),(req,res)=>{
-    const {username,role} = req.user;
-    res.status(200).json({isAuthenticated : true, user : {username,role}});
+userRouter.get('/authenticated', passport.authenticate('jwt',{session : false}), (req,res) => {
+    res.status(200).json({
+        ...req.user._doc, 
+        password: null
+    });
 });
 
 // Check if the email exist
@@ -253,7 +250,7 @@ userRouter.post('/email-check', (req, res) => {
         }
 
         if (user) {
-            return res.status(200).json({
+            return res.status(201).json({
                 message: {
                     msgBody: 'This email is already taken.',
                     emailExist: true,
@@ -270,6 +267,6 @@ userRouter.post('/email-check', (req, res) => {
             })
         }
     })
-})
+});
 
 module.exports = userRouter;

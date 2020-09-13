@@ -2,12 +2,15 @@ import React, { useState } from 'react'
 import Dropzone from 'react-dropzone'
 import axios from 'axios'
 
+import { connect } from 'react-redux'
+import { Register } from '../../actions/authActions'
+
 import { RegisterForm, Label, RadioLabel, DragAndDropSection, DragAndDropContent, SelectFile } from './style'
 import PrimaryButton from '../Primary-Button'
 import { FiUploadCloud } from 'react-icons/fi'
 // import { Ring } from 'react-spinners-css'
 
-const FormPersonalDetails = ({customHandleChange, nextStep, prevStep, formik}) => {
+const FormPersonalDetails = ({customHandleChange, nextStep, prevStep, formik, Register}) => {
 
     const { handleChange, values, setFieldError, errors } = formik;
 
@@ -74,10 +77,7 @@ const FormPersonalDetails = ({customHandleChange, nextStep, prevStep, formik}) =
             return
         }
 
-        axios.post('/users/register', values)
-             .then(res => res)
-             .catch(error => error)
-        
+        Register(values)
         nextStep()
     }
 
@@ -165,10 +165,18 @@ const FormPersonalDetails = ({customHandleChange, nextStep, prevStep, formik}) =
                 </>
             )}
 
-            <PrimaryButton className="mr-4 mt-4" onClick={prev} size="medium" text="Previous" transparent />
             <PrimaryButton onClick={RegisterUser} size="medium" text="Get Started" />
+            <PrimaryButton className="mr-4 mt-4" onClick={prev} size="medium" text="Previous" transparent />
+            
         </RegisterForm>
     )
 }
 
-export default FormPersonalDetails
+const mapStateToProps = (state) => {
+    return {
+        user: state.auth.user,
+        error: state.error
+    }
+}
+
+export default connect(mapStateToProps, {Register})(FormPersonalDetails)

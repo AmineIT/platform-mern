@@ -1,6 +1,5 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const bodyParser = require('body-parser');
 const cors = require('cors');
 const passport = require('passport');
 const morgan = require('morgan');
@@ -11,14 +10,11 @@ const jobRouter = require('./routes/api/Job');
 
 // Setup the express 
 const app = express();
-app.use(bodyParser.json());
+app.use(express.json());
 app.use(cors());
 app.use(passport.initialize());
 app.use(morgan('dev'));
-app.use('/uploads', express.static('uploads'))
-
-const PORT = process.env.PORT || 5000
-app.listen(PORT, () => { console.log(`listening on port ${PORT}`) });
+app.use('/uploads', express.static('uploads'));
 
 app.get('/', (req, res) => {
     res.send('Hello World');
@@ -32,3 +28,6 @@ mongoose.connect(process.env.MONGODB_CONNECTION_STRING, {useNewUrlParser: true, 
 // Setup the routes
 app.use('/users', userRouter);
 app.use('/jobs', jobRouter);
+
+const PORT = process.env.PORT || 5000
+app.listen(PORT, () => { console.log(`listening on port ${PORT}`) });

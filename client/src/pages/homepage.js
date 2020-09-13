@@ -1,4 +1,6 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import { connect } from 'react-redux'
+import { userAuth } from '../actions/authActions'
 
 import Layout from '../components/Layout/index'
 import HeroBanner from '../components/Hero-Banner'
@@ -17,7 +19,12 @@ import FeatureThree from '../images/home-page/feature-3.png'
 import FeatureBGFour from '../images/home-page/feature-4-bg.png'
 import FeatureFour from '../images/home-page/feature-4.png'
 
-const HomePage = () => {
+const HomePage = ({userAuth}) => {
+
+    useEffect(() => {
+        userAuth()
+    }, [userAuth])
+
     return (
         <Layout>
 
@@ -63,4 +70,12 @@ const HomePage = () => {
     )
 }
 
-export default HomePage
+const mapStateToProps = (state) => {
+    return {
+        user: state.auth.user,
+        isAuthenticated: state.auth.isAuthenticated,
+        error: state.error
+    }
+}
+
+export default connect(mapStateToProps, { userAuth })(HomePage)

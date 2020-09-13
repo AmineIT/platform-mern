@@ -2,9 +2,9 @@ import React from 'react'
 
 import RegistreComponent from '../components/Register-Section'
 
-const RegistrePage = () => {
+const RegistrePage = ({history}) => {
     return (
-        <RegistreComponent />
+        <RegistreComponent history={history} />
     )
 }
 

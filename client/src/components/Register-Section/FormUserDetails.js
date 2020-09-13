@@ -5,7 +5,7 @@ import PhoneInput from 'react-phone-number-input'
 import 'react-phone-number-input/style.css'
 
 import { RegisterForm, Label, InputInlineSection } from './style'
-import PrimaryBotton from '../Primary-Button'
+import PrimaryButton from '../Primary-Button'
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai'
 
 const FormUserDetails = ({formik, nextStep, prevStep, Form, customHandleChange}) => {
@@ -202,8 +202,9 @@ const FormUserDetails = ({formik, nextStep, prevStep, Form, customHandleChange})
                 </>
             ) : null}
 
-            <PrimaryBotton className="mr-4 mt-4" onClick={prev} size="medium" text="Previous" transparent />
-            <PrimaryBotton onClick={handleSubmit} size="medium" text="Next" />
+            <PrimaryButton onClick={handleSubmit} size="medium" text="Next" />  
+            <PrimaryButton className="mr-4 mt-4" onClick={prev} size="medium" text="Previous" transparent />
+            
         </RegisterForm>
     )
 }

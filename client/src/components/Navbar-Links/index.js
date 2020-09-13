@@ -39,7 +39,7 @@ const NavbarLinks = () => {
                             <Link className="links" to="/registre">Sign up</Link>
                         </NavbarItem>
                         <NavbarItem>
-                            <PrimaryButton href="/" size='small' text='login'></PrimaryButton>
+                            <PrimaryButton href="/login" size='small' text='login'></PrimaryButton>
                         </NavbarItem>
                     </NavbarList>
                 </RightMenu>

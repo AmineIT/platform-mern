@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { Link } from 'react-router-dom'
 
 import { RegisterForm, Label, AccountType, Type, Loginlink } from './style'
 import PrimaryBotton from '../Primary-Button'
@@ -37,7 +38,7 @@ const FormAccountType = ({nextStep, customHandleChange, formik}) => {
 
             <PrimaryBotton onClick={next} size="medium" text="Next" />
 
-            <Loginlink>You have an account already? <a href="/" >Login</a></Loginlink>
+            <Loginlink>You have an account already? <Link to="/login" >Login</Link></Loginlink>
         </RegisterForm>
     )
 }
