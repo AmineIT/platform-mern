@@ -28,13 +28,16 @@ const RegisterComponent = ({history, userAuth, user, isAuthenticated, token}) =>
 
     useEffect(() => {
         userAuth()
+    }, [userAuth])
+
+    useEffect(() => {
         if (isAuthenticated && user != null && user.role === 'employer' && token != null) {
             history.push('/company-dashboard')
         }
         if (isAuthenticated && user != null  && user.role === 'candidate' && token != null) {
             history.push('/employee-dashboard')
         }
-    }, [userAuth, user, isAuthenticated, token, history])
+    }, [user, isAuthenticated, token, history])
 
     const [step, setStep] = useState(1)
 

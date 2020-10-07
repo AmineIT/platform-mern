@@ -1,10 +1,27 @@
 import React from 'react'
-import LoginComponent from '../components/Login-Section'
+import { connect } from 'react-redux'
 
-const LoginPage = ({history}) => {
+import LoginComponent from '../components/Login-Section'
+import LoadingScreen from '../components/Loading-Screen'
+
+const LoginPage = ({history, isLoading}) => {
+
     return (
-        <LoginComponent history={history} />
+        <>
+            {
+                isLoading ? 
+                (<LoadingScreen />)
+                :
+                (<LoginComponent history={history} />)
+            }
+        </>
     )
 }
 
-export default LoginPage
+const mapStateToProps = (state) => {
+    return {
+        isLoading: state.auth.isLoading
+    }
+}
+
+export default connect(mapStateToProps)(LoginPage)

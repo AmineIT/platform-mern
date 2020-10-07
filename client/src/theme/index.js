@@ -4,9 +4,11 @@
  */
 
 import colors from './colors'
+import fontFamilies from './fontFamilies'
 
 const theme = {
   colors,
+  font: fontFamilies,
   bg: {
     primary: colors.primaryColor,
     lightBlue: colors.lightBlue,
@@ -46,56 +48,52 @@ const theme = {
     textDecoration: 'none',
   },
   h1: {
-    fontSize: 90,
+    fontSize: 64,
   },
   h2: {
-    fontSize: 70,
+    fontSize: 52,
   },
   h3: {
-    fontSize: 50,
+    fontSize: 38,
   },
   h4: {
-    fontSize: 40,
+    fontSize: 26,
   },
   h5: {
-    fontSize: 30,
+    fontSize: 24,
   },
   h6: {
     fontSize: 20,
   },
   body: {
     large: {
-      fontSize: 40,
-    },
-    medium: {
-      fontSize: 35,
+      fontSize: 24,
     },
     regular: {
-      fontSize: 24,
+      fontSize: 16,
+    },
+    small: {
+      fontSize: 12,
     },
   },
   spacing: {
-    xs: 15,
-    sm: 30,
-    md: 60,
-    lg: 120,
-    xl: 240,
+    eight: '8px',
+    sixTeen: '16px',
+    twentyFour: '24px',
+    thirtyTwo: '32px',
+    foutry: '40px',
+    sixtyFour: '64px'
   },
   smallHeading: {
-    fontSize: 15,
+    fontSize: 12,
     lineHeight: 16,
-    textTransform: 'uppercase',
-    marginBottom: 30,
+    textTransform: 'uppercase'
   },
-  button: {
-    primary: {
-      buttonColor: colors.primaryColor,
-      color: colors.white,
-    },
-    outline: {
-      buttonColor: 'transparent',
-    },
-  },
+  card: {
+    backgroundColor: '#ffffff',
+    borderRadius: 10,
+    boxShadow: '2px 4px 15px rgba(0, 0, 0, 0.05)'
+  }
 }
 
 export default theme

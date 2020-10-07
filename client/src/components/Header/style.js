@@ -4,6 +4,8 @@ import theme from '../../theme'
 export const NavbarContainer = styled.div`
     width: 100vw;
     height: auto;
+    position: relative;
+    z-index: 9999;
 `
 
 export const Navbar = styled.div`

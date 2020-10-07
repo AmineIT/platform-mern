@@ -1,33 +1,38 @@
 import React, {useEffect} from 'react'
-import {Link} from 'react-router-dom'
 import { connect } from 'react-redux'
-import { userAuth, Logout } from '../actions/authActions'
+import { userAuth } from '../actions/authActions'
 
-const CompanyDashboardPage = ({userAuth, Logout}) => {
+import LoadingScreen from '../components/Loading-Screen'
+import DashboardLayout from '../components/Dashboard-Layout'
+import CompanyDashboard from '../components/Company-Dashboard'
+
+const CompanyDashboardPage = ({userAuth, isLoading, user}) => {
 
     useEffect(() => {
         userAuth()
     }, [userAuth])
 
-    const logOut = () => {
-        Logout()
-    }
-
     return (
         <div>
-            <h1>Welcome Admin</h1>
-            <Link to='/login'>login</Link>
-            <p onClick={logOut}>logout</p>
+            {
+                isLoading && !user ? 
+                (<LoadingScreen/>)
+                :
+                (
+                    <DashboardLayout>
+                        <CompanyDashboard />
+                    </DashboardLayout>
+                )
+            }
         </div>
     )
 }
 
 const mapStateToProps = (state) => {
     return {
-        user: state.auth.user,
-        isAuthenticated: state.auth.isAuthenticated,
-        error: state.error
+        isLoading: state.auth.isLoading,
+        user: state.auth.user
     }
 }
 
-export default connect(mapStateToProps, { userAuth, Logout })(CompanyDashboardPage)
+export default connect(mapStateToProps, { userAuth })(CompanyDashboardPage)

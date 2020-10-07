@@ -51,11 +51,6 @@ export const Register = (user) => (dispatch) => {
 
 // Check token and load user
 export const userAuth = () => (dispatch, getState) => {
-    // User loading
-    dispatch({
-        type: USER_LOADING
-    })
-
     // Get token from localstorage
     const token = getState().auth.token;
 
@@ -67,7 +62,12 @@ export const userAuth = () => (dispatch, getState) => {
     }
 
     if (token) {
-        config.headers['Authorization'] = "Bearer " + token;
+        // User loading
+        dispatch({
+            type: USER_LOADING
+        })
+        
+        config.headers['Authorization'] = `Bearer ${token}`;
         axios.get('/users/authenticated', config).then(res => {
             dispatch({
                 type: USER_LOADED,
@@ -80,7 +80,7 @@ export const userAuth = () => (dispatch, getState) => {
             dispatch({
                 type: AUTH_ERROR
             })
-        })   
+        })
     }
 }
 

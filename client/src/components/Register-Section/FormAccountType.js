@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 
 import { RegisterForm, Label, AccountType, Type, Loginlink } from './style'
-import PrimaryBotton from '../Primary-Button'
+import Button from '../Button'
 import { EmployerIcon } from '../../images/register-page/employerIcon'
 import { CandidateIcon } from '../../images/register-page/candidateIcon'
 
@@ -36,7 +36,7 @@ const FormAccountType = ({nextStep, customHandleChange, formik}) => {
                 <Type>Candidate</Type>
             </AccountType>
 
-            <PrimaryBotton onClick={next} size="medium" text="Next" />
+            <Button onClick={next} size="medium" >Next</Button>
 
             <Loginlink>You have an account already? <Link to="/login" >Login</Link></Loginlink>
         </RegisterForm>

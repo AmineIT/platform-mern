@@ -219,16 +219,10 @@ userRouter.post('/login', passport.authenticate('local', {session: false}) ,(req
 // Setup the logout route using passport middleware
 userRouter.get('/logout' ,(req,res) => {
     req.logout();
-    res.json({
-        user: {
-            username : "",
-            role : ""
-        }, 
-        success : true
-    });
+    res.json({user: null});
 });
 
-userRouter.get('/authenticated', passport.authenticate('jwt',{session : false}), (req,res) => {
+userRouter.get('/authenticated', passport.authenticate('jwt', {session : false}), (req,res) => {
     res.status(200).json({
         ...req.user._doc, 
         password: null

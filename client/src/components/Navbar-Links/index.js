@@ -1,7 +1,8 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import { connect } from 'react-redux'
 
-import PrimaryButton from '../Primary-Button'
+import Button from '../Button'
 import Logo from '../../images/selfstarter-logo/selfstarter-logo.svg'
 import { 
     MenuContainer,
@@ -13,7 +14,8 @@ import {
     RightMenu,
     NavbarContainer } from './style'
 
-const NavbarLinks = () => {
+const NavbarLinks = ({user, isAuthenticated}) => {
+    
     return (
         <MenuContainer>
             <NavbarContainer>
@@ -36,10 +38,17 @@ const NavbarLinks = () => {
                 <RightMenu>
                     <NavbarList>
                         <NavbarItem>
-                            <Link className="links" to="/registre">Sign up</Link>
+                            {!isAuthenticated ? (<Link className="links" to="/register">Sign up</Link>) : null}
                         </NavbarItem>
                         <NavbarItem>
-                            <PrimaryButton href="/login" size='small' text='login'></PrimaryButton>
+                            {isAuthenticated 
+                                ? 
+                                (<Button to={user.role === 'employer' ? '/company-dashboard' : '/employee-dashboard'} size='medium'>Go to dashboard</Button>)
+                                : 
+                                (<Button to="/login" size='small'>
+                                    <span>Login</span>
+                                </Button>)
+                            }
                         </NavbarItem>
                     </NavbarList>
                 </RightMenu>
@@ -48,4 +57,11 @@ const NavbarLinks = () => {
     )
 }
 
-export default NavbarLinks
+const mapStateToProps = state => {
+    return {
+        user: state.auth.user,
+        isAuthenticated: state.auth.isAuthenticated
+    }
+}
+
+export default connect(mapStateToProps)(NavbarLinks)

@@ -5,7 +5,7 @@ import * as Yup from 'yup'
 import { connect } from 'react-redux'
 import { Login, userAuth } from '../../actions/authActions'
 
-import PrimaryButton from '../Primary-Button'
+import Button from '../Button'
 import { 
     LoginContainer,
     LoginColOne, 
@@ -41,6 +41,10 @@ const LoginComponent = ({history, Login, user, error, isAuthenticated, token, us
 
     useEffect(() => {
         userAuth()
+    }, [userAuth])
+
+    useEffect(() => {
+        
         if (error.id === 'LOGIN_FAIL') {
             setErrors({verified: null ,authenticated: 'Please enter a valid email and password.'})
         }
@@ -53,7 +57,7 @@ const LoginComponent = ({history, Login, user, error, isAuthenticated, token, us
         if (isAuthenticated && user != null  && user.role === 'candidate' && token != null) {
             history.push('/employee-dashboard')
         }
-    }, [error, user, history, isAuthenticated, setErrors, token, userAuth])
+    }, [error, user, history, isAuthenticated, setErrors, token])
 
     const handleSubmit = () => {
 
@@ -123,7 +127,7 @@ const LoginComponent = ({history, Login, user, error, isAuthenticated, token, us
                             </div>
                         ) : null}
 
-                        <PrimaryButton onClick={handleSubmit} size="block" text="Login" />
+                        <Button onClick={handleSubmit} size="block" >Login</Button>
 
                         <ForgotPassword>Forgot Password?</ForgotPassword>
                     </LoginForm>

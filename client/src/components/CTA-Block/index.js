@@ -1,6 +1,6 @@
 import React from 'react'
 
-import PrimaryButton from '../Primary-Button'
+import Button from '../Button'
 import { CtaSection, CtaHeading, CtaSubtext } from './style'
 
 const CTABlock = () => {
@@ -9,7 +9,7 @@ const CTABlock = () => {
             <div>
                 <CtaHeading>Interview Best Skilled Talents Today!</CtaHeading>
                 <CtaSubtext>An assessment builder to help streamline a result-oriented hiring process.</CtaSubtext>
-                <PrimaryButton text='Get Selfstarted' href='/' size='large'/>
+                <Button to='/register' size='large'>Get Selfstarter</Button>
             </div>
         </CtaSection>
     )

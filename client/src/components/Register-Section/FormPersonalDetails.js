@@ -6,7 +6,7 @@ import { connect } from 'react-redux'
 import { Register } from '../../actions/authActions'
 
 import { RegisterForm, Label, RadioLabel, DragAndDropSection, DragAndDropContent, SelectFile } from './style'
-import PrimaryButton from '../Primary-Button'
+import Button from '../Button'
 import { FiUploadCloud } from 'react-icons/fi'
 // import { Ring } from 'react-spinners-css'
 
@@ -165,8 +165,8 @@ const FormPersonalDetails = ({customHandleChange, nextStep, prevStep, formik, Re
                 </>
             )}
 
-            <PrimaryButton onClick={RegisterUser} size="medium" text="Get Started" />
-            <PrimaryButton className="mr-4 mt-4" onClick={prev} size="medium" text="Previous" transparent />
+            <Button onClick={RegisterUser} size="medium" align="right">Get Started</Button>
+            <Button className="mr-4 mt-4" onClick={prev} size="medium" outline>Previous</Button>
             
         </RegisterForm>
     )

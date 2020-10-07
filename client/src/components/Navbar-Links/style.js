@@ -41,7 +41,7 @@ export const NavLink = styled.a`
 
 export const NavbarItem = styled.li`
     font-size: 18px;
-    color: ${theme.colors.primaryColor};
+    color: ${theme.colors.black};
     margin-right: 60px;
     margin-top: 5px;
 

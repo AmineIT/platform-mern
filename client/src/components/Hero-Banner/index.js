@@ -1,6 +1,6 @@
 import React from 'react'
 
-import PrimaryButton from '../Primary-Button'
+import Button from '../Button'
 import { OutlineButton } from '../Outline-Button'
 
 import { 
@@ -19,7 +19,7 @@ const HeroBanner = ({heading, subtext, heroImg}) => {
                 <BannerHeading>{heading}</BannerHeading>
                 <BannerSubtext>{subtext}</BannerSubtext>
                 <CtaBlock>
-                    <PrimaryButton href="/" text="Get Selfstarter" size='medium'/>
+                    <Button to="/register" size='medium'>Get Selfstarter</Button>
                     <OutlineButton href="/" text="See how it works"/>
                 </CtaBlock>
             </BannerContent>
