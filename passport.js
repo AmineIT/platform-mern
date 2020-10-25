@@ -6,13 +6,13 @@ require('dotenv').config();
 
 const User = require('./models/User');
 
-// const cookieExtractor = req => {
-//     let token = null;
-//     if (req && req.cookie) {
-//         token = req.cookie["access_token"];
-//     }
-//     return token;
-// }
+passport.serializeUser(function(user, done) {
+    done(null, user);
+});
+  
+passport.deserializeUser(function(user, done) {
+    done(null, user);
+});
 
 // Setup the JWT using the passport middleware for the authorization
 passport.use(new JwtStrategy({

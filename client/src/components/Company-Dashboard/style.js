@@ -109,6 +109,11 @@ export const Grid = styled.div`
             text-decoration: underline;
         }
     }
+
+    & .empty-state {
+        color: ${theme.colors.primaryGrey};
+        margin-bottom: 12em;
+    }
 `
 
 export const JobList = styled.div`

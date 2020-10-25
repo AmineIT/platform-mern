@@ -9,15 +9,43 @@ const JobSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    minSalary: {
+    jobRequirement: {
+        type: String,
+        required: true
+    },
+    salary: {
         type: String,
         default: 'Not mentioned'
     },
-    maxSalary: {
+    salaryCurrency: {
         type: String,
         default: 'Not mentioned'
+    },
+    showSalary: {
+        type: Array,
+        default: ['']
     },
     jobDepartment: {
+        type: String,
+        required: true
+    },
+    employmentType: {
+        type: String,
+        required: true
+    },
+    minRequirement: {
+        type: String,
+        required: false
+    },
+    candidates: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    }],
+    country: {
+        type: String,
+        required: true
+    },
+    city: {
         type: String,
         required: true
     },
@@ -25,12 +53,17 @@ const JobSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     },
+    status: {
+        type: String,
+        default: 'draft'
+    },
     createdAt: {
         type: Date,
-        default: Date.now()
+        default: Date.now
     },
     expiredAt: {
-        type: Date
+        type: Date,
+        required: false
     }
 });
 

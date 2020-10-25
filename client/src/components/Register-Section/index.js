@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { connect } from 'react-redux'
-import { userAuth } from '../../actions/authActions'
 
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
@@ -24,11 +23,7 @@ import FormPersonalDetails from './FormPersonalDetails'
 import FormAccountType from './FormAccountType'
 import RegisterSuccess from './RegistreSuccess'
 
-const RegisterComponent = ({history, userAuth, user, isAuthenticated, token}) => {
-
-    useEffect(() => {
-        userAuth()
-    }, [userAuth])
+const RegisterComponent = ({history, user, isAuthenticated, token}) => {
 
     useEffect(() => {
         if (isAuthenticated && user != null && user.role === 'employer' && token != null) {
@@ -175,4 +170,4 @@ const mapStateToProps = (state) => {
     }
 }
 
-export default connect(mapStateToProps, { userAuth })(RegisterComponent)
+export default connect(mapStateToProps)(RegisterComponent)

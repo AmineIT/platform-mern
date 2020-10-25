@@ -6,7 +6,8 @@ import {
     LOGIN_FAIL,
     LOGOUT_SUCCESS,
     REGISTER_SUCCESS,
-    REGISTER_FAIL } from '../actions/types';
+    REGISTER_FAIL,
+    UPDATE_STEPS } from '../actions/types';
   
 const initialState = {
     token: localStorage.getItem('auth-token'),
@@ -54,6 +55,11 @@ export default function(state = initialState, action) {
                 isAuthenticated: false,
                 isLoading: false
             };
+        case UPDATE_STEPS:
+            return {
+                ...state,
+                ...action.payload
+            }
         default:
             return state;
     }

@@ -91,7 +91,7 @@ const theme = {
   },
   card: {
     backgroundColor: '#ffffff',
-    borderRadius: 10,
+    borderRadius: 4,
     boxShadow: '2px 4px 15px rgba(0, 0, 0, 0.05)'
   }
 }

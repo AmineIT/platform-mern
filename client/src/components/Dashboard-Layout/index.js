@@ -6,11 +6,11 @@ import DashboardSidebar from '../Dashboard-Sidebar'
 import DashboardViews from '../Dashboard-Views'
 import DashboardFooter from '../Dashboard-Footer'
 
-const DashboardLayout = ({children}) => {
+const DashboardLayout = ({children, active, from}) => {
     return (
         <>
             <DashboardNavbar />
-            <DashboardSidebar />
+            <DashboardSidebar active={active} from={from} />
             <DashboardViews>
                 {children}
             <DashboardFooter />

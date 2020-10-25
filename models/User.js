@@ -54,12 +54,10 @@ const UserSchema = new mongoose.Schema({
     emailToken: {
         type: String
     },
-    jobsCreated: [
-        {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'Job'
-        }
-    ]
+    steps : {
+        type: Boolean,
+        default: true
+    }
 });
 
 // Define a pre hook for the document, in this case we are hashing the password before it gets sent to the db

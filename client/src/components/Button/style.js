@@ -28,7 +28,7 @@ export const StyledButton = styled.button`
   &:disabled,
   &[disabled],
   &[isLoading] {
-    opacity: 0.5;
+    opacity: 0.8;
     cursor: default;
     pointer-events: none;
   }
@@ -37,16 +37,19 @@ export const StyledButton = styled.button`
     color: ${theme.colors.white}
   }
 
-   &:hover {
-        color: ${theme.colors.white};
-        /* border: none; */
-        border-color: transparent;
-   }
+  &:hover {
+      color: ${theme.colors.white};
+      border-color: transparent;
+  }
 
-    @media screen and (max-width: ${theme.breakpoints.xs}){
-        width: 100%;
-        margin-bottom: 10px;
-    }
+  & > div {
+    display: flex;
+  }
+
+  @media screen and (max-width: ${theme.breakpoints.xs}){
+      width: 100%;
+      margin-bottom: 10px;
+  }
 `
 
 export const StyledPrimaryButton = styled(StyledButton)`
@@ -73,6 +76,20 @@ export const StyledOutlineButton = styled(StyledButton)`
   &:hover {
         color: ${theme.colors.primaryColor};
         border: 1.5px solid ${theme.colors.primaryColor};
+  }
+`
+
+export const StyledLoadingButton = styled(StyledButton)`
+  color: ${theme.colors.white};
+  background-color: ${theme.colors.primaryColor};
+  border: 1px solid ${theme.colors.primaryColor};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+        color: ${theme.colors.primaryColor};
+        border-color: transparent;
   }
 `
 

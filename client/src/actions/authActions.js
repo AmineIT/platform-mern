@@ -7,7 +7,8 @@ import {
     LOGIN_FAIL,
     LOGOUT_SUCCESS,
     REGISTER_SUCCESS,
-    REGISTER_FAIL
+    REGISTER_FAIL,
+    UPDATE_STEPS
 } from './types';
 import { returnErrors, clearErrors } from './errorActions'
 
@@ -51,24 +52,11 @@ export const Register = (user) => (dispatch) => {
 
 // Check token and load user
 export const userAuth = () => (dispatch, getState) => {
-    // Get token from localstorage
-    const token = getState().auth.token;
-
-    // Setup the headers
-    const config = {
-        headers: {
-            "Content-type" : "application"
-        }
-    }
-
-    if (token) {
-        // User loading
-        dispatch({
-            type: USER_LOADING
-        })
-        
-        config.headers['Authorization'] = `Bearer ${token}`;
-        axios.get('/users/authenticated', config).then(res => {
+    dispatch({
+        type: USER_LOADING
+    })
+    if(tokenConfig(getState).headers['Authorization']) {
+        axios.get('/users/authenticated', tokenConfig(getState)).then(res => {
             dispatch({
                 type: USER_LOADED,
                 payload: res.data
@@ -81,7 +69,25 @@ export const userAuth = () => (dispatch, getState) => {
                 type: AUTH_ERROR
             })
         })
+    } else {
+        dispatch({
+            type: AUTH_ERROR
+        }) 
     }
+}
+
+// Update steps
+export const updateSteps = () => (dispatch, getState) => {
+    axios.post('/users/update-steps', null, tokenConfig(getState)).then(res => {
+        dispatch({
+            type: UPDATE_STEPS,
+            payload: res.data
+        })
+    }).catch(error => {
+        dispatch(
+            returnErrors(error.response.data, error.response.status, 'UPDATE_STEPS_FAIL')
+        );
+    })
 }
 
 // Logout Action
@@ -98,3 +104,23 @@ export const Logout = () => (dispatch) => {
         );
     })
 }
+
+// Setup config/headers and token
+export const tokenConfig = (getState) => {
+    // Get token from localstorage
+    const token = getState().auth.token;
+  
+    // Headers
+    const config = {
+      headers: {
+        'Content-type': 'application/json'
+      }
+    };
+  
+    // If token, add to headers
+    if (token) {
+      config.headers['Authorization'] = `Bearer ${token}`;
+    }
+  
+    return config;
+};

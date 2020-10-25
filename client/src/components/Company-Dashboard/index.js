@@ -1,11 +1,13 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
+import { getCompanyJobs } from '../../actions/jobActions'
 import { Doughnut } from 'react-chartjs-2'
 
 import { Heading, Card, Grid, JobList, Divider } from './style'
 import Button from '../Button'
 
-const CompanyDashboard = () => {
+const CompanyDashboard = ({user, getCompanyJobs, jobs}) => {
     const data = {
         datasets: [
             {
@@ -26,11 +28,27 @@ const CompanyDashboard = () => {
             enabled: false
         }
     }
+
+    useEffect(() => {
+        getCompanyJobs(user._id)
+    }, [])
+
     return (
         <>
+            {
+                !user.isVerified ?
+                (
+                <div style={{marginBottom: 0}} className="message is-warning mt-4">
+                    <div className="message-body">Please verify your email address, we've sent you a verification email to: <strong>{user.email}</strong></div>
+                </div>
+                )
+                :
+                null
+            }
+
             <Heading>Welcome to Selfstarter dashboard</Heading>
 
-            <Card>
+            <Card className='dashboard-profile-step'>
                 <div>
                     <h5>Complete your company profile</h5>
                     <p>Extend your profile information and improve your company’s <br/> chances of finding the best applicants significantly.</p>
@@ -47,26 +65,24 @@ const CompanyDashboard = () => {
             </Card>
 
             <Grid>
-                <div className="span-row-2">
+                <div className="span-row-2 create-job-step">
                     <h5>My jobs</h5>
-                    <JobList>
-                        Graphic Designer <span>(Abu Dhabi)</span>
-                        <p>210 Candidates</p>
-                        <Divider />
-                    </JobList>
-                    <JobList>
-                        Marketing Manager <span>(Dubai)</span>
-                        <p>120 Candidates</p>
-                        <Divider />
-                    </JobList>
-                    <JobList>
-                        Social Media Executive <span>(Abu Dhabi)</span>
-                        <p>334 Candidates</p>
-                        <Divider />
-                    </JobList>
+                    {
+                        jobs.length !== 0 ? 
+                        jobs.filter(job => job.status === 'published').slice(0,3).map(job => {
+                            return (
+                                <JobList key={job._id}>
+                                    {job.jobTitle} <span>({job.city})</span>
+                                    <p>{job.candidates.length} Candidates</p>
+                                    <Divider />
+                                </JobList>
+                            )
+                        }) : 
+                        (<p className='empty-state'>You don't any jobs yet.</p>)
+                    }
                     <Button to='job/create' size='block' primary>Create new job</Button>
                 </div>
-                <div className="span-col-2">
+                <div className="span-col-2 assessment-step">
                     <h5>Assessments</h5>
                     <p>Create your assessment and see real results before you consider a talent and shortlist effectively to drill into quality candidates. Or choose from some of the prebuilt questions <Link className='link' to='/assessments'>here.</Link></p>
                     <Button to='assessment/create' size='small' light fit='stretched' align='right'>Create assessment</Button>
@@ -82,4 +98,11 @@ const CompanyDashboard = () => {
     )
 }
 
-export default CompanyDashboard
+const mapStateToProps = (state) => {
+    return {
+        user: state.auth.user,
+        jobs: state.jobs.jobs
+    }
+}
+
+export default connect(mapStateToProps, { getCompanyJobs })(CompanyDashboard)

@@ -1,10 +1,12 @@
 import React from 'react'
+
 import DashboardLayout from '../components/Dashboard-Layout'
+import CompanyJobs from '../components/Company-Jobs'
 
 const CompanyJobsPage = () => {
     return (
-        <DashboardLayout>
-            <h1 className='mt-4'>Something exciting on the way 🤩</h1>
+        <DashboardLayout active from='jobs'>
+            <CompanyJobs />
         </DashboardLayout>
     )
 }

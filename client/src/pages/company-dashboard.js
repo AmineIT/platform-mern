@@ -2,29 +2,19 @@ import React, {useEffect} from 'react'
 import { connect } from 'react-redux'
 import { userAuth } from '../actions/authActions'
 
-import LoadingScreen from '../components/Loading-Screen'
 import DashboardLayout from '../components/Dashboard-Layout'
 import CompanyDashboard from '../components/Company-Dashboard'
 
-const CompanyDashboardPage = ({userAuth, isLoading, user}) => {
+const CompanyDashboardPage = ({userAuth, user}) => {
 
     useEffect(() => {
         userAuth()
-    }, [userAuth])
+    }, [])
 
     return (
-        <div>
-            {
-                isLoading && !user ? 
-                (<LoadingScreen/>)
-                :
-                (
-                    <DashboardLayout>
-                        <CompanyDashboard />
-                    </DashboardLayout>
-                )
-            }
-        </div>
+        <DashboardLayout active from='company-dashboard'>
+            <CompanyDashboard />
+        </DashboardLayout>
     )
 }
 

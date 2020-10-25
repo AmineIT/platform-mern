@@ -6,7 +6,7 @@ const morgan = require('morgan');
 require('dotenv').config();
 
 const userRouter = require('./routes/api/User');
-const jobRouter = require('./routes/api/Job');
+const jobRouter = require('./routes/api/Jobs');
 
 // Setup the express 
 const app = express();

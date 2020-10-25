@@ -1,9 +1,9 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import { connect } from 'react-redux'
-import { Login, userAuth } from '../../actions/authActions'
+import { Login } from '../../actions/authActions'
 
 import Button from '../Button'
 import { 
@@ -21,7 +21,7 @@ import {
 import Logo from '../../images/selfstarter-logo/selfstarter-logo.svg'
 import LoginAsset from '../../images/login-page/login-asset.png'
 
-const LoginComponent = ({history, Login, user, error, isAuthenticated, token, userAuth}) => {
+const LoginComponent = ({history, Login, user, error, isAuthenticated, token}) => {
 
     const validationSchema = Yup.object({
         username: Yup.string().trim().email('Please type your valid email address.').required('Please type your valid email address.'),
@@ -40,13 +40,10 @@ const LoginComponent = ({history, Login, user, error, isAuthenticated, token, us
     const { handleBlur, touched, errors, handleChange, values, setFieldTouched, setErrors } = formik
 
     useEffect(() => {
-        userAuth()
-    }, [userAuth])
-
-    useEffect(() => {
         
         if (error.id === 'LOGIN_FAIL') {
             setErrors({verified: null ,authenticated: 'Please enter a valid email and password.'})
+            setIsloading(false)
         }
         if (error.id === 'VERIFICATION_FAIL') {
             setErrors({verified: 'We sent you a verification email, please check out your inbox', authenticated: null})
@@ -57,7 +54,10 @@ const LoginComponent = ({history, Login, user, error, isAuthenticated, token, us
         if (isAuthenticated && user != null  && user.role === 'candidate' && token != null) {
             history.push('/employee-dashboard')
         }
+
     }, [error, user, history, isAuthenticated, setErrors, token])
+
+    const [isLoading, setIsloading] = useState(false)
 
     const handleSubmit = () => {
 
@@ -65,6 +65,7 @@ const LoginComponent = ({history, Login, user, error, isAuthenticated, token, us
         setFieldTouched('password', true, true)
 
         if (Object.keys(errors).length === 0) {
+            setIsloading(true)
             Login(values)
         }
     }
@@ -121,13 +122,7 @@ const LoginComponent = ({history, Login, user, error, isAuthenticated, token, us
                             </div>
                         ) : null}
 
-                        {errors.verified ? (
-                            <div className="notification is-warning is-light">
-                                {errors.verified}
-                            </div>
-                        ) : null}
-
-                        <Button onClick={handleSubmit} size="block" >Login</Button>
+                        <Button onClick={handleSubmit} size="block" loading={isLoading}>Login</Button>
 
                         <ForgotPassword>Forgot Password?</ForgotPassword>
                     </LoginForm>
@@ -146,4 +141,4 @@ const mapStateToProps = (state) => {
     }
 }
 
-export default connect(mapStateToProps, {Login, userAuth})(LoginComponent)
+export default connect(mapStateToProps, {Login})(LoginComponent)

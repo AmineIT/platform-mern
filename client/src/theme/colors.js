@@ -12,7 +12,9 @@ const primaryColor = '#1C65E3',
       navyBlue = '#7F84FF',
       skyBlue = '#8FDDFF',
       secondaryGrey = '#D8E3E7',
-      lightGrey = '#EBEEF3'
+      lightGrey = '#EBEEF3',
+      green = '#00d1b2',
+      red = '#e74c3c'
 
 const colors = {
   transparent: 'transparent',
@@ -26,6 +28,8 @@ const colors = {
   skyBlue,
   secondaryGrey,
   lightGrey,
+  green,
+  red,
   overlay: 'rgba(0,0,0,.5)',
 }
 

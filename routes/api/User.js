@@ -263,4 +263,25 @@ userRouter.post('/email-check', (req, res) => {
     })
 });
 
+// Update the steps proprety
+userRouter.post('/update-steps', passport.authenticate('jwt', {session : false}), (res, req) => {
+    const { _id } = res.user
+    User.updateOne({_id: _id}, {steps: false}, (error) => {
+        if (error) {
+            return req.status(500).json({
+                message: {
+                    msgBody: 'Error has occured.',
+                    msgError: true,
+                }
+            })
+        } else {
+            return req.status(200).json({
+                message: {
+                    msgBody: 'The steps status has changed'
+                }
+            })
+        }
+    })
+})
+
 module.exports = userRouter;

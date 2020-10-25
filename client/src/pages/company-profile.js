@@ -3,8 +3,8 @@ import DashboardLayout from '../components/Dashboard-Layout'
 
 const CompanyProfilePage = () => {
     return (
-        <DashboardLayout>
-            <h1 className='mt-4'>Something exciting on the way 🤩</h1>
+        <DashboardLayout active from='company-profile'>
+            <h1 className='mt-4'>Something exciting on the way</h1>
         </DashboardLayout>
     )
 }

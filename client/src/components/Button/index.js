@@ -2,23 +2,24 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 
-import { StyledPrimaryButton, StyledLightButton, StyledButton, StyledOutlineButton } from './style'
+import { StyledPrimaryButton, StyledLightButton, StyledButton, StyledOutlineButton, StyledLoadingButton } from './style'
 
 const handleRender = (Component, props) => {
-    const { children, disabled, isLoading, as, to, href, type, align, fit } = props;
-    const { primary, light, outline, ...rest } = props;
+    const { children, disabled, as, to, href, type, align, fit } = props;
+    const { primary, light, loading, outline, ...rest } = props;
     const asElement = to ? Link : href ? 'a' : as
 
     const button = (
         <Component
           {...rest}
           type={type}
-          disabled={disabled || isLoading}
+          disabled={disabled}
           as={asElement}
-          //styled={{ primary, light, outline }}
           align={align}
           fit={fit}
-          className="button" >{children}</Component>
+          className={`button ${loading ? 'is-loading' : ''}`} >
+            {children}
+        </Component>
     )
     return button
 }

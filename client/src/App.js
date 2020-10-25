@@ -14,6 +14,8 @@ import CompanyCandidatesPage from './pages/company-candidates'
 import CompanyAssessmentsPage from './pages/company-assessments'
 import CompanyProfilePage from './pages/company-profile'
 import CompanySettingsPage from './pages/company-settings'
+import CreateJob from './pages/create-job'
+import UpdateJob from './pages/update-job'
 
 import EmployeeDashboardPage from './pages/employee-dashboard'
 
@@ -36,6 +38,8 @@ function App() {
             <PrivateRoute path='/assessments' component={CompanyAssessmentsPage} roles={['employer']} />
             <PrivateRoute path='/company-profile' component={CompanyProfilePage} roles={['employer']} />
             <PrivateRoute path='/company-settings' component={CompanySettingsPage} roles={['employer']} />
+            <PrivateRoute path='/job/create' component={CreateJob} roles={['employer']} />
+            <PrivateRoute path='/job/update/:id' component={UpdateJob} roles={['employer']} />
 
             <PrivateRoute  path='/employee-dashboard' component={EmployeeDashboardPage} roles={['candidate']} />
           </Switch>

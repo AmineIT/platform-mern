@@ -1,19 +1,18 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
+import { userAuth } from '../actions/authActions'
 
 import LoginComponent from '../components/Login-Section'
-import LoadingScreen from '../components/Loading-Screen'
 
-const LoginPage = ({history, isLoading}) => {
+const LoginPage = ({history, isLoading, userAuth}) => {
+
+    useEffect(() => {
+        userAuth()
+    }, [])
 
     return (
         <>
-            {
-                isLoading ? 
-                (<LoadingScreen />)
-                :
-                (<LoginComponent history={history} />)
-            }
+            <LoginComponent history={history} />
         </>
     )
 }
@@ -24,4 +23,4 @@ const mapStateToProps = (state) => {
     }
 }
 
-export default connect(mapStateToProps)(LoginPage)
+export default connect(mapStateToProps, { userAuth })(LoginPage)

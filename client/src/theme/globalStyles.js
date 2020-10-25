@@ -79,6 +79,56 @@ const GlobalStyle = createGlobalStyle`
     font-size: 100%;
     font-weight: 600;
   }
+
+  hr {
+    margin: 0;
+  }
+
+  .react-tabs__tab-list {
+    align-items: center;
+    display: flex;
+    flex-grow: 1;
+    flex-shrink: 0;
+    justify-content: flex-start;
+    margin-top: ${theme.spacing.twentyFour};
+    margin-bottom: ${theme.spacing.twentyFour};
+  }
+
+  .react-tabs__tab {
+    padding: .5em 1em;
+    cursor: pointer;
+    color: ${theme.colors.primaryGrey};
+    font-family: ${theme.font.basisProMedium};
+  }
+
+  .react-tabs__tab--selected {
+    border-bottom-color: ${theme.colors.primaryColor};
+    border-bottom-style: solid;
+    border-bottom-width: 2px;
+    color: ${theme.colors.black};
+  }
+
+  .introjs-tooltiptext {
+    color: ${theme.colors.primaryColor};
+    font-family: ${theme.font.basisProMedium};
+    font-size: 14px;
+  }
+
+  .introjs-progressbar, .Toastify__toast--info {
+    background-color: ${theme.colors.primaryColor}
+  }
+
+  .Toastify__toast--success {
+    background-color: ${theme.colors.green}
+  }
+
+  .__react_component_tooltip {
+    color: ${theme.colors.white} !important;
+  }
+
+  .Toastify__toast--error, .button.is-danger, .button.is-danger:hover {
+    background-color: ${theme.colors.red}
+  }
 `;
  
 export default GlobalStyle;
