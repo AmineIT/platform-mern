@@ -1,0 +1,88 @@
+{
+  "name": "client",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@babel/generator": "^7.12.5",
+    "@lourenci/react-kanban": "^2.1.0",
+    "@syncfusion/ej2": "^18.3.47",
+    "@syncfusion/ej2-react-inputs": "^18.3.47",
+    "@syncfusion/ej2-react-kanban": "^18.3.47",
+    "@syncfusion/ej2-react-schedule": "^18.3.47",
+    "@testing-library/jest-dom": "^4.2.4",
+    "@testing-library/react": "^9.3.2",
+    "@testing-library/user-event": "^7.1.2",
+    "axios": "^0.19.2",
+    "bulma": "^0.9.1",
+    "chart.js": "^2.9.4",
+    "formik": "^2.2.2",
+    "framer-motion": "^1.11.1",
+    "helmet": "^3.23.3",
+    "http-proxy-middleware": "^1.0.6",
+    "intro.js": "^2.9.3",
+    "intro.js-react": "^0.2.0",
+    "jwt-decode": "^3.1.1",
+    "moment": "^2.29.1",
+    "mongodb-stitch-browser-sdk": "^4.8.0",
+    "node-sass": "^4.14.1",
+    "normalize.css": "^8.0.1",
+    "react": "^16.14.0",
+    "react-bulma-components": "^3.4.0",
+    "react-calendar": "^3.2.0",
+    "react-chartjs-2": "^2.11.1",
+    "react-countdown": "^2.3.1",
+    "react-dom": "^16.14.0",
+    "react-dropdown": "^1.9.0",
+    "react-dropzone": "^11.2.3",
+    "react-icons": "^3.11.0",
+    "react-lottie": "^1.2.3",
+    "react-phone-number-input": "^3.1.4",
+    "react-quill": "^1.3.5",
+    "react-redux": "^7.2.2",
+    "react-router-dom": "^5.2.0",
+    "react-scripts": "3.4.1",
+    "react-seo-component": "^2.0.2",
+    "react-spinners": "^0.9.0",
+    "react-tabs": "^3.1.1",
+    "react-toastify": "^6.1.0",
+    "react-tooltip": "^4.2.10",
+    "react-transition-group": "^4.4.1",
+    "realm": "^10.0.1",
+    "redux": "^4.0.5",
+    "redux-devtools-extension": "^2.13.8",
+    "redux-thunk": "^2.3.0",
+    "styled-components": "^5.2.1",
+    "styled-reset": "^4.3.0",
+    "tiny-skeleton-loader-react": "^1.1.4",
+    "yup": "^0.29.3"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "proxy": "http://localhost:5000",
+  "devDependencies": {
+    "@babel/cli": "^7.12.1",
+    "@babel/core": "^7.12.3",
+    "@babel/node": "^7.12.6",
+    "@babel/polyfill": "^7.12.1",
+    "@babel/preset-env": "^7.12.1"
+  }
+}
