@@ -7,7 +7,8 @@ import {
     UPDATE_JOB,
     DELETE_JOB,
     PUBLISH_JOB,
-    ARCHIVE_JOB
+    ARCHIVE_JOB,
+    GET_ALL_JOBS
 } from '../actions/types'
 
 const initialState = {
@@ -22,6 +23,13 @@ export default function (state = initialState, action) {
             return {
                 ...state,
                 isLoading: true
+            }
+        case GET_ALL_JOBS:
+            return {
+                ...state,
+                jobs: action.payload,
+                companyJob: {},
+                isLoading: false
             }
         case GET_COMPANY_JOBS:
             return {

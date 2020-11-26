@@ -19,7 +19,7 @@ passport.use(new JwtStrategy({
     jwtFromRequest: passportJWT.ExtractJwt.fromAuthHeaderAsBearerToken(),
     secretOrKey: process.env.JWT_SECRET_KEY
 }, (payload, done) => {
-    User.findById({ _id: payload.sub }, (error, user) => {
+    User.findById({ _id: payload.sub }).populate('candidatesPipeline').exec((error, user) => {
         if (error) {
             return done(error, null)
         }

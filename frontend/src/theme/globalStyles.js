@@ -130,27 +130,6 @@ const GlobalStyle = createGlobalStyle`
     background-color: ${theme.colors.red}
   }
 
-  .e-control, .e-css, .e-card {
-    font-family: ${theme.font.basisProRegular};
-  }
-
-  .e-kanban {
-    padding: 16px 8px;
-    min-height: 70vh;
-  }
-
-  .e-kanban .e-kanban-table .e-header-cells {
-    background-color: #F0F2F5
-  }
-
-  .e-kanban .e-kanban-table.e-content-table .e-content-row:not(.e-swimlane-row) td {
-    background-color: #F0F2F5
-  }
-
-  .e-content-row {
-    height: 65vh;
-  }
-
   span.dropdown-item {
     cursor: pointer;
   }
@@ -158,6 +137,18 @@ const GlobalStyle = createGlobalStyle`
   a.dropdown-item:hover, button.dropdown-item:hover, span.dropdown-item:hover {
     background-color: whitesmoke;
     color: #0a0a0a;
+  }
+
+  .pagination span {
+    cursor: pointer;
+  }
+
+  .css-yk16xz-control, .css-1pahdxg-control {
+    width: 180px;
+  }
+
+  .css-1pahdxg-control:hover {
+    border-color: ${theme.colors.primaryColor}
   }
 `;
 

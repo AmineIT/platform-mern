@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import Modal from '../Modal-Component'
-import { ImagePlaceholder } from './style'
+import { ImagePlaceholder, Box, CTAWrapper, Score } from './style'
 
 export const CardKanbanTemplate = ({ data }) => {
 
@@ -11,7 +11,7 @@ export const CardKanbanTemplate = ({ data }) => {
 
   return (
     <>
-      <div className="box">
+      <Box score='90'>
         <article className="media">
           <div className="media-left">
             {
@@ -21,7 +21,7 @@ export const CardKanbanTemplate = ({ data }) => {
                 </ImagePlaceholder>
               ) : (
                   <figure className="image is-48x48">
-                    <img className='is-rounded' src={`http://localhost:5000/${data.profileImage}`} alt="Profile" />
+                    <img className='is-rounded' style={{width: '48px', height: '48px'}} src={`http://localhost:5000/${data.profileImage}`} alt="Profile" />
                   </figure>
                 )
             }
@@ -31,17 +31,21 @@ export const CardKanbanTemplate = ({ data }) => {
               <p className='fullname'>
                 <strong>{data.fullName}</strong>
               </p>
-              <p className='jobrole'>
-                <small>{data.currentJobRole}</small>
-              </p>
-              <p className='score'>
-                <strong>Assessment score - <span>91/100</span></strong>
-              </p>
-              <p onClick={() => setShow(true)} className='result-cta'>View results</p>
+              <div className='score'>
+                <p><Score score='90' style={{ fontWeight: "bold" }}>91% </Score>- my score</p>
+              </div>
             </div>
           </div>
         </article>
-      </div>
+        <CTAWrapper>
+          <div>
+            <p>Completed 2 days ago.</p>
+          </div>
+          <div>
+            <p onClick={() => setShow(true)} className='result-cta'>View results</p>
+          </div>
+        </CTAWrapper>
+      </Box>
 
       <Modal item={data} onClose={onClose} show={show} />
     </>

@@ -15,43 +15,33 @@ export const Container = styled.div`
     padding-bottom: ${theme.spacing.twentyFour};
     position: relative;
 
-    & .e-card {
-        border-radius: 8px;
-    }
-
-    & .box {
-        margin-bottom: 0;
-        padding: 8px 16px;
-    }
-
     & .content {
         font-family: ${theme.font.basisProRegular};
         color: ${theme.colors.primaryGrey};
-
-        & .fullname {
-            margin-bottom: -15px;
-        }
 
         & p {
             margin-bottom: 0;
         }
 
-        & .score span {
-            color: ${theme.colors.navyBlue};
-        }
-
         & .jobrole {
-            margin-bottom: -10px;
-        }
-
-        & .result-cta {
-            color: ${theme.colors.primaryColor};
-            font-family: ${theme.font.basisProMedium};
-            cursor: pointer;
-            text-decoration: underline;
-            width: fit-content;
+            margin-bottom: 5px;
         }
     }
+`
+
+export const Box = styled.div`
+    margin-bottom: 0;
+    padding: 8px 16px;
+    box-shadow: none;
+    border-radius: 4px;
+    border-style: solid;
+    border-width: 0 0 0 4px;
+    border-color: ${({ score }) => score === 90 ? theme.colors.green : theme.colors.navyBlue};
+    background: white;
+`
+
+export const Score = styled.span`
+    color: ${({ score }) => score === 90 ? theme.colors.green : theme.colors.navyBlue};
 `
 
 export const HeaderContainer = styled.div`
@@ -82,12 +72,6 @@ export const FlexWrapper = styled.div`
 export const JobDetails = styled.div`
     position: relative;
     margin-top: ${theme.spacing.thirtyTwo};
-
-    & > h1 {
-        ${theme.h6};
-        margin-top: ${theme.spacing.sixTeen};
-        margin-bottom: ${theme.spacing.eight};
-    }
 
     & p {
         color: ${theme.colors.primaryGrey};
@@ -121,6 +105,33 @@ export const JobDetails = styled.div`
     } */
 `
 
+export const HeadingContainer = styled.div`
+    display: flex;
+    align-items: center;
+    background-color: ${theme.colors.lightGrey};
+    min-height: 60px;
+    border-radius: 4px;
+    padding-left: ${theme.spacing.sixTeen};
+    margin-bottom: ${theme.spacing.sixTeen};
+
+    & h1 {
+        margin-left: .5em
+    }
+`
+
+export const ColoredSpan = styled.div`
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
+    background: ${({ title }) => title === 'Applied' ? theme.colors.orange : title === 'Screening' ? theme.colors.red : title === 'Shortlisted' ? theme.colors.purple : theme.colors.green}
+`
+
+export const JobTitle = styled.h1`
+    ${theme.h5};
+    margin-top: ${theme.spacing.sixTeen};
+    margin-bottom: ${theme.spacing.eight};
+`
+
 export const ImagePlaceholder = styled.div`
     background-color: ${theme.colors.lightBlue};
     display: flex;
@@ -133,5 +144,24 @@ export const ImagePlaceholder = styled.div`
     & p {
         font-weight: 700;
         color: ${theme.colors.primaryColor}
+    }
+`
+
+export const CTAWrapper = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: ${theme.spacing.eight} 0 0;
+
+    & .result-cta {
+        color: ${theme.colors.primaryColor};
+        font-family: ${theme.font.basisProMedium};
+        cursor: pointer;
+        width: fit-content;
+    }
+
+    & p {
+        color: ${theme.colors.primaryGrey};
+        font-size: 14px;
     }
 `

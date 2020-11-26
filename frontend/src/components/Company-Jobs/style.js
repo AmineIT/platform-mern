@@ -6,6 +6,11 @@ export const FlexWrapper = styled.div`
     align-items: center;
 `
 
+export const Heading = styled.h1`
+    ${theme.h4};
+    padding-top: 40px;
+`
+
 export const EmptyState = styled.div`
     display: flex;
     align-items: center;

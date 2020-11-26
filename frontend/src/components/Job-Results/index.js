@@ -2,15 +2,12 @@ import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useParams, useHistory } from 'react-router-dom'
 import moment from 'moment'
-import { DndProvider } from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
-
+import DashboardFooter from '../Dashboard-Footer'
 import { fetchJob } from '../../actions/jobActions'
-import { GlobalStyle, Container, JobDetails, HeaderContainer, FlexWrapper } from './style'
+import { GlobalStyle, Container, JobDetails, HeaderContainer, FlexWrapper, JobTitle } from './style'
 import Logo from '../../images/selfstarter-logo/selfstarter-logo.svg'
 import { RiArrowLeftLine } from 'react-icons/ri'
 import LoadingScreen from '../Loading-Screen'
-import SearchField from '../Search-Component'
 import KanbanTemplate from './KanbanComponent'
 
 const JobResultsComponent = () => {
@@ -56,7 +53,7 @@ const JobResultsComponent = () => {
     }
 
     return (
-        <DndProvider backend={HTML5Backend}>
+        <>
             {job.candidates && candidates.length !== 0 ? (
                 <>
                     <GlobalStyle />
@@ -72,24 +69,24 @@ const JobResultsComponent = () => {
                         </HeaderContainer>
                         <JobDetails>
                             <FlexWrapper>
-                                <h1 className='mr-4'>{job.jobTitle}</h1>
+                                <JobTitle className='mr-4'>{job.jobTitle}</JobTitle>
                                 <span className={`tag ${job.status === 'published' ? 'is-primary' : (job.status === 'draft' ? 'is-link' : 'is-light')}`}>
                                     {job.status}
                                 </span>
                             </FlexWrapper>
                             <FlexWrapper>
                                 <p className='mr-4'>{job.candidates ? job.candidates.length : '0'} Candidates</p>
-                                <p className='dot'>Posted on: {moment(job.expiredAt).format('MMM D, YYYY')}</p>
+                                <p className='dot'>Posted on: {moment(job.createdAt).format('MMM D, YYYY')}</p>
                             </FlexWrapper>
-                            <SearchField placeholder='Search for a Candidate...' handleSearch={e => console.log(e.target.value)} />
                         </JobDetails>
 
                         <KanbanTemplate kanbanData={kanbanData} />
 
+                        <DashboardFooter />
                     </Container>
                 </>
             ) : (<LoadingScreen />)}
-        </DndProvider>
+        </>
     )
 }
 

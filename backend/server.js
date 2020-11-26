@@ -7,32 +7,32 @@ const { notFound, errorHandler } = require('./middleware/errorMiddleware')
 
 require('dotenv').config();
 
-const userRouter = require('./routes/api/User');
-const jobRouter = require('./routes/api/Jobs');
-const assessmentRouter = require('./routes/api/Assessments');
+const userRouter = require('./routes/api/User')
+const jobRouter = require('./routes/api/Jobs')
+const assessmentRouter = require('./routes/api/Assessments')
 
 // Setup the express 
-const app = express();
-app.use(express.json());
-app.use(cors());
-app.use(passport.initialize());
-app.use(morgan('dev'));
-app.use('/uploads', express.static('uploads'));
+const app = express()
+app.use(express.json())
+app.use(cors())
+app.use(passport.initialize())
+app.use(morgan('dev'))
+app.use('/uploads', express.static('uploads'))
 
 app.get('/', (req, res) => {
-    res.send('Hello World');
+    res.send('Hello World')
 })
 
 // Setup the MongoDB connection
 connectDB()
 
 // Setup the routes
-app.use('/users', userRouter);
-app.use('/jobs', jobRouter);
-app.use('/assessment', assessmentRouter);
+app.use('/users', userRouter)
+app.use('/jobs', jobRouter)
+app.use('/assessment', assessmentRouter)
 
 const PORT = process.env.PORT || 5000
-app.listen(PORT, () => { console.log(`listening on port ${PORT}`) });
+app.listen(PORT, () => { console.log(`listening on port ${PORT}`) })
 
-app.use(notFound);
-app.use(errorHandler);
+app.use(notFound)
+app.use(errorHandler)

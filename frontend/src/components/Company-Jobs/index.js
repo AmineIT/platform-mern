@@ -7,7 +7,7 @@ import ArchivedJobs from './Archived-Jobs'
 import PublishedJobs from './Published-Jobs'
 import Button from '../Button'
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'
-import { FlexWrapper } from './style'
+import { FlexWrapper, Heading } from './style'
 import 'react-toastify/dist/ReactToastify.css'
 import SearchField from '../Search-Component'
 import SkeletonLoader from 'tiny-skeleton-loader-react'
@@ -36,13 +36,14 @@ const CompanyJobs = ({ jobs }) => {
                     </div>
                 ) : (
                         <>
+                            <Heading>Selfstarter Jobs</Heading>
                             <Tabs>
                                 <FlexWrapper>
                                     <TabList>
-                                        <Tab>All jobs</Tab>
-                                        <Tab>Published</Tab>
-                                        <Tab>Draft</Tab>
-                                        <Tab>Archived</Tab>
+                                        <Tab>All jobs ({jobs.length})</Tab>
+                                        <Tab>Published ({jobs.filter(job => job.status === 'published').length})</Tab>
+                                        <Tab>Draft ({jobs.filter(job => job.status === 'draft').length})</Tab>
+                                        <Tab>Archived ({jobs.filter(job => job.status === 'archived').length})</Tab>
                                     </TabList>
                                     <div>
                                         <Button size='small' to='/job/create'>Create new job</Button>

@@ -11,28 +11,28 @@ const handleRender = (Component, props) => {
 
     const button = (
         <Component
-          {...rest}
-          type={type}
-          disabled={disabled}
-          as={asElement}
-          align={align}
-          fit={fit}
-          className={`button ${loading ? 'is-loading' : ''}`} >
+            {...rest}
+            type={type}
+            disabled={disabled}
+            as={asElement}
+            align={align}
+            fit={fit}
+            className={`button ${loading ? 'is-loading' : ''}`} >
             {children}
         </Component>
     )
     return button
 }
 
-const Button = ({...props}) => {
+const Button = ({ ...props }) => {
     if (props.primary)
-        return handleRender(StyledPrimaryButton, {...props})
+        return handleRender(StyledPrimaryButton, { ...props })
     if (props.light)
-        return handleRender(StyledLightButton, {...props})
+        return handleRender(StyledLightButton, { ...props })
     if (props.outline)
-        return handleRender(StyledOutlineButton, {...props})
+        return handleRender(StyledOutlineButton, { ...props })
 
-    return handleRender(StyledButton, {...props})
+    return handleRender(StyledButton, { ...props })
 }
 
 Button.propTypes = {
@@ -42,9 +42,9 @@ Button.propTypes = {
     href: PropTypes.string,
     to: PropTypes.string,
     children: PropTypes.node,
-    disabled: PropTypes.bool,
+    disabled: PropTypes.bool || PropTypes.array,
     isLoading: PropTypes.bool,
-    size: PropTypes.oneOf(['small', 'medium', 'large', 'block']),
+    size: PropTypes.oneOf(['tiny', 'small', 'medium', 'large', 'block']),
     primary: PropTypes.bool,
     light: PropTypes.bool,
     fit: PropTypes.oneOf(['stretched'])

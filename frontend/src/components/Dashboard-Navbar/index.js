@@ -1,18 +1,33 @@
-import React from 'react'
-import { connect } from 'react-redux'
+import React, { useState, useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
-import { Logout } from '../../actions/authActions'
+import { Logout, fetchNotification, clearNotifications } from '../../actions/authActions'
+import moment from 'moment'
 
 import Logo from '../../images/selfstarter-logo/selfstarter-logo.svg'
 import { BiUserCircle } from 'react-icons/bi'
 import { AiOutlineQuestionCircle } from 'react-icons/ai'
-import { Navbar, NavbarDivider } from './style'
+import { IoMdNotificationsOutline } from 'react-icons/io'
+import { Navbar, NavbarDivider, Notifications } from './style'
 
-const DashboardNavbar = ({ user, Logout }) => {
+const DashboardNavbar = () => {
+
+    const dispatch = useDispatch()
+    const user = useSelector(state => state.auth.user)
+    const [isNotificationActive, setIsNotificationActive] = useState(false)
+    const [isDropDownActive, setIsDropDownActive] = useState(false)
 
     const logOut = () => {
-        Logout();
+        dispatch(Logout())
     }
+
+    const handleNotification = () => {
+        dispatch(clearNotifications())
+    }
+
+    useEffect(() => {
+        dispatch(fetchNotification())
+    }, [dispatch])
 
     return (
         <Navbar>
@@ -36,7 +51,46 @@ const DashboardNavbar = ({ user, Logout }) => {
                                 <AiOutlineQuestionCircle size='26' color='#7E8BA2' />
                             </div>
                         </div>
-                        <div className="navbar-item has-dropdown is-hoverable">
+
+                        <div onClick={() => setIsNotificationActive(!isNotificationActive)} className={`navbar-item has-dropdown ${isNotificationActive ? 'is-active' : ''}`}>
+                            <span className="navbar-link">
+                                <div className={`question ${user.notifications.length > 0 ? 'notifications' : ''}`}>
+                                    <IoMdNotificationsOutline size='26' color='#7E8BA2' />
+                                </div>
+                            </span>
+                            <div className="navbar-dropdown is-right" style={{ paddingTop: 0, paddingBottom: 0, minWidth: '350px' }}>
+                                <Notifications>
+                                    <div className='flex'>
+                                        <h1>Notifications</h1>
+                                        {user.notifications.length > 0 ? <small onClick={handleNotification}>Mark all as read</small> : null}
+                                    </div>
+                                    <div className={user.notifications.length > 4 ? `notification-wrapper` : ''} style={{ maxHeight: '200px', overflowY: 'scroll' }}>
+                                        {
+                                            user.notifications.length > 0 ?
+                                                user.notifications.sort((a, b) => a._id - b._id).map((notification, index) => (
+                                                    <div key={index}>
+                                                        <div className="navbar-item" style={{ padding: '1rem 0rem' }}>
+                                                            <div className='flex' style={{ marginBottom: '8px' }}>
+                                                                <h4>{notification.messageType}</h4>
+                                                                <small style={{ color: '#7E8BA2' }}>{moment(notification.addedAt).fromNow(true)}</small>
+                                                            </div>
+                                                            <span>{notification.message}</span>
+                                                        </div>
+                                                    </div>
+                                                ))
+                                                :
+                                                (
+                                                    <p>You don't have any notifications.</p>
+                                                )
+                                        }
+                                    </div>
+                                    <p className='manage'>Manage your notifications</p>
+                                </Notifications>
+                            </div>
+
+                        </div>
+
+                        <div onClick={() => setIsDropDownActive(!isDropDownActive)} className={`navbar-item has-dropdown ${isDropDownActive ? 'is-active' : ''}`}>
                             <span className="navbar-link">
                                 {!user
                                     ?
@@ -81,12 +135,4 @@ const DashboardNavbar = ({ user, Logout }) => {
     )
 }
 
-const mapStateToProps = (state) => {
-    return {
-        user: state.auth.user,
-        isAuthenticated: state.auth.isAuthenticated,
-        userLoaded: state.auth.userLoaded
-    }
-}
-
-export default connect(mapStateToProps, { Logout })(DashboardNavbar)
+export default DashboardNavbar

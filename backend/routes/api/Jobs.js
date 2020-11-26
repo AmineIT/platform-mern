@@ -4,7 +4,6 @@ const passport = require('passport');
 const passportConfig = require('../../config/passport');
 const Joi = require('joi');
 const Job = require('../../models/Job');
-const moment = require('moment')
 
 // @desc    Create new job
 // @route   POST /jobs/create-job/
@@ -32,9 +31,7 @@ router.get('/fetch-jobs', (res, req) => {
         if (error) {
             throw new Error('Error has occured!')
         } else {
-            req.status(200).json({
-                jobs
-            })
+            req.status(200).json(jobs)
         }
     })
 })
@@ -94,7 +91,7 @@ router.put('/update-job/:id', passport.authenticate('jwt', { session: false }), 
 
     Job.findById(res.params.id, null, (error, job) => {
         if (error) {
-            throw new Error('Error has occured!')
+            throw new Error(error)
         }
         else {
             job.jobTitle = jobTitle

@@ -10,7 +10,7 @@ import Button from '../Button'
 import { FiUploadCloud } from 'react-icons/fi'
 // import { Ring } from 'react-spinners-css'
 
-const FormPersonalDetails = ({customHandleChange, nextStep, prevStep, formik, Register}) => {
+const FormPersonalDetails = ({ customHandleChange, nextStep, prevStep, formik, Register }) => {
 
     const { handleChange, values, setFieldError, errors } = formik;
 
@@ -22,14 +22,14 @@ const FormPersonalDetails = ({customHandleChange, nextStep, prevStep, formik, Re
 
     const imageMaxSize = 5242880 // 5MB
     const acceptedFileTypes = 'image/x-png, image/png, image/jpg, image/jpeg'
-    const acceptedFileTypesArray = acceptedFileTypes.split(",").map((item) => {return item.trim()})
+    const acceptedFileTypesArray = acceptedFileTypes.split(",").map((item) => { return item.trim() })
 
     const verifyFile = (files) => {
         if (files && files.length > 0) {
             const currentFile = files[0]
             const currentFileType = currentFile.type
             const currentFileSize = currentFile.size
-            if(currentFileSize > imageMaxSize) {
+            if (currentFileSize > imageMaxSize) {
                 alert(`Maximum upload size is ${imageMaxSize} MB`)
                 return false
             }
@@ -46,12 +46,12 @@ const FormPersonalDetails = ({customHandleChange, nextStep, prevStep, formik, Re
             verifyFile(rejectedFiles)
         }
 
-        if (files && files.length > 0){
+        if (files && files.length > 0) {
             const isVerified = verifyFile(files)
-            if (isVerified){
+            if (isVerified) {
                 let formData = new FormData()
                 const config = {
-                    header: {'content-typy' : 'multipart/form-data'}
+                    header: { 'content-typy': 'multipart/form-data' }
                 }
 
                 const currentFile = files[0]
@@ -59,22 +59,22 @@ const FormPersonalDetails = ({customHandleChange, nextStep, prevStep, formik, Re
                 formData.append('profileImage', currentFile)
 
                 axios.post('/users/uploads/userImage', formData, config)
-                     .then(response => {
-                         if (response.data.success) {
+                    .then(response => {
+                        if (response.data.success) {
                             customHandleChange('profileImage', response.data.image)
                             setFileName(currentFile.path)
-                         } else {
-                             alert('Failed to save the image, please try again.')
-                         }
-                     })
+                        } else {
+                            alert('Failed to save the image, please try again.')
+                        }
+                    })
             }
         }
     }
 
     const RegisterUser = () => {
         if (values.profileImage === '') {
-            setFieldError('profileImage', 'Please upload an image.')
-            return
+            return setFieldError('profileImage', 'Please upload an image.')
+
         }
 
         Register(values)
@@ -86,11 +86,11 @@ const FormPersonalDetails = ({customHandleChange, nextStep, prevStep, formik, Re
 
             {values.role === 'employer' ? (<Label required>Company Logo</Label>) : (<Label>Photo Profile</Label>)}
             <Dropzone onDrop={handleOnDrop} accept={acceptedFileTypes} multiple={false}>
-                {({getRootProps, getInputProps}) => (
+                {({ getRootProps, getInputProps }) => (
                     <DragAndDropSection {...getRootProps()}>
                         <input {...getInputProps()} />
                         <DragAndDropContent>
-                            <FiUploadCloud size="2em" className="mr-4"/> <span>Drag and Drop to upload 
+                            <FiUploadCloud size="2em" className="mr-4" /> <span>Drag and Drop to upload
                                 <br />
                                 {fileName}
                             </span>
@@ -105,23 +105,23 @@ const FormPersonalDetails = ({customHandleChange, nextStep, prevStep, formik, Re
                 <>
                     <Label className="mt-4">What's Your Role?</Label>
                     <div className="control mt-4 mb-4">
-                        <label className="radio" style={{width: '240px'}}>
-                            <div style={{display: 'flex', alignItems: 'center'}}>
-                                <input 
-                                    className="inputRadio" 
-                                    type="radio" 
-                                    name="answer" 
-                                    value="HR Manager" 
+                        <label className="radio" style={{ width: '240px' }}>
+                            <div style={{ display: 'flex', alignItems: 'center' }}>
+                                <input
+                                    className="inputRadio"
+                                    type="radio"
+                                    name="answer"
+                                    value="HR Manager"
                                     onChange={handleChange('currentJobRole')} />
                                 <RadioLabel>HR Manager</RadioLabel>
                             </div>
                         </label>
-                        <label className="radio" style={{width: '240px'}}>
-                            <div style={{display: 'flex', alignItems: 'center'}}>
-                                <input 
-                                    className="inputRadio" 
-                                    type="radio" 
-                                    name="answer" 
+                        <label className="radio" style={{ width: '240px' }}>
+                            <div style={{ display: 'flex', alignItems: 'center' }}>
+                                <input
+                                    className="inputRadio"
+                                    type="radio"
+                                    name="answer"
                                     value="Recruiter"
                                     onChange={handleChange('currentJobRole')} />
                                 <RadioLabel>Recruiter</RadioLabel>
@@ -129,23 +129,23 @@ const FormPersonalDetails = ({customHandleChange, nextStep, prevStep, formik, Re
                         </label>
                     </div>
                     <div className="control mt-2 mb-4">
-                        <label className="radio" style={{width: '240px'}}>
-                            <div style={{display: 'flex', alignItems: 'center'}}>
-                                <input 
-                                    className="inputRadio" 
-                                    type="radio" 
+                        <label className="radio" style={{ width: '240px' }}>
+                            <div style={{ display: 'flex', alignItems: 'center' }}>
+                                <input
+                                    className="inputRadio"
+                                    type="radio"
                                     name="answer"
-                                    value="Head of Department" 
+                                    value="Head of Department"
                                     onChange={handleChange('currentJobRole')} />
                                 <RadioLabel>Head of Department</RadioLabel>
                             </div>
                         </label>
-                        <label className="radio" style={{width: '240px'}}>
-                            <div style={{display: 'flex', alignItems: 'center'}}>
-                                <input 
-                                    className="inputRadio" 
-                                    type="radio" 
-                                    name="answer" 
+                        <label className="radio" style={{ width: '240px' }}>
+                            <div style={{ display: 'flex', alignItems: 'center' }}>
+                                <input
+                                    className="inputRadio"
+                                    type="radio"
+                                    name="answer"
                                     value="Other"
                                     onChange={handleChange('currentJobRole')} />
                                 <RadioLabel>Other</RadioLabel>
@@ -154,20 +154,20 @@ const FormPersonalDetails = ({customHandleChange, nextStep, prevStep, formik, Re
                     </div>
                 </>
             ) : (
-                <>
-                    <Label className="mt-4">About You</Label>
-                    <textarea 
-                        className="textarea mt-4" 
-                        placeholder="Tell us more about yourself"
-                        onChange={handleChange('aboutMe')}
-                        defaultValue={values.aboutMe}
-                    ></textarea>
-                </>
-            )}
+                    <>
+                        <Label className="mt-4">About You</Label>
+                        <textarea
+                            className="textarea mt-4 mb-4"
+                            placeholder="Tell us more about yourself"
+                            onChange={handleChange('aboutMe')}
+                            defaultValue={values.aboutMe}
+                        ></textarea>
+                    </>
+                )}
 
-            <Button onClick={RegisterUser} size="medium" align="right">Get Started</Button>
+            <Button onClick={RegisterUser} type='button' size="medium" align="right">Get Started</Button>
             <Button className="mr-4 mt-4" onClick={prev} size="medium" outline>Previous</Button>
-            
+
         </RegisterForm>
     )
 }
@@ -179,4 +179,4 @@ const mapStateToProps = (state) => {
     }
 }
 
-export default connect(mapStateToProps, {Register})(FormPersonalDetails)
+export default connect(mapStateToProps, { Register })(FormPersonalDetails)

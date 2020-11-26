@@ -24,8 +24,7 @@ const UserSchema = new mongoose.Schema({
         default: null
     },
     companyWebsite: {
-        type: String,
-        require: true
+        type: String
     },
     phoneNumber: {
         type: String,
@@ -41,7 +40,15 @@ const UserSchema = new mongoose.Schema({
     },
     profileImage: {
         type: String,
-        require: true,
+        default: ''
+    },
+    city: {
+        type: String,
+        default: ''
+    },
+    country: {
+        type: String,
+        default: ''
     },
     createdAt: {
         type: Date,
@@ -58,6 +65,51 @@ const UserSchema = new mongoose.Schema({
         type: Boolean,
         default: true
     },
+    kanbanStatus: {
+        type: String,
+        default: 'Applied'
+    },
+    appliedFor: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Job'
+    }],
+    notifications: [{
+        message: {
+            type: String,
+            required: true
+        },
+        messageType: {
+            type: String,
+            required: true
+        },
+        addedAt: {
+            type: Date,
+            default: Date.now
+        }
+    }],
+    candidatesPipeline: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    }],
+    assessmentsTaken: [{
+        assessment: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Assessment'
+        },
+        score: {
+            type: String,
+            required: true,
+            default: ''
+        },
+        status: {
+            type: String,
+            default: 'Saved'
+        },
+        completedAt: {
+            type: Date,
+            default: Date.now
+        }
+    }],
     candidateWorkExperience: [{
         jobTitle: {
             type: String
@@ -150,7 +202,6 @@ UserSchema.pre('save', function (next) {
         this.password = hashedPassword;
         next();
     })
-
 })
 
 // Compare the plain text password with the hashed password that's store in our db

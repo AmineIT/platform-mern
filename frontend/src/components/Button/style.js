@@ -17,20 +17,33 @@ export const StyledButton = styled.button`
   font-size: 18px;
   font-weight: 500;
   padding: 0 16px;
-  margin-left: ${({align}) => (align === 'left' ? '32px' : null)};
-  margin-right: ${({align}) => (align === 'right' ? '32px' : null)};
+  margin-left: ${({ align }) => (align === 'left' ? '32px' : null)};
+  margin-right: ${({ align }) => (align === 'right' ? '32px' : null)};
   height: 45px;
   font-family: ${theme.font.basisProMedium};
 
-  ${({ size }) => (size === 'large' ? LargeBtn : (size === 'medium' ? MediumBtn : (size === 'small' ? SmallBtn : BlockBtn)))};
+  ${({ size }) => (
+    size === 'large'
+      ? LargeBtn
+      : size === 'medium'
+        ? MediumBtn
+        : size === 'small'
+          ? SmallBtn
+          : size === 'tiny'
+            ? TinyBtn
+            : BlockBtn
+  )};
   width: ${({ fit }) => fit === 'stretched' ? 'auto' : null};
 
   &:disabled,
   &[disabled],
   &[isLoading] {
-    opacity: 0.8;
-    cursor: default;
+    /* opacity: 0.8; */
+    cursor: not-allowed;
     pointer-events: none;
+    background-color: ${theme.colors.lightBlue};
+    color: ${theme.colors.primaryGrey};
+    border: none;
   }
 
   &:focus {
@@ -115,4 +128,10 @@ const SmallBtn = css`
     width: 170px;
     height: 45px;
     font-size: 18px;
+`
+
+const TinyBtn = css`
+    width: 150px;
+    height: 35px;
+    font-size: 16px;
 `

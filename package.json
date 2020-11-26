@@ -8,8 +8,8 @@
     "start": "node backend/server.js",
     "server": "nodemon backend/server.js",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
-    "client": "npm start --prefix client",
-    "client-install": "npm install --prefix client",
+    "client": "npm start --prefix frontend",
+    "client-install": "npm install --prefix fronend",
     "server-install": "npm install"
   },
   "keywords": [],

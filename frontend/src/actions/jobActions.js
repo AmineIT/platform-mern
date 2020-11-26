@@ -8,7 +8,8 @@ import {
     DELETE_JOB,
     PUBLISH_JOB,
     ARCHIVE_JOB,
-    GET_JOB_REQUEST
+    GET_JOB_REQUEST,
+    GET_ALL_JOBS
 } from './types'
 import { returnErrors } from './errorActions'
 import { tokenConfig } from '../actions/authActions'
@@ -76,7 +77,7 @@ export const updateJob = (values) => (dispatch, getState) => {
 }
 
 export const deleteJob = (id) => (dispatch, getState) => {
-    axios.delete(`jobs/delete-job/${id}`, tokenConfig(getState)).then(res => {
+    axios.delete(`/jobs/delete-job/${id}`, tokenConfig(getState)).then(res => {
         dispatch({
             type: DELETE_JOB,
             payload: id
@@ -87,7 +88,7 @@ export const deleteJob = (id) => (dispatch, getState) => {
 }
 
 export const publishJob = (id) => (dispatch, getState) => {
-    axios.post(`jobs/publish-job/${id}`, null, tokenConfig(getState)).then(res => {
+    axios.post(`/jobs/publish-job/${id}`, null, tokenConfig(getState)).then(res => {
         dispatch({
             type: PUBLISH_JOB,
             payload: id
@@ -105,5 +106,16 @@ export const archiveJob = (id) => (dispatch, getState) => {
         })
     }).catch(error => {
         returnErrors(error.response.data, error.response.status, 'ARCHIVE_JOB_FAIL')
+    })
+}
+
+export const fetchAllJobs = () => (dispatch) => {
+    axios.get('/jobs/fetch-jobs').then(res => {
+        dispatch({
+            type: GET_ALL_JOBS,
+            payload: res.data
+        })
+    }).catch(error => {
+        returnErrors(error.response.data, error.response.status, 'FETCH_JOB_FAIL')
     })
 }

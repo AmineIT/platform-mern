@@ -5,6 +5,7 @@ const passportConfig = require('../../config/passport');
 const Joi = require('joi');
 const JWT = require('jsonwebtoken');
 const User = require('../../models/User');
+const Job = require('../../models/Job');
 const multer = require('multer');
 const sgMail = require('@sendgrid/mail');
 const crypto = require('crypto');
@@ -263,6 +264,161 @@ router.post('/update-steps', passport.authenticate('jwt', { session: false }), (
             })
         }
     })
+})
+
+// @desc    Edit user profile
+// @route   POST /users/edit-profile
+// @access  Private
+router.put('/edit-profile', passport.authenticate('jwt', { session: false }), (req, res) => {
+    const { candidatesPipeline, assessmentsTaken } = req.body;
+
+    User.findById(req.user._id, null, (error, user) => {
+        if (error) {
+            throw new Error(error)
+        } else {
+            candidatesPipeline ? user.candidatesPipeline.push(...candidatesPipeline) : null
+            assessmentsTaken ? user.assessmentsTaken.push(...assessmentsTaken) : null
+            user.save().then(user => {
+                res.status(200).json(user)
+            }).catch(error => {
+                res.status(400)
+                throw new Error(error)
+            })
+        }
+    })
+})
+
+// @desc    Fetch notifications array
+// @route   GET /users/fetch-notifications
+// @access  Private
+router.get('/fetch-notifications', passport.authenticate('jwt', { session: false }), (res, req) => {
+    const { _id } = res.user
+    User.aggregate([
+        { $match: { "_id": _id } },
+        { $unwind: "$notifications" },
+        { $sort: { "notifications.addedAt": -1 } },
+        { $group: { _id: "$_id", 'notifications': { $push: '$notifications' } } },
+        { $project: { "notifications": "$notifications" } }
+    ]).exec((error, doc) => {
+        if (error) {
+            throw new Error(error)
+        } else {
+            req.status(200).json(doc.length > 0 ? doc[0].notifications : [])
+        }
+    })
+})
+
+// @desc    Clear notifications array
+// @route   POST /users/fetch-notifications
+// @access  Private
+router.post('/clear-notifications', passport.authenticate('jwt', { session: false }), (res, req) => {
+    const { _id } = res.user
+    User.findById(_id, (error, user) => {
+        if (error) {
+            throw new Error(error)
+        } else {
+            user.notifications = []
+            user.save()
+            req.status(200).json(user)
+        }
+    })
+})
+
+// @desc    Update kanbanStatus
+// @route   PUT /users/update-kanbanstatus/:id
+// @access  Private
+router.put('/update-kanbanstatus', passport.authenticate('jwt', { session: false }), (res, req) => {
+
+    const { kanbanStatus, id } = res.body
+
+    User.findById(id, null, (error, user) => {
+        if (error) {
+            throw new Error(error)
+        }
+        else {
+            user.kanbanStatus = kanbanStatus
+            user.save().then(user => {
+                req.status(200).json(user)
+            }).catch(error => {
+                throw new Error(error)
+            })
+        }
+    })
+})
+
+// @desc    Apply for a job
+// @route   PUT /users/apply-job/:id
+// @access  Private
+router.put('/apply-job/:id', passport.authenticate('jwt', { session: false }), (res, req) => {
+
+    const { id } = res.params
+    const currentUser = res.user._id
+    const fullName = res.user.fullName
+    const appliedFor = res.user.appliedFor
+
+    Job.findById(id, null, (error, job) => {
+        if (error) {
+            throw new Error(error)
+        } else {
+            const hasApplied = job.candidates.includes(currentUser)
+            if (!hasApplied) {
+                job.candidates.push(currentUser)
+                const { _id } = job.createdBy
+                User.findById(_id, null, (error, user) => {
+                    if (error) {
+                        throw new Error(error)
+                    } else {
+                        user.notifications.push({ message: `${fullName} has applied to ${job.jobTitle} role.`, messageType: 'Job Application' })
+                        user.save()
+                    }
+                })
+            }
+
+            const pipelineExist = job.createdBy.candidatesPipeline.includes(currentUser)
+            if (!pipelineExist) {
+                const { _id } = job.createdBy
+                User.findById(_id, null, (error, user) => {
+                    if (error) {
+                        throw new Error(error)
+                    } else {
+                        const userExist = user.candidatesPipeline.includes(currentUser)
+                        if (userExist) {
+                            return req.json({
+                                message: 'This candidate has already applied been added to your pipeline.',
+                                pipelineExist: true
+                            })
+                        } else {
+                            user.candidatesPipeline.push(currentUser)
+                            user.save()
+                        }
+                    }
+                })
+            }
+
+            const alreadyApplied = appliedFor.includes(job._id)
+            if (!alreadyApplied) {
+                User.findById(currentUser, null, (error, user) => {
+                    if (error) {
+                        throw new Error(error)
+                    } else {
+                        const jobExist = user.appliedFor.includes(job._id)
+                        if (jobExist) {
+                            return req.json({
+                                message: 'You already applied for this job.',
+                                alreadyApplied: true
+                            })
+                        } else {
+                            user.appliedFor.push(job._id)
+                            user.save()
+                        }
+                    }
+                })
+            }
+
+            job.save()
+            req.status(200).json(job)
+        }
+    }).populate('createdBy')
 })
 
 module.exports = router;

@@ -6,7 +6,8 @@ const AssessmentSchema = new mongoose.Schema({
         required: true,
     },
     questions: [{
-        Type: String
+        type: String,
+        required: true
     }],
     candidates: [{
         type: mongoose.Schema.Types.ObjectId,
