@@ -6,7 +6,7 @@ const AssessmentSchema = new mongoose.Schema({
         required: true,
     },
     questions: [{
-        type: String,
+        type: Array,
         required: true
     }],
     candidates: [{

@@ -4,10 +4,9 @@ const passport = require('passport');
 const passportConfig = require('../../config/passport');
 const Joi = require('joi');
 const Assessment = require('../../models/Assessment');
-const moment = require('moment')
 
 // @desc    Create new assessment
-// @route   POST /assessment/create-assessment/
+// @route   POST /assessments/create-assessment/
 // @access  Private
 router.post('/create-assessment', passport.authenticate('jwt', { session: false }), (req, res) => {
 
@@ -16,11 +15,27 @@ router.post('/create-assessment', passport.authenticate('jwt', { session: false 
 
     newAssessment.save((error, assessment) => {
         if (error) {
-            throw new Error('Error has occured!')
+            throw new Error(error)
         } else {
             res.status(200).json(assessment)
         }
     })
+})
+
+// @desc    Fetch assessment of a company
+// @route   GET /assessments/fetch-company-assessment/
+// @access  Private
+router.get('/fetch-company-assessments', passport.authenticate('jwt', { session: false }), (req, res) => {
+
+    const { _id } = req.user
+    Assessment.find({ createdBy: _id }).sort({ createdAt: 'desc' }).populate('candidates').exec((error, assessments) => {
+        if (error) {
+            throw new Error(error)
+        } else {
+            res.status(200).json(assessments)
+        }
+    })
+
 })
 
 module.exports = router

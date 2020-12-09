@@ -13,7 +13,7 @@ const DataTable = () => {
     const user = useSelector(state => state.auth.user)
     const { candidatesPipeline } = user
 
-    const data = useMemo(() => candidatesPipeline, [])
+    const data = useMemo(() => candidatesPipeline, [candidatesPipeline])
     const columns = useMemo(() => COLUMNS, [])
 
     const tableInstance = useTable({

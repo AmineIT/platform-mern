@@ -150,6 +150,10 @@ const GlobalStyle = createGlobalStyle`
   .css-1pahdxg-control:hover {
     border-color: ${theme.colors.primaryColor}
   }
+
+  .modal-background {
+    background-color: rgb(10 10 10 / 60%);
+  }
 `;
 
 export default GlobalStyle;

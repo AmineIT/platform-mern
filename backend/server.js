@@ -29,7 +29,7 @@ connectDB()
 // Setup the routes
 app.use('/users', userRouter)
 app.use('/jobs', jobRouter)
-app.use('/assessment', assessmentRouter)
+app.use('/assessments', assessmentRouter)
 
 const PORT = process.env.PORT || 5000
 app.listen(PORT, () => { console.log(`listening on port ${PORT}`) })
