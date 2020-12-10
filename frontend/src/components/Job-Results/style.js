@@ -123,7 +123,7 @@ export const ColoredSpan = styled.div`
     width: 20px;
     height: 20px;
     border-radius: 4px;
-    background: ${({ title }) => title === 'Applied' ? theme.colors.orange : title === 'Screening' ? theme.colors.red : title === 'Shortlisted' ? theme.colors.purple : theme.colors.green}
+    background: ${({ title }) => title === 'Applied' ? theme.colors.orange : title === 'Screening' ? theme.colors.red : title === 'Shortlisted' ? theme.colors.purple : theme.colors.green};
 `
 
 export const JobTitle = styled.h1`

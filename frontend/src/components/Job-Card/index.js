@@ -110,20 +110,24 @@ const JobCard = ({ data }) => {
                         <div className="dropdown-menu" id="dropdown-menu" role="menu">
                             <div className="dropdown-content">
                                 {
-                                    data.status === 'draft' || data.status === 'archived' ?
-                                        (<>
+                                    data.status === 'published' || data.status === 'archived' ? (
+                                        <>
+                                            <Link to={`/job/results/${data._id}`} className="dropdown-item">
+                                                View job results
+                                            </Link>
+                                            <hr className="dropdown-divider" />
+                                        </>
+                                    ) : null
+                                }
+                                {
+                                    data.status === 'draft' || data.status === 'archived' ? (
+                                        <>
                                             <span onClick={showPublishModal} className="dropdown-item">
                                                 Publish job
                                             </span>
                                             <hr className="dropdown-divider" />
-                                        </>)
-                                        : data.candidates && data.candidates.length > 0 ?
-                                            (<>
-                                                <Link to={`/job/results/${data._id}`} className="dropdown-item">
-                                                    View job results
-                                        </Link>
-                                                <hr className="dropdown-divider" />
-                                            </>) : null
+                                        </>
+                                    ) : null
                                 }
                                 <Link to={`/job/update/${data._id}`} className="dropdown-item">
                                     Edit job

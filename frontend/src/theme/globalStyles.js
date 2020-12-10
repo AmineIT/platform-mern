@@ -143,10 +143,6 @@ const GlobalStyle = createGlobalStyle`
     cursor: pointer;
   }
 
-  .css-yk16xz-control, .css-1pahdxg-control {
-    width: 180px;
-  }
-
   .css-1pahdxg-control:hover {
     border-color: ${theme.colors.primaryColor}
   }

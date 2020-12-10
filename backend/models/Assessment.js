@@ -5,10 +5,10 @@ const AssessmentSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    questions: [{
+    questions: {
         type: Array,
         required: true
-    }],
+    },
     candidates: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'

@@ -1,6 +1,6 @@
 import axios from 'axios'
 import {
-    FETCH_COMPANY_ASSESSMENTS, GET_ASSESSMENT_REQUEST, CREATE_ASSESSMENT
+    FETCH_COMPANY_ASSESSMENTS, GET_ASSESSMENT_REQUEST, CREATE_ASSESSMENT, FETCH_ASSESSMENT
 } from './types'
 import { returnErrors } from './errorActions'
 import { tokenConfig } from '../actions/authActions'
@@ -61,5 +61,20 @@ export const createAssessment = (values) => (dispatch, getState) => {
         })
     }).catch(error => {
         returnErrors(error.response.data, error.response.status, 'CREATE_ASSESSMENT_FAIL')
+    })
+}
+
+// Fetch a single assessment
+export const fetchAssessment = (id) => (dispatch, getState) => {
+    dispatch({
+        type: GET_ASSESSMENT_REQUEST
+    })
+    axios.get(`/assessments/fetch-assessment/${id}`, tokenConfig(getState)).then(res => {
+        dispatch({
+            type: FETCH_ASSESSMENT,
+            payload: res.data
+        })
+    }).catch(error => {
+        returnErrors(error.response.data, error.response.status, 'FETCH_ASSESSMENT_FAIL')
     })
 }

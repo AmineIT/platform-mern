@@ -1,7 +1,8 @@
 import {
     FETCH_COMPANY_ASSESSMENTS,
     GET_ASSESSMENT_REQUEST,
-    CREATE_ASSESSMENT
+    CREATE_ASSESSMENT,
+    FETCH_ASSESSMENT
 } from '../actions/types'
 
 const initialState = {
@@ -53,6 +54,12 @@ export default function (state = initialState, action) {
             return {
                 ...state,
                 assessments: [action.payload, ...state.assessments]
+            }
+        case FETCH_ASSESSMENT:
+            return {
+                ...state,
+                companyAssessment: action.payload,
+                isLoading: false
             }
         default:
             return state

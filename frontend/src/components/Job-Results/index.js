@@ -83,6 +83,7 @@ const JobResultsComponent = () => {
                         <KanbanTemplate kanbanData={kanbanData} />
 
                         <DashboardFooter />
+
                     </Container>
                 </>
             ) : (<LoadingScreen />)}
