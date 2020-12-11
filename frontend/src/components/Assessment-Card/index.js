@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import moment from 'moment'
 import { toast } from 'react-toastify'
+import { deleteAssessment, publishAssessment } from '../../actions/assessmentActions'
 
 import {
     CardWrapper,
@@ -31,33 +32,33 @@ const AssessmentCard = ({ data }) => {
         setIsPublichActive(!isPublishActive)
     }
 
-    // const jobDelete = (id) => {
-    //     dispatch(deleteJob(id))
-    //     toast.error('Your job has been deleted!', {
-    //         position: "top-right",
-    //         autoClose: 5000,
-    //         hideProgressBar: true,
-    //         closeOnClick: true,
-    //         pauseOnHover: true,
-    //         draggable: true,
-    //         progress: undefined
-    //     });
-    //     setIsDeleteActive(false)
-    // }
+    const assessmentDelete = (id) => {
+        dispatch(deleteAssessment(id))
+        toast.error('Your job has been deleted!', {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined
+        });
+        setIsDeleteActive(false)
+    }
 
-    // const jobPublish = (id) => {
-    //     dispatch(publishJob(id))
-    //     toast.success('Your job has been published!', {
-    //         position: "top-right",
-    //         autoClose: 5000,
-    //         hideProgressBar: true,
-    //         closeOnClick: true,
-    //         pauseOnHover: true,
-    //         draggable: true,
-    //         progress: undefined
-    //     });
-    //     setIsPublichActive(false)
-    // }
+    const assessmentPublish = (id) => {
+        dispatch(publishAssessment(id))
+        toast.success('Your job has been published!', {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined
+        });
+        setIsPublichActive(false)
+    }
 
     return (
         <CardWrapper status={data.status}>
@@ -133,8 +134,8 @@ const AssessmentCard = ({ data }) => {
                         <p>Are you sure you want to delete this assessment?</p>
                     </section>
                     <footer className="modal-card-foot">
-                        <button className="button is-danger">Delete</button>
-                        <button className="button">Cancel</button>
+                        <button className="button is-danger" onClick={assessmentDelete.bind(this, data._id)}>Delete</button>
+                        <button onClick={() => setIsDeleteActive(false)} className="button">Cancel</button>
                     </footer>
                 </div>
             </div>
@@ -150,8 +151,8 @@ const AssessmentCard = ({ data }) => {
                         <p>Are you sure you want to publish this assessment?</p>
                     </section>
                     <footer className="modal-card-foot">
-                        <button className="button is-success">Publish</button>
-                        <button className="button">Cancel</button>
+                        <button className="button is-success" onClick={assessmentPublish.bind(this, data._id)}>Publish</button>
+                        <button onClick={() => setIsPublichActive(false)} className="button">Cancel</button>
                     </footer>
                 </div>
             </div>

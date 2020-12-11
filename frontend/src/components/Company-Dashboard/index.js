@@ -101,7 +101,7 @@ const CompanyDashboard = () => {
                     <h5>Assessments</h5>
                     <p>Create your assessment and see real results before you consider a talent and shortlist effectively to drill into quality candidates. Or choose from some of the prebuilt questions <Link className='link' to='/assessments'>here.</Link></p>
                     <Button to='assessment/create' size='small' light fit='stretched' align='right'>Create assessment</Button>
-                    <Button to='assessments' size='small' outline>See questions</Button>
+                    <Button to='assessments' size='small' outline fit='stretched'>Browse questions</Button>
                 </div>
                 <div className="span-col-2 feedback">
                     <h5>We love feedback!</h5>

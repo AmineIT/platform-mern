@@ -19,6 +19,7 @@ import UpdateJobPage from './pages/update-job'
 import JobResultsPage from './pages/job-results'
 import CreateAssessmentJob from './pages/create-assessment'
 import CompanyAssessmentPreviewPage from './pages/company-assessment-preview'
+import UpdateAssessmentPage from './pages/update-assessment'
 
 import EmployeeDashboardPage from './pages/employee-dashboard'
 
@@ -47,6 +48,7 @@ function App() {
           <PrivateRoute path='/job/results/:id' component={JobResultsPage} roles={['employer']} />
           <PrivateRoute path='/assessment/create' component={CreateAssessmentJob} roles={['employer']} />
           <PrivateRoute path='/assessment/preview/:id' component={CompanyAssessmentPreviewPage} roles={['employer']} />
+          <PrivateRoute path='/assessment/update/:id' component={UpdateAssessmentPage} roles={['employer']} />
 
           <PrivateRoute path='/employee-dashboard' component={EmployeeDashboardPage} roles={['candidate']} />
         </Switch>

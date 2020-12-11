@@ -1,6 +1,6 @@
 import axios from 'axios'
 import {
-    FETCH_COMPANY_ASSESSMENTS, GET_ASSESSMENT_REQUEST, CREATE_ASSESSMENT, FETCH_ASSESSMENT
+    FETCH_COMPANY_ASSESSMENTS, GET_ASSESSMENT_REQUEST, CREATE_ASSESSMENT, FETCH_ASSESSMENT, UPDATE_ASSESSMENT, DELETE_ASSESSMENT, PUBLISH_ASSESSMENT
 } from './types'
 import { returnErrors } from './errorActions'
 import { tokenConfig } from '../actions/authActions'
@@ -20,7 +20,7 @@ export const fetchCompanyAssessments = () => (dispatch, getState) => {
     })
 }
 
-// Add question of an assessment
+// Add question of an assessment (Create Page)
 export const addQuestion = (question) => (dispatch) => {
     dispatch({
         type: 'addQuestion',
@@ -28,10 +28,41 @@ export const addQuestion = (question) => (dispatch) => {
     })
 }
 
-// Delete question of an assessment
+// Enable question of an assessment for editing (Update Page)
+export const addQuestionForEditing = (question) => (dispatch) => {
+    dispatch({
+        type: 'enableEditingFromUpdate',
+        payload: question
+    })
+}
+
+// Update question of an assessment
+export const updateEditedQuestion = (question) => (dispatch) => {
+    dispatch({
+        type: 'updateEditedQuestion',
+        payload: question
+    })
+}
+
+// Add question of an assessment (Update Page)
+export const addQuestionFromEditing = (question) => (dispatch) => {
+    dispatch({
+        type: 'addQuestionFromEditing',
+        payload: question
+    })
+}
+
+// Delete question of an assessment (Create Page)
 export const removeQuestion = (id) => (dispatch) => {
     dispatch({
         type: 'removeQuestion',
+        payload: id
+    })
+}
+// Remove question (Update Page)
+export const removeQuestionFromEditing = (id) => (dispatch) => {
+    dispatch({
+        type: 'removeQuestionFromEditing',
         payload: id
     })
 }
@@ -76,5 +107,41 @@ export const fetchAssessment = (id) => (dispatch, getState) => {
         })
     }).catch(error => {
         returnErrors(error.response.data, error.response.status, 'FETCH_ASSESSMENT_FAIL')
+    })
+}
+
+// Update a single assessment
+export const updateAssessment = (values) => (dispatch, getState) => {
+    axios.put(`/assessments/update-assessment/${values._id}`, values, tokenConfig(getState)).then(res => {
+        dispatch({
+            type: UPDATE_ASSESSMENT,
+            payload: res.data
+        })
+    }).catch(error => {
+        returnErrors(error.response.data, error.response.status, 'UPDATE_ASSESSMENT_FAIL')
+    })
+}
+
+// Delete an assessment
+export const deleteAssessment = (id) => (dispatch, getState) => {
+    axios.delete(`/assessments/delete-assessment/${id}`, tokenConfig(getState)).then(res => {
+        dispatch({
+            type: DELETE_ASSESSMENT,
+            payload: id
+        })
+    }).catch(error => {
+        returnErrors(error.response.data, error.response.status, 'DELETE_ASSESSMENT_FAIL')
+    })
+}
+
+// Publish an assessment
+export const publishAssessment = (id) => (dispatch, getState) => {
+    axios.put(`/assessments/publish-assessment/${id}`, null, tokenConfig(getState)).then(res => {
+        dispatch({
+            type: PUBLISH_ASSESSMENT,
+            payload: id
+        })
+    }).catch(error => {
+        returnErrors(error.response.data, error.response.status, 'PUBLISH_ASSESSMENT_FAIL')
     })
 }

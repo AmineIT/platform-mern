@@ -52,4 +52,60 @@ router.get('/fetch-assessment/:id', passport.authenticate('jwt', { session: fals
 
 })
 
+// @desc    Update an assessment
+// @route   PUT /assessments/update-assessment/:id
+// @access  Private
+router.put('/update-assessment/:id', passport.authenticate('jwt', { session: false }), (req, res) => {
+
+    const { assessmentTitle, questions, candidates, createdBy, status } = req.body;
+    Assessment.findById(req.params.id, null, (error, assessment) => {
+        if (error) {
+            throw new Error(error)
+        }
+        else {
+            assessment.assessmentTitle = assessmentTitle
+            assessment.questions = questions
+            assessment.candidates = candidates
+            assessment.createdBy = createdBy
+            assessment.status = status
+            assessment.createdAt = Date.now()
+
+            assessment.save().then(assessment => {
+                res.status(200).json(assessment)
+            }).catch(error => {
+                res.status(400)
+                throw new Error(error)
+            })
+        }
+    })
+})
+
+// @desc    Delete am assessment
+// @route   DELETE /assessment/delete-assessment/:id
+// @access  Private
+router.delete('/delete-assessment/:id', passport.authenticate('jwt', { session: false }), (req, res) => {
+    Assessment.deleteOne({ _id: req.params.id }, (error, assessment) => {
+        if (error) {
+            throw new Error('Error has occured!')
+        }
+        else {
+            res.json(assessment)
+        }
+    })
+})
+
+// @desc    Publish an assessment
+// @route   PUT /assessments/pubish-assessment/:id
+// @access  Private
+router.put('/publish-assessment/:id', passport.authenticate('jwt', { session: false }), (req, res) => {
+    Assessment.updateOne({ _id: req.params.id }, { status: 'published', createdAt: Date.now() }).exec((error, assessment) => {
+        if (error) {
+            throw new Error('Error has occured!')
+        }
+        else {
+            res.json(assessment)
+        }
+    })
+})
+
 module.exports = router
