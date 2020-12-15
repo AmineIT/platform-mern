@@ -25,8 +25,6 @@ import Button from '../Button'
 import DashboardFooter from '../Dashboard-Footer'
 import LoadingScreen from '../Loading-Screen'
 
-import Logo from '../../images/selfstarter-logo/selfstarter-logo.svg'
-
 import { RiArrowLeftLine } from 'react-icons/ri'
 import { BsCalendar } from 'react-icons/bs'
 
@@ -240,7 +238,7 @@ const UpdateJobComponent = () => {
                     <GlobalStyle />
                     <Container>
                         <LogoContainer>
-                            <img src={Logo} alt='Selfstarter Logo' />
+                            <img src={`http://localhost:5000/${user.profileImage}`} alt='Company Logo' />
                         </LogoContainer>
 
                         <HeadingContainer>

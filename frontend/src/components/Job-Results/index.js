@@ -13,6 +13,7 @@ import KanbanTemplate from './KanbanComponent'
 const JobResultsComponent = () => {
 
     const job = useSelector(state => state.jobs.companyJob)
+    const { user: { profileImage } } = useSelector(state => state.auth)
     const { id } = useParams()
     const history = useHistory()
     const dispatch = useDispatch()
@@ -65,7 +66,7 @@ const JobResultsComponent = () => {
                                 <RiArrowLeftLine size='24' />
                                 <span className='ml-1'>Back</span>
                             </div>
-                            <img src={Logo} alt='Selfstarter Logo' />
+                            <img src={`http://localhost:5000/${profileImage}`} alt='Selfstarter Logo' />
                         </HeaderContainer>
                         <JobDetails>
                             <FlexWrapper>

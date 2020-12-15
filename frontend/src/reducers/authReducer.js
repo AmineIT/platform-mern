@@ -11,7 +11,8 @@ import {
     UPDATE_KANBAN_STATUS,
     APPLY_JOB,
     FETCH_NOTIFICATIONS,
-    CLEAR_NOTIFICATIONS
+    CLEAR_NOTIFICATIONS,
+    EDIT_PROFILE
 } from '../actions/types';
 
 const initialState = {
@@ -84,6 +85,11 @@ export default function (state = initialState, action) {
             return {
                 ...state,
                 user: { ...state.user.notifications = [], ...state.user }
+            }
+        case EDIT_PROFILE:
+            return {
+                ...state,
+                user: action.payload
             }
         default:
             return state;

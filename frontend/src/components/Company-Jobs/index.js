@@ -16,6 +16,7 @@ const CompanyJobs = ({ jobs }) => {
 
     const [searchText, setSearchText] = useState('')
     const jobDetails = useSelector(state => state.jobs)
+    const { user: { companyName } } = useSelector(state => state.auth)
     const { isLoading } = jobDetails
 
     const filtredJobs = jobs.filter(job =>
@@ -36,7 +37,7 @@ const CompanyJobs = ({ jobs }) => {
                     </div>
                 ) : (
                         <>
-                            <Heading>Selfstarter Jobs</Heading>
+                            <Heading>{companyName} Jobs</Heading>
                             <Tabs>
                                 <FlexWrapper>
                                     <TabList>

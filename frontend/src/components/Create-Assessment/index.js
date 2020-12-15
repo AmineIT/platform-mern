@@ -19,7 +19,6 @@ import Button from '../Button'
 import DashboardFooter from '../Dashboard-Footer'
 import AssessmentSidebar from './AssessmentSidebar'
 import QuestionLibrary from './QuestionLibraries'
-import Logo from '../../images/selfstarter-logo/selfstarter-logo.svg'
 import { RiArrowLeftLine } from 'react-icons/ri'
 
 toast.configure()
@@ -122,7 +121,7 @@ const CreateAssessmentComponent = () => {
             <GlobalStyle />
             <Container>
                 <LogoContainer>
-                    <img src={Logo} alt='Selfstarter Logo' />
+                    <img src={`http://localhost:5000/${user.profileImage}`} alt='Company Logo' />
                 </LogoContainer>
 
                 <HeadingContainer>

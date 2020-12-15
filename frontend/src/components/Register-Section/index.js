@@ -52,7 +52,7 @@ const RegisterComponent = ({ history }) => {
         }),
         companyWebsite: Yup.string().when('role', {
             is: 'employer',
-            then: Yup.string().matches('^([a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?.)+[a-zA-Z]{2,6}$', 'Please type a valid url.').required('Please type your company website.')
+            then: Yup.string().required('Please type your company website.').url('Please type a valid URL. (e.g https://www.domaine.com)')
         }),
         phoneNumber: Yup.number().positive('Type a valid phone number.').required('Type a valid phone number.')
     })

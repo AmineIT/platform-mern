@@ -2,17 +2,17 @@ import React, { useState } from 'react'
 import Dropzone from 'react-dropzone'
 import axios from 'axios'
 
-import { connect } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { Register } from '../../actions/authActions'
 
 import { RegisterForm, Label, RadioLabel, DragAndDropSection, DragAndDropContent, SelectFile } from './style'
 import Button from '../Button'
 import { FiUploadCloud } from 'react-icons/fi'
-// import { Ring } from 'react-spinners-css'
 
-const FormPersonalDetails = ({ customHandleChange, nextStep, prevStep, formik, Register }) => {
+const FormPersonalDetails = ({ customHandleChange, nextStep, prevStep, formik }) => {
 
     const { handleChange, values, setFieldError, errors } = formik;
+    const dispatch = useDispatch()
 
     const prev = () => {
         prevStep()
@@ -74,10 +74,8 @@ const FormPersonalDetails = ({ customHandleChange, nextStep, prevStep, formik, R
     const RegisterUser = () => {
         if (values.profileImage === '') {
             return setFieldError('profileImage', 'Please upload an image.')
-
         }
-
-        Register(values)
+        dispatch(Register(values))
         nextStep()
     }
 
@@ -172,11 +170,4 @@ const FormPersonalDetails = ({ customHandleChange, nextStep, prevStep, formik, R
     )
 }
 
-const mapStateToProps = (state) => {
-    return {
-        user: state.auth.user,
-        error: state.error
-    }
-}
-
-export default connect(mapStateToProps, { Register })(FormPersonalDetails)
+export default FormPersonalDetails

@@ -110,7 +110,7 @@ const JobCard = ({ data }) => {
                         <div className="dropdown-menu" id="dropdown-menu" role="menu">
                             <div className="dropdown-content">
                                 {
-                                    data.status === 'published' || data.status === 'archived' ? (
+                                    (data.status === 'published' && data.candidates.length > 0) || data.status === 'archived' ? (
                                         <>
                                             <Link to={`/job/results/${data._id}`} className="dropdown-item">
                                                 View job results

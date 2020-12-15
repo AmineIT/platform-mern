@@ -19,7 +19,6 @@ import Button from '../Button'
 import DashboardFooter from '../Dashboard-Footer'
 import AssessmentSidebar from './AssessmentSidebar'
 import QuestionLibrary from './QuestionLibraries'
-import Logo from '../../images/selfstarter-logo/selfstarter-logo.svg'
 import { RiArrowLeftLine } from 'react-icons/ri'
 import LoadingScreen from '../Loading-Screen'
 
@@ -32,6 +31,7 @@ const UpdateAssessmentComponent = () => {
     const { id } = useParams()
     const { companyAssessment } = useSelector(state => state.assessments)
     const { assessmentTitle, questions, status, createdBy, _id } = companyAssessment
+    const { user: { profileImage } } = useSelector(state => state.auth)
 
     useEffect(() => {
         dispatch(fetchAssessment(id))
@@ -161,7 +161,7 @@ const UpdateAssessmentComponent = () => {
                 <GlobalStyle />
                 <Container>
                     <LogoContainer>
-                        <img src={Logo} alt='Selfstarter Logo' />
+                        <img src={`http://localhost:5000/${profileImage}`} alt='Company Logo' />
                     </LogoContainer>
 
                     <HeadingContainer>

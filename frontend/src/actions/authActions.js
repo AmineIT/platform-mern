@@ -12,7 +12,8 @@ import {
     UPDATE_KANBAN_STATUS,
     APPLY_JOB,
     FETCH_NOTIFICATIONS,
-    CLEAR_NOTIFICATIONS
+    CLEAR_NOTIFICATIONS,
+    EDIT_PROFILE
 } from './types';
 import { returnErrors, clearErrors } from './errorActions'
 
@@ -161,6 +162,20 @@ export const clearNotifications = () => (dispatch, getState) => {
     }).catch(error => {
         dispatch(
             returnErrors(error.response.data, error.response.status, 'CLEAR_NOTIFICATION_FAIL')
+        );
+    })
+}
+
+// Edit Profile
+export const editProfile = (values) => (dispatch, getState) => {
+    axios.put('/users/edit-profile', values, tokenConfig(getState)).then(res => {
+        dispatch({
+            type: EDIT_PROFILE,
+            payload: res.data
+        })
+    }).catch(error => {
+        dispatch(
+            returnErrors(error.response.data, error.response.status, 'EDIT_PROFILE_FAIL')
         );
     })
 }

@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const passport = require('passport');
 const passportConfig = require('../../config/passport');
-const Joi = require('joi');
 const JWT = require('jsonwebtoken');
 const User = require('../../models/User');
 const Job = require('../../models/Job');
@@ -50,30 +49,6 @@ router.post('/register', (req, res) => {
     // Extract the user data from the request body
     const { fullName, email, password, role, ...data } = req.body;
     // Check if this email is already exist in the database
-
-    // const schema = Joi.object().keys({
-    //     fullName: Joi.string().trim().min(3).required().error(errors => {
-    //         return errors.map(error => {
-    //             switch (error.type) {
-    //                 case "string.min":
-    //                     return { message: "Full Name must be more than 3 characters." };
-    //                 case "string.required":
-    //                     return { message: "Full Name is required." };
-    //                 case "any.empty":
-    //                     return { message: "Full Name is required." };
-    //             }
-    //         }
-    //         )
-    //     }),
-    //     password: Joi.string().trim().min(6).required().error(() => 'Password is required.'),
-    //     email: Joi.string().trim().required().error(() => 'Email is required.')
-    // })
-
-    // const result = Joi.validate(req.body, schema, { allowUnknown: true });
-
-    // if (result.error) {
-    //     return res.status(400).send({ msgError: result.error.details[0].message });
-    // }
 
     User.findOne({ email }, (error, user) => {
         // Check if there's an error while we're sending this request
@@ -270,14 +245,59 @@ router.post('/update-steps', passport.authenticate('jwt', { session: false }), (
 // @route   POST /users/edit-profile
 // @access  Private
 router.put('/edit-profile', passport.authenticate('jwt', { session: false }), (req, res) => {
-    const { candidatesPipeline, assessmentsTaken } = req.body;
 
-    User.findById(req.user._id, null, (error, user) => {
+    const {
+        candidatesPipeline,
+        assessmentsTaken,
+        socialMediaAccounts,
+        brandColor,
+        aboutMe,
+        appliedFor,
+        candidateEducation,
+        candidateWorkExperience,
+        city,
+        country,
+        currentJorRole,
+        companyWebsite,
+        email,
+        emailToken,
+        fullName,
+        isVerified,
+        kanbanStatus,
+        notifications,
+        phoneNumber,
+        profileImage,
+        role,
+        steps, } = req.body;
+
+    User.findById(req.user._id, '-password', (error, user) => {
         if (error) {
             throw new Error(error)
         } else {
-            candidatesPipeline ? user.candidatesPipeline.push(...candidatesPipeline) : null
-            assessmentsTaken ? user.assessmentsTaken.push(...assessmentsTaken) : null
+            candidatesPipeline ? user.candidatesPipeline = candidatesPipeline : user.candidatesPipeline
+            assessmentsTaken ? user.assessmentsTaken = assessmentsTaken : user.assessmentsTaken
+            socialMediaAccounts ? user.socialMediaAccounts = socialMediaAccounts : user.socialMediaAccounts
+            appliedFor ? user.appliedFor = appliedFor : user.appliedFor
+            candidateEducation ? user.candidateEducation = candidateEducation : user.candidateEducation
+            candidateWorkExperience ? user.candidateWorkExperience = candidateWorkExperience : user.candidateWorkExperience
+            notifications ? user.notifications = notifications : user.notifications
+
+            user.brandColor = brandColor
+            user.aboutMe = aboutMe
+            user.city = city
+            user.country = country
+            user.currentJorRole = currentJorRole
+            user.email = email
+            user.emailToken = emailToken
+            user.fullName = fullName
+            user.isVerified = isVerified
+            user.kanbanStatus = kanbanStatus
+            user.phoneNumber = phoneNumber
+            user.profileImage = profileImage
+            user.role = role
+            user.steps = steps
+            user.companyWebsite = companyWebsite
+
             user.save().then(user => {
                 res.status(200).json(user)
             }).catch(error => {

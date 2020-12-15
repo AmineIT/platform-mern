@@ -114,12 +114,19 @@ const GlobalStyle = createGlobalStyle`
     font-size: 14px;
   }
 
-  .introjs-progressbar, .Toastify__toast--info {
-    background-color: ${theme.colors.primaryColor}
+  .introjs-progressbar {
+    background-color: ${theme.colors.primaryColor};
   }
 
-  .Toastify__toast--success {
-    background-color: ${theme.colors.green}
+  .Toastify__toast--info, .Toastify__toast--success, .Toastify__toast--dark {
+    background-color: ${theme.colors.white};
+    color: ${theme.colors.black};
+    padding: ${theme.spacing.sixTeen};
+    border-radius: 4px;
+
+    & svg {
+      color: ${theme.colors.black};
+    }
   }
 
   .__react_component_tooltip {
@@ -149,6 +156,12 @@ const GlobalStyle = createGlobalStyle`
 
   .modal-background {
     background-color: rgb(10 10 10 / 60%);
+  }
+
+  .chrome-picker {
+    position: absolute;
+    bottom: 0;
+    left: 120px;
   }
 `;
 

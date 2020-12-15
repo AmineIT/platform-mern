@@ -52,7 +52,7 @@ const CompanyDashboard = () => {
                     null
             }
 
-            <Heading>Welcome to Selfstarter dashboard</Heading>
+            <Heading>Welcome to {user.companyName} dashboard</Heading>
 
             <Card className='dashboard-profile-step'>
                 <div>

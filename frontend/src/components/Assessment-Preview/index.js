@@ -30,8 +30,10 @@ const AssessmentPreview = () => {
     const dispatch = useDispatch()
     const { id } = useParams()
     const history = useHistory()
+    const { user } = useSelector(state => state.auth)
     const { companyAssessment } = useSelector(state => state.assessments)
     const { questions, assessmentTitle, status, createdAt } = companyAssessment
+    const { profileImage } = user
 
     useEffect(() => {
         dispatch(fetchAssessment(id))
@@ -120,10 +122,6 @@ const AssessmentPreview = () => {
         setSelectedOption(selectedOption)
     }
 
-    const handleShowValue = () => {
-        console.log(valueGetter.current());
-    }
-
     return (
         <>
             {Object.keys(companyAssessment).length === 0 ? (
@@ -138,7 +136,7 @@ const AssessmentPreview = () => {
                                     <RiArrowLeftLine size='24' />
                                     <span className='ml-1'>Back</span>
                                 </div>
-                                <img src={Logo} alt='Selfstarter Logo' />
+                                <img src={`http://localhost:5000/${profileImage}`} alt='Company Logo' />
                             </HeaderContainer>
 
                             <AssessmentDetails>

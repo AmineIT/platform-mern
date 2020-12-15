@@ -69,6 +69,20 @@ const UserSchema = new mongoose.Schema({
         type: String,
         default: 'Applied'
     },
+    brandColor: {
+        type: String,
+        default: '#000000'
+    },
+    socialMediaAccounts: [{
+        type: {
+            type: String,
+            default: ''
+        },
+        URL: {
+            type: String,
+            default: ''
+        }
+    }],
     appliedFor: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Job'
