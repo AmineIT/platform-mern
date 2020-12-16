@@ -215,3 +215,64 @@ export const SelectFile = styled.div`
         width: 100%;
     }
 `
+
+export const NotificationsWrapper = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: ${theme.spacing.twentyFour};
+    padding-top: ${theme.spacing.twentyFour};
+    border-bottom: 1px solid ${theme.colors.lightGrey};
+
+    & h1 {
+        ${theme.h6};
+    }
+
+    & p {
+        font-size: 16px;
+        color: ${theme.colors.primaryGrey}
+    }
+
+    & input[type=checkbox] {
+        height: 0;
+        width: 0;
+        visibility: hidden;
+        display: none;
+    }
+
+    & label {
+        cursor: pointer;
+        text-indent: -9999px;
+        width: 50px;
+        height: 30px;
+        background: grey;
+        display: block;
+        border-radius: 100px;
+        position: relative;
+
+        &::after {
+            content: '';
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            width: 20px;
+            height: 20px;
+            background: #fff;
+            border-radius: 90px;
+            transition: 0.3s;
+        }
+    }
+
+    input:checked + label {
+        background: ${theme.colors.primaryColor};
+    }
+
+    input:checked + label:after {
+        left: calc(100% - 5px);
+        transform: translateX(-100%);
+    }
+
+    label:active:after {
+        width: 30px;
+    }
+`

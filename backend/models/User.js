@@ -73,6 +73,24 @@ const UserSchema = new mongoose.Schema({
         type: String,
         default: '#000000'
     },
+    notifyWhenCandidateApplies: {
+        type: Boolean,
+        default: true
+    },
+    notifyWhenCandidateCompleteAssessment: {
+        type: Boolean,
+        default: true
+    },
+    feedbackMessage: {
+        subjectLine: {
+            type: String,
+            default: 'Feedback for your application'
+        },
+        messageBody: {
+            type: String,
+            default: 'Unfortunately, you were not selected for this position...'
+        }
+    },
     socialMediaAccounts: [{
         type: {
             type: String,

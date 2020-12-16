@@ -255,6 +255,7 @@ router.put('/edit-profile', passport.authenticate('jwt', { session: false }), (r
         appliedFor,
         candidateEducation,
         candidateWorkExperience,
+        feedbackMessage,
         city,
         country,
         currentJorRole,
@@ -268,7 +269,9 @@ router.put('/edit-profile', passport.authenticate('jwt', { session: false }), (r
         phoneNumber,
         profileImage,
         role,
-        steps, } = req.body;
+        steps,
+        notifyWhenCandidateApplies,
+        notifyWhenCandidateCompleteAssessment } = req.body;
 
     User.findById(req.user._id, '-password', (error, user) => {
         if (error) {
@@ -281,6 +284,7 @@ router.put('/edit-profile', passport.authenticate('jwt', { session: false }), (r
             candidateEducation ? user.candidateEducation = candidateEducation : user.candidateEducation
             candidateWorkExperience ? user.candidateWorkExperience = candidateWorkExperience : user.candidateWorkExperience
             notifications ? user.notifications = notifications : user.notifications
+            feedbackMessage ? user.feedbackMessage = feedbackMessage : user.feedbackMessage
 
             user.brandColor = brandColor
             user.aboutMe = aboutMe
@@ -297,6 +301,8 @@ router.put('/edit-profile', passport.authenticate('jwt', { session: false }), (r
             user.role = role
             user.steps = steps
             user.companyWebsite = companyWebsite
+            user.notifyWhenCandidateCompleteAssessment = notifyWhenCandidateCompleteAssessment
+            user.notifyWhenCandidateApplies = notifyWhenCandidateApplies
 
             user.save().then(user => {
                 res.status(200).json(user)
@@ -440,5 +446,22 @@ router.put('/apply-job/:id', passport.authenticate('jwt', { session: false }), (
         }
     }).populate('createdBy')
 })
+
+
+// @desc    Send a feedback for a specific job
+// @route   post /users/send-feedback/
+// @access  Private
+// router.get('/send-feedback', passport.authenticate('jwt', { session: false }), (res, req) => {
+//     const { _id } = res.user
+//     Job.find({ createdBy: _id, status: 'archived' }, 'candidates', (error, jobs) => {
+//         if (error) {
+//             throw new Error(error)
+//         } else {
+//             const users = jobs.filter(user)
+//             console.log(users)
+//             return req.status(200).json(users)
+//         }
+//     }).populate('candidates')
+// })
 
 module.exports = router;

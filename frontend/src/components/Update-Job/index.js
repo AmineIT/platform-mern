@@ -9,6 +9,7 @@ import ReactQuill from 'react-quill'
 import { CountryDropdown, RegionDropdown } from 'react-country-region-selector'
 import Calendar from 'react-calendar'
 import { toast } from 'react-toastify'
+import { cleanHtml } from '../../utils'
 
 import {
     GlobalStyle,
@@ -146,7 +147,7 @@ const UpdateJobComponent = () => {
         enableReinitialize: true
     })
 
-    const { handleChange, handleBlur, touched, errors, setFieldTouched, values } = formik
+    const { handleChange, handleBlur, touched, errors, setFieldTouched, values, setFieldValue } = formik
 
     const publishJob = () => {
         if (Object.keys(errors).length > 0) {
@@ -270,7 +271,7 @@ const UpdateJobComponent = () => {
                             <label className="label required">Job Description</label>
                             <ReactQuill
                                 placeholder='Describe your job responsibilities...'
-                                onChange={handleChange('jobDescription')}
+                                onChange={e => setFieldValue('jobDescription', cleanHtml(e))}
                                 onBlur={() => setFieldTouched('jobDescription')}
                                 name="jobDescription"
                                 value={values.jobDescription || ''}
@@ -283,7 +284,7 @@ const UpdateJobComponent = () => {
                             <label className="label required">Job Requirements</label>
                             <ReactQuill
                                 placeholder='Type your job requirements...'
-                                onChange={handleChange('jobRequirement')}
+                                onChange={e => setFieldValue('jobRequirement', cleanHtml(e))}
                                 onBlur={() => setFieldTouched('jobRequirement')}
                                 name="jobRequirement"
                                 value={values.jobRequirement || ''}

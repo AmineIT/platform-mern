@@ -51,3 +51,26 @@ export function image64toCanvasRef(canvasRef, image64, pixelCrop) {
         )
     }
 }
+
+export const cleanHtml = (html) => {
+    // Clean spaces between tags
+    var newText = html.replace(/(<(pre|script|style|textarea)[^]+?<\/\2)|(^|>)\s+|\s+(?=<|$)/g, "$1$3")
+
+    // Clean empty paragraphs before the content
+    // <p><br/><p> && <p></p>
+    var slicer;
+    while (newText.slice(0, 7) === '<p></p>' || newText.slice(0, 11) === '<p><br></p>') {
+        if (newText.slice(0, 7) === '<p></p>') slicer = 7
+        else slicer = 11
+        newText = newText.substring(slicer, newText.length)
+    }
+
+    // Clean empty paragraphs after the content
+    while (newText.slice(-7) === '<p></p>' || newText.slice(-11) === '<p><br></p>') {
+        if (newText.slice(-7) === '<p></p>') slicer = 7
+        else slicer = 11
+        newText = newText.substring(0, newText.length - slicer)
+    }
+    // Return the clean Text
+    return newText
+}

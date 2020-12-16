@@ -4,6 +4,8 @@ import { useSelector } from 'react-redux'
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'
 import CompanySettings from './CompanySettings'
 import { Heading, FlexWrapper } from './style'
+import MessageSettings from './MessageSettings';
+import Notifications from './Notifications';
 
 const CompanyProfileComponent = () => {
 
@@ -26,10 +28,10 @@ const CompanyProfileComponent = () => {
                     <CompanySettings user={user} />
                 </TabPanel>
                 <TabPanel>
-                    <p>Message Settings</p>
+                    <MessageSettings user={user} />
                 </TabPanel>
                 <TabPanel>
-                    <p>Notifications</p>
+                    <Notifications user={user} />
                 </TabPanel>
             </Tabs>
         </>

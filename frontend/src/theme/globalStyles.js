@@ -163,6 +163,10 @@ const GlobalStyle = createGlobalStyle`
     bottom: 0;
     left: 120px;
   }
+
+  .ql-editor {
+    white-space: normal!important;
+  }
 `;
 
 export default GlobalStyle;

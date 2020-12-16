@@ -9,6 +9,7 @@ import ReactQuill from 'react-quill'
 import { CountryDropdown, RegionDropdown } from 'react-country-region-selector'
 import Calendar from 'react-calendar'
 import { toast } from 'react-toastify'
+import { cleanHtml } from '../../utils'
 
 import {
     GlobalStyle,
@@ -136,7 +137,7 @@ const CreateJobComponent = () => {
         validateOnMount: true
     })
 
-    const { handleChange, handleBlur, touched, errors, setFieldTouched, values } = formik
+    const { handleChange, handleBlur, touched, errors, setFieldTouched, values, setFieldValue } = formik
 
     const publishJob = () => {
         if (Object.keys(errors).length > 0) {
@@ -151,9 +152,7 @@ const CreateJobComponent = () => {
         }
         values.status = 'published'
         if (values.expiredAt) {
-            console.log('before : ', values.expiredAt)
             moment(values.expiredAt).toString()
-            console.log('after : ', values.expiredAt)
         }
         setIsLoading(true)
         dispatch(createJob(values))
@@ -243,7 +242,7 @@ const CreateJobComponent = () => {
                     <label className="label required">Job Description</label>
                     <ReactQuill
                         placeholder='Describe your job responsibilities...'
-                        onChange={handleChange('jobDescription')}
+                        onChange={e => setFieldValue('jobDescription', cleanHtml(e))}
                         onBlur={() => setFieldTouched('jobDescription')}
                         name="jobDescription"
                         formats={formats}
@@ -255,7 +254,7 @@ const CreateJobComponent = () => {
                     <label className="label required">Job Requirements</label>
                     <ReactQuill
                         placeholder='Type your job requirements...'
-                        onChange={handleChange('jobRequirement')}
+                        onChange={e => setFieldValue('jobRequirement', cleanHtml(e))}
                         onBlur={() => setFieldTouched('jobRequirement')}
                         name="jobRequirement"
                         formats={formats}
