@@ -13,7 +13,7 @@ import { editProfile } from '../../actions/authActions'
 import { useDispatch } from 'react-redux'
 import { toast } from 'react-toastify'
 
-import { LogoContainer, FieldControl, FlexWrapper, SettingsContainer, ColorPreview, SocialMedia, DragAndDropSection, SelectFile, DragAndDropContent } from './style'
+import { LogoContainer, FieldControl, FlexWrapper, SettingsContainer, ColorPreview, SocialMedia, DragAndDropSection, DragAndDropContent } from './style'
 import Button from '../Button'
 import { AiFillInstagram, AiFillLinkedin, AiFillTwitterSquare, AiFillFacebook } from 'react-icons/ai'
 import { MdCancel } from 'react-icons/md'
@@ -225,7 +225,7 @@ const CompanySettings = ({ user }) => {
             setFieldTouched('city', true, true)
             return
         }
-        toast.info('Your profile has been updated!', {
+        toast.info('Your company profile has been updated!', {
             position: "top-right",
             autoClose: 5000,
             hideProgressBar: true,

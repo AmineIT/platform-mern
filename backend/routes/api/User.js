@@ -258,7 +258,7 @@ router.put('/edit-profile', passport.authenticate('jwt', { session: false }), (r
         feedbackMessage,
         city,
         country,
-        currentJorRole,
+        currentJobRole,
         companyWebsite,
         email,
         emailToken,
@@ -270,6 +270,7 @@ router.put('/edit-profile', passport.authenticate('jwt', { session: false }), (r
         profileImage,
         role,
         steps,
+        password,
         notifyWhenCandidateApplies,
         notifyWhenCandidateCompleteAssessment } = req.body;
 
@@ -285,12 +286,13 @@ router.put('/edit-profile', passport.authenticate('jwt', { session: false }), (r
             candidateWorkExperience ? user.candidateWorkExperience = candidateWorkExperience : user.candidateWorkExperience
             notifications ? user.notifications = notifications : user.notifications
             feedbackMessage ? user.feedbackMessage = feedbackMessage : user.feedbackMessage
+            password ? user.password = password : user.password
 
             user.brandColor = brandColor
             user.aboutMe = aboutMe
             user.city = city
             user.country = country
-            user.currentJorRole = currentJorRole
+            user.currentJobRole = currentJobRole
             user.email = email
             user.emailToken = emailToken
             user.fullName = fullName

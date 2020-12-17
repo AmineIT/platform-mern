@@ -11,7 +11,7 @@ import { BiBriefcaseAlt2, BiBarChartSquare } from 'react-icons/bi'
 import { FiUsers, FiSettings } from 'react-icons/fi'
 import { AiOutlineHome } from 'react-icons/ai'
 
-const DashboardSidebar = ({active, from, updateSteps, user}) => {
+const DashboardSidebar = ({ active, from, updateSteps, user }) => {
 
     const [stepsEnabled, setStepsEnabled] = useState(true)
 
@@ -67,14 +67,14 @@ const DashboardSidebar = ({active, from, updateSteps, user}) => {
 
     return (
         <Sidebar id='sidebar'>
-            <Steps 
+            <Steps
                 enabled={user.steps}
                 stepsEnabled={stepsEnabled}
-                steps={steps} 
-                initialStep={0} 
-                options={options} 
-                onExit={onExit} 
-                onComplete={onComplete} 
+                steps={steps}
+                initialStep={0}
+                options={options}
+                onExit={onExit}
+                onComplete={onComplete}
                 onStart={onStart} />
 
             <Menu className='sidebar'>
@@ -109,8 +109,8 @@ const DashboardSidebar = ({active, from, updateSteps, user}) => {
                             <span>Company</span>
                         </Link>
                     </MenuItem>
-                    <MenuItem active={active && from === 'company-settings' ? active : false}>
-                        <Link to='/company-settings' className='menu-link'>
+                    <MenuItem active={active && from === 'profile-settings' ? active : false}>
+                        <Link to='/profile-settings' className='menu-link'>
                             <FiSettings size='24' />
                             <span>Settings</span>
                         </Link>

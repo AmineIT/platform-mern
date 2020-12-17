@@ -13,7 +13,7 @@ import CompanyJobsPage from './pages/company-jobs'
 import CompanyCandidatesPage from './pages/company-candidates'
 import CompanyAssessmentsPage from './pages/company-assessments'
 import CompanyProfilePage from './pages/company-profile'
-import CompanySettingsPage from './pages/company-settings'
+import CompanySettingsPage from './pages/profile-settings'
 import CreateJobPage from './pages/create-job'
 import UpdateJobPage from './pages/update-job'
 import JobResultsPage from './pages/job-results'
@@ -24,6 +24,7 @@ import UpdateAssessmentPage from './pages/update-assessment'
 import EmployeeDashboardPage from './pages/employee-dashboard'
 
 import PrivateRoute from './hocs/PrivateRoute'
+import ChangePasswordPage from './pages/change-password'
 
 function App() {
 
@@ -37,12 +38,14 @@ function App() {
           <Route exact path='/login' component={LoginPage} />
           <Route exact path='/verify-email' component={VerifyEmailPage} />
 
+          <PrivateRoute exact path='/user/change-password' component={ChangePasswordPage} roles={['employer', 'candidate']} />
+
           <PrivateRoute path='/company-dashboard' component={CompanyDashboardPage} roles={['employer']} />
           <PrivateRoute path='/jobs' component={CompanyJobsPage} roles={['employer']} />
           <PrivateRoute path='/candidates' component={CompanyCandidatesPage} roles={['employer']} />
           <PrivateRoute path='/assessments' component={CompanyAssessmentsPage} roles={['employer']} />
           <PrivateRoute path='/company-profile' component={CompanyProfilePage} roles={['employer']} />
-          <PrivateRoute path='/company-settings' component={CompanySettingsPage} roles={['employer']} />
+          <PrivateRoute path='/profile-settings' component={CompanySettingsPage} roles={['employer']} />
           <PrivateRoute path='/job/create' component={CreateJobPage} roles={['employer']} />
           <PrivateRoute path='/job/update/:id' component={UpdateJobPage} roles={['employer']} />
           <PrivateRoute path='/job/results/:id' component={JobResultsPage} roles={['employer']} />

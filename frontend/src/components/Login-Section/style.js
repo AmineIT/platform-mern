@@ -106,13 +106,13 @@ export const LoginForm = styled.div`
 export const Label = styled.p`
     margin: 0;
     font-size: 18px;
-    font-weight: 400;
+    font-weight: 500;
     position: relative;
     width: fit-content;
+    color: ${theme.colors.primaryGrey};
 `
 
 export const ForgotPassword = styled.a`
-
     color: ${theme.colors.primaryColor};
     font-weight: 600;
     margin-top: 20px;
