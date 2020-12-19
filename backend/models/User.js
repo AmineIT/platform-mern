@@ -61,6 +61,12 @@ const UserSchema = new mongoose.Schema({
     emailToken: {
         type: String
     },
+    resetToken: {
+        type: String
+    },
+    expireToken: {
+        type: Date
+    },
     steps: {
         type: Boolean,
         default: true

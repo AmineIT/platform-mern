@@ -98,6 +98,17 @@ export const LoginForm = styled.div`
     margin-top: 80px;
     width: 65%;
 
+    & .forgot-password {
+        color: ${theme.colors.primaryColor};
+        font-weight: 600;
+        margin-top: 20px;
+        display: inline-block;
+
+        &:hover {
+            color: ${theme.colors.primaryColor};
+        }
+    }
+
     @media screen and (max-width: ${theme.breakpoints.sm}){
         width: 100%;
     }
@@ -110,15 +121,4 @@ export const Label = styled.p`
     position: relative;
     width: fit-content;
     color: ${theme.colors.primaryGrey};
-`
-
-export const ForgotPassword = styled.a`
-    color: ${theme.colors.primaryColor};
-    font-weight: 600;
-    margin-top: 20px;
-    display: inline-block;
-
-    &:hover {
-        color: ${theme.colors.primaryColor};
-    }
 `

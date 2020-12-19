@@ -16,8 +16,7 @@ import {
     LoginHeading,
     LoginSubtext,
     LoginForm,
-    Label,
-    ForgotPassword
+    Label
 } from './style'
 import Logo from '../../images/selfstarter-logo/selfstarter-logo.svg'
 import LoginAsset from '../../images/login-page/login-asset.png'
@@ -130,7 +129,7 @@ const LoginComponent = ({ history }) => {
 
                         <Button onClick={handleSubmit} size="block" loading={isLoading}>Login</Button>
 
-                        <ForgotPassword>Forgot Password?</ForgotPassword>
+                        <Link className='forgot-password' to='/reset-password'>Forgot Password?</Link>
                     </LoginForm>
                 </LoginContent>
             </LoginColTwo>

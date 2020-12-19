@@ -12,7 +12,9 @@ import {
     APPLY_JOB,
     FETCH_NOTIFICATIONS,
     CLEAR_NOTIFICATIONS,
-    EDIT_PROFILE
+    EDIT_PROFILE,
+    RESET_PASSWORD,
+    UPDATE_PASSWORD
 } from '../actions/types';
 
 const initialState = {
@@ -50,6 +52,16 @@ export default function (state = initialState, action) {
                 isAuthenticated: false,
                 isLoading: false
             };
+        case RESET_PASSWORD:
+            return {
+                ...state,
+                ...action.payload
+            }
+        case UPDATE_PASSWORD:
+            return {
+                ...state,
+                ...action.payload
+            }
         case AUTH_ERROR:
         case LOGIN_FAIL:
         case LOGOUT_SUCCESS:

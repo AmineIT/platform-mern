@@ -13,7 +13,9 @@ import {
     APPLY_JOB,
     FETCH_NOTIFICATIONS,
     CLEAR_NOTIFICATIONS,
-    EDIT_PROFILE
+    EDIT_PROFILE,
+    RESET_PASSWORD,
+    UPDATE_PASSWORD
 } from './types';
 import { returnErrors, clearErrors } from './errorActions'
 
@@ -106,6 +108,34 @@ export const Logout = () => (dispatch) => {
     }).catch(error => {
         dispatch(
             returnErrors(error.response.data, error.response.status, 'LOGOUT_FAIL')
+        );
+    })
+}
+
+// Reset Password
+export const resetPassword = (email) => (dispatch) => {
+    axios.post('/users/reset-password', email).then(res => {
+        dispatch({
+            type: RESET_PASSWORD,
+            payload: res.data
+        })
+    }).catch(error => {
+        dispatch(
+            returnErrors(error.response.data, error.response.status, 'RESET_PASSWORD_FAIL')
+        );
+    })
+}
+
+// Update Password
+export const updatePassword = (values) => (dispatch) => {
+    axios.put('/users/update-password', values).then(res => {
+        dispatch({
+            type: UPDATE_PASSWORD,
+            payload: res.data
+        })
+    }).catch(error => {
+        dispatch(
+            returnErrors(error.response.data, error.response.status, 'UPDATE_PASSWORD_FAIL')
         );
     })
 }

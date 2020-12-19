@@ -88,10 +88,10 @@ router.post('/register', (req, res) => {
                     })
 
                     const msg = {
-                        to: 'amine@selfstarter.app',
+                        to: user.email,
                         from: 'support@selfstarter.app',
                         subject: 'Confirmation Email From Selfstarter',
-                        template_id: process.env.SENDGRID_TEMPLATE_ID,
+                        template_id: process.env.SENDGRID_REGISTER_TEMPLATE_ID,
                         dynamic_template_data: {
                             name: user.fullName,
                             link: `http://${req.headers.host}/users/verify-email?token=${user.emailToken}`
@@ -202,7 +202,7 @@ router.post('/email-check', (req, res) => {
 
     User.findOne({ email }, (error, user) => {
         if (error) {
-            throw new Error('Error has occured!')
+            throw new Error(error)
         }
 
         if (user) {
@@ -222,6 +222,77 @@ router.post('/email-check', (req, res) => {
         }
     })
 });
+
+// @desc    Reset Password
+// @route   POST /users/reset-password
+// @access  Public
+router.post('/reset-password', (res, req) => {
+    const token = crypto.randomBytes(64).toString('hex')
+    const email = res.body.email;
+    User.findOne({ email }, (error, user) => {
+        if (error) {
+            throw new Error(error)
+        }
+        if (!user) {
+            return req.status(400).json({
+                message: 'This email does not exist.'
+            })
+        }
+        user.resetToken = token
+        user.expireToken = Date.now() + 3600000 // the token will expire after an hour
+        user.save().then(user => {
+            const msg = {
+                to: user.email,
+                from: 'support@selfstarter.app',
+                subject: 'Reset Password Instructions - Selfstarter',
+                template_id: process.env.SENDGRID_REST_PASSWORD_TEMPLATE_ID,
+                dynamic_template_data: {
+                    name: user.fullName,
+                    link: `http:/localhost:3000/update-password/${user.resetToken}`
+                }
+            }
+            sgMail.send(msg).then(() => {
+                req.status(200).json({ emailSent: true })
+            }).catch((error) => {
+                throw new Error(error)
+            })
+        }).catch(error => {
+            req.status(400)
+            throw new Error(error)
+        })
+    })
+})
+
+router.put('/update-password', (res, req) => {
+
+    const newPassword = res.body.password
+    const sentToken = res.body.token
+
+    User.findOne({ resetToken: sentToken, expireToken: { $gt: Date.now() } }, (error, user) => {
+        if (error) {
+            throw new Error(error)
+        }
+        if (!user) {
+            return req.status(400).json({ errorMessage: "Your reset link has expired, try again." })
+        }
+        user.password = newPassword
+        user.resetToken = null
+        user.expireToken = null
+        user.save().then(user => {
+            const msg = {
+                to: user.email,
+                from: 'support@selfstarter.app',
+                template_id: process.env.SENDGRID_REST_PASSWORD_CONFIRMATION_TEMPLATE_ID
+            }
+
+            sgMail.send(msg).then(() => {
+                req.status(200).json({ emailSent: true })
+            }).catch((error) => {
+                throw new Error(error)
+            })
+        })
+    })
+})
 
 // @desc    Update the dashboard steps
 // @route   POST /users/update-steps

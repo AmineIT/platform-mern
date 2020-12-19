@@ -8,6 +8,8 @@ import HomePage from './pages/homepage'
 import RegisterPage from './pages/register'
 import VerifyEmailPage from './pages/verify-email'
 import LoginPage from './pages/login'
+import ResetPasswordPage from './pages/reset-password'
+import ChangePasswordPage from './pages/change-password'
 import CompanyDashboardPage from './pages/company-dashboard'
 import CompanyJobsPage from './pages/company-jobs'
 import CompanyCandidatesPage from './pages/company-candidates'
@@ -24,7 +26,6 @@ import UpdateAssessmentPage from './pages/update-assessment'
 import EmployeeDashboardPage from './pages/employee-dashboard'
 
 import PrivateRoute from './hocs/PrivateRoute'
-import ChangePasswordPage from './pages/change-password'
 
 function App() {
 
@@ -37,8 +38,8 @@ function App() {
           <Route exact path='/register' component={RegisterPage} />
           <Route exact path='/login' component={LoginPage} />
           <Route exact path='/verify-email' component={VerifyEmailPage} />
-
-          <PrivateRoute exact path='/user/change-password' component={ChangePasswordPage} roles={['employer', 'candidate']} />
+          <Route exact path='/reset-password' component={ResetPasswordPage} />
+          <Route exact path='/update-password/:token' component={ChangePasswordPage} />
 
           <PrivateRoute path='/company-dashboard' component={CompanyDashboardPage} roles={['employer']} />
           <PrivateRoute path='/jobs' component={CompanyJobsPage} roles={['employer']} />

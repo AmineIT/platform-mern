@@ -1,10 +1,9 @@
-import React, { useState } from 'react'
-import { useHistory } from 'react-router-dom'
-import { useSelector, useDispatch } from 'react-redux'
+import React, { useState, useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { useHistory, useParams, Link } from "react-router-dom"
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
-import { editProfile } from '../../actions/authActions'
-import { toast } from 'react-toastify'
+import { updatePassword } from '../../actions/authActions'
 
 import {
     LoginContainer,
@@ -15,39 +14,49 @@ import {
     LoginContent,
     LoginHeading,
     LoginForm,
-    Label
+    Label,
+    LoginSubtext
 } from '../Login-Section/style'
 import Logo from '../../images/selfstarter-logo/selfstarter-logo.svg'
 import Button from '../Button'
 import Asset from '../../images/login-page/login-asset.png'
-import { RiArrowLeftLine } from 'react-icons/ri'
 import { AiOutlineEyeInvisible, AiOutlineEye } from 'react-icons/ai'
-
-toast.configure()
 
 const ChangePasswordComponent = () => {
 
-    let history = useHistory()
-    const { user } = useSelector(state => state.auth)
     const dispatch = useDispatch()
+    const error = useSelector(state => state.error)
+    const auth = useSelector(state => state.auth)
+    const { token } = useParams()
+    const [isLoading, setIsLoading] = useState(false)
+    const [passwordShown, setPasswordShown] = useState(false)
 
     const validationSchema = Yup.object({
-        password: Yup.string().trim().required('Please type your new password.').min(6, 'Password must be more than 6 characters long.').nullable(true),
-        confirmPassword: Yup.string().trim().required('Please type confirm your new password.').oneOf([Yup.ref('password'), null], 'Passwords must match.'),
+        password: Yup.string().trim().required('Please type your new password.').min(6, 'Password must be more than 6 characters long.'),
+        confirmPassword: Yup.string().trim().required('Please confirm your new password.').oneOf([Yup.ref('password'), null], 'Passwords must match.')
     })
 
     const formik = useFormik({
         initialValues: {
-            ...user
+            password: '',
+            token
         },
         validationSchema,
         validateOnMount: true
     })
 
-    const { handleBlur, touched, errors, handleChange, values, setFieldTouched } = formik
+    const { handleBlur, touched, errors, handleChange, values, setFieldTouched, setErrors, setFieldValue } = formik
 
-    const [passwordShown, setPasswordShown] = useState(false)
-    const [isLoading, setIsLoading] = useState(false)
+    useEffect(() => {
+        if (error.id === 'UPDATE_PASSWORD_FAIL') {
+            setErrors({ userExist: error.msg.errorMessage })
+            setIsLoading(false)
+        }
+        if (auth.emailSent) {
+            setErrors({ emailExist: '' })
+            setIsLoading(false)
+        }
+    }, [error, setErrors, auth])
 
     const togglePassword = () => {
         setPasswordShown(passwordShown ? false : true)
@@ -60,20 +69,9 @@ const ChangePasswordComponent = () => {
             return
         }
         setIsLoading(true)
-        dispatch(editProfile(values))
-        setTimeout(() => {
-            toast.info('Your password has been updated!', {
-                position: "top-right",
-                autoClose: 5000,
-                hideProgressBar: true,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined
-            });
-            setIsLoading(false)
-            history.push('/profile-settings')
-        }, 1500)
+        dispatch(updatePassword(values))
+        setFieldValue('password', '')
+        setFieldValue('confirmPassword', '')
     }
 
     return (
@@ -91,44 +89,58 @@ const ChangePasswordComponent = () => {
 
             <LoginColTwo>
                 <LoginContent>
-                    <div onClick={() => history.goBack()} style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', color: '#7E8BA2' }}>
-                        <RiArrowLeftLine size='24' />
-                        <span className='ml-1'>Back</span>
-                    </div>
                     <LoginHeading>
-                        Reset Password
+                        Reset Your Password
                     </LoginHeading>
+                    <LoginSubtext>
+                        Once you reset your password you will be able to log in to your <br />
+                        account and use our service to the maximum.
+                    </LoginSubtext>
 
                     <LoginForm>
                         <Label>New password</Label>
                         <div className='control mb-4 has-icons-right'>
                             <input
                                 className="input is-medium mt-2"
-                                placeholder="Type a new password"
+                                placeholder="Enter your new password"
                                 type={passwordShown ? "text" : "password"}
+                                value={values.password}
                                 onBlur={handleBlur('password')}
                                 onChange={handleChange('password')}
                             />
                             {
                                 passwordShown ?
-                                    (<AiOutlineEyeInvisible onClick={togglePassword} style={{ fontSize: '.7rem', pointerEvents: 'painted', cursor: 'pointer', top: '18px', right: '10px' }} className="icon is-right" />)
+                                    (<AiOutlineEyeInvisible onClick={togglePassword} style={{ fontSize: '.7rem', pointerEvents: 'painted', cursor: 'pointer', top: '20px', right: '10px' }} className="icon is-right" />)
                                     :
-                                    (<AiOutlineEye onClick={togglePassword} style={{ fontSize: '.7rem', pointerEvents: 'painted', cursor: 'pointer', top: '18px', right: '10px' }} className="icon is-right" />)
+                                    (<AiOutlineEye onClick={togglePassword} style={{ fontSize: '.7rem', pointerEvents: 'painted', cursor: 'pointer', top: '20px', right: '10px' }} className="icon is-right" />)
                             }
                             {touched.password && errors.password ? <p className="help is-danger mt-1">{errors.password}</p> : null}
                         </div>
 
                         <Label>Confirm new password</Label>
-                        <div className='control mb-4'>
+                        <div className='control mb-4 has-icons-right'>
                             <input
                                 className="input is-medium mt-2"
                                 placeholder="Confirm your new password"
-                                type="password"
+                                type='password'
+                                value={values.confirmPassword}
                                 onBlur={handleBlur('confirmPassword')}
                                 onChange={handleChange('confirmPassword')}
                             />
                             {touched.confirmPassword && errors.confirmPassword ? <p className="help is-danger mt-1">{errors.confirmPassword}</p> : null}
                         </div>
+
+                        {errors.userExist ? (
+                            <div className="notification is-danger is-light">
+                                {errors.userExist}
+                            </div>
+                        ) : null}
+
+                        {auth.emailSent ? (
+                            <div className="notification is-success is-light">
+                                Your password has been updated. now you can <Link to='/login'><b>log in</b></Link> to your account with the new password.
+                            </div>
+                        ) : null}
 
                         <Button size="block" onClick={resetPassword} loading={isLoading}>Reset my password</Button>
                     </LoginForm>
