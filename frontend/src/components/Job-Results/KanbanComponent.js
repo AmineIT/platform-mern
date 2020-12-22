@@ -1,30 +1,32 @@
 import React, { useState } from "react"
 import { useDispatch } from 'react-redux'
+import { useParams } from 'react-router-dom'
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
 import { CardKanbanTemplate } from "./CardKanbanTemplate.js"
-import { updateKanbanStatus } from '../../actions/authActions'
+import { updateKanbanStatus } from '../../actions/jobActions'
 import { HeadingContainer, Container, ColoredSpan } from './style'
 
 const KanbanTemplate = ({ kanbanData }) => {
 
   const dispatch = useDispatch()
+  const { id } = useParams()
 
   const columnsOption = {
     Applied: {
       name: 'Applied',
-      items: kanbanData.filter(data => data.kanbanStatus === 'Applied')
+      items: kanbanData.filter(data => data.status === 'Applied')
     },
     Screening: {
       name: "Screening",
-      items: kanbanData.filter(data => data.kanbanStatus === 'Screening')
+      items: kanbanData.filter(data => data.status === 'Screening')
     },
     Shortlisted: {
       name: "Shortlisted",
-      items: kanbanData.filter(data => data.kanbanStatus === 'Shortlisted')
+      items: kanbanData.filter(data => data.status === 'Shortlisted')
     },
     Interviewed: {
       name: "Interviewed",
-      items: kanbanData.filter(data => data.kanbanStatus === 'Interviewed')
+      items: kanbanData.filter(data => data.status === 'Interviewed')
     }
   }
 
@@ -38,7 +40,8 @@ const KanbanTemplate = ({ kanbanData }) => {
       const sourceItems = [...sourceColumn.items];
       const destItems = [...destColumn.items];
       const [removed] = sourceItems.splice(source.index, 1);
-      dispatch(updateKanbanStatus(removed._id, destination.droppableId))
+      console.log(removed._id, destination.droppableId)
+      dispatch(updateKanbanStatus(id, removed._id, destination.droppableId))
       destItems.splice(destination.index, 0, removed);
       setColumns({
         ...columns,
@@ -112,7 +115,7 @@ const KanbanTemplate = ({ kanbanData }) => {
                                               ...provided.draggableProps.style
                                             }}
                                           >
-                                            <CardKanbanTemplate data={item} />
+                                            <CardKanbanTemplate data={item.user} />
                                           </div>
                                         )
                                       }

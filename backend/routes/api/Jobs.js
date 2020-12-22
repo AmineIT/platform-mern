@@ -56,7 +56,7 @@ router.post('/fetch-company-jobs', passport.authenticate('jwt', { session: false
 // @route   GET /jobs/fetch-job/:id
 // @access  Private
 router.get('/fetch-job/:id', passport.authenticate('jwt', { session: false }), (res, req) => {
-    Job.findById(res.params.id).populate('candidates').exec((error, job) => {
+    Job.findById(res.params.id).populate('candidates.user').exec((error, job) => {
         if (error) {
             throw new Error('Error has occured!')
         }
@@ -165,6 +165,34 @@ router.post('/archive-job/:id', passport.authenticate('jwt', { session: false })
             res.json(job)
         }
     })
+})
+
+// @desc    Update Application Status
+// @route   PUT /users/update-kanbanstatus/:id
+// @access  Private
+router.put('/update-application-status/:id', passport.authenticate('jwt', { session: false }), (res, req) => {
+
+    const { id } = res.params
+    const { applicationStatus, userID } = res.body
+
+    Job.findOne({ _id: id }).exec((error, job) => {
+        if (error) {
+            throw new Error(error)
+        }
+        job.candidates.map(candidate => {
+            if (`${candidate._id}` === userID) {
+                candidate.status = applicationStatus
+                job.save().then(job => {
+                    req.status(200).json(job)
+                }).catch(error => {
+                    throw new Error(error)
+                })
+            } else {
+                req.status(400).json({ message: 'nothing found' })
+            }
+        })
+    })
+
 })
 
 module.exports = router;

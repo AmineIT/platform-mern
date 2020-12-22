@@ -9,7 +9,6 @@ import {
     REGISTER_SUCCESS,
     REGISTER_FAIL,
     UPDATE_STEPS,
-    UPDATE_KANBAN_STATUS,
     APPLY_JOB,
     FETCH_NOTIFICATIONS,
     CLEAR_NOTIFICATIONS,
@@ -136,20 +135,6 @@ export const updatePassword = (values) => (dispatch) => {
     }).catch(error => {
         dispatch(
             returnErrors(error.response.data, error.response.status, 'UPDATE_PASSWORD_FAIL')
-        );
-    })
-}
-
-// Update Kanban Status
-export const updateKanbanStatus = (id, kanbanStatus) => (dispatch, getState) => {
-    axios.put('/users/update-kanbanstatus', { id, kanbanStatus }, tokenConfig(getState)).then(res => {
-        dispatch({
-            type: UPDATE_KANBAN_STATUS,
-            payload: res.data
-        })
-    }).catch(error => {
-        dispatch(
-            returnErrors(error.response.data, error.response.status, 'UPDATE_KANBAN_STATUS_FAIL')
         );
     })
 }

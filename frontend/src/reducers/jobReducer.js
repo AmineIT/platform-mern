@@ -8,7 +8,8 @@ import {
     DELETE_JOB,
     PUBLISH_JOB,
     ARCHIVE_JOB,
-    GET_ALL_JOBS
+    GET_ALL_JOBS,
+    UPDATE_KANBAN_STATUS
 } from '../actions/types'
 
 const initialState = {
@@ -52,6 +53,11 @@ export default function (state = initialState, action) {
                 companyJob: {}
             }
         }
+        case UPDATE_KANBAN_STATUS:
+            return {
+                ...state,
+                companyJob: action.payload
+            }
         case GET_SINGLE_JOB: {
             return {
                 ...state,

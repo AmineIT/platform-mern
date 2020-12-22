@@ -38,8 +38,14 @@ const JobSchema = new mongoose.Schema({
         required: false
     },
     candidates: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
+        status: {
+            type: String,
+            default: ''
+        },
+        user: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User'
+        }
     }],
     assessment: [{
         type: mongoose.Schema.Types.ObjectId,
@@ -61,6 +67,16 @@ const JobSchema = new mongoose.Schema({
         type: String,
         default: 'draft'
     },
+    // applicationStatus: [{
+    //     status: {
+    //         type: String,
+    //         default: ''
+    //     },
+    //     candidate: {
+    //         type: mongoose.Schema.Types.ObjectId,
+    //         ref: 'User'
+    //     }
+    // }],
     createdAt: {
         type: Date,
         default: Date.now

@@ -9,7 +9,8 @@ import {
     PUBLISH_JOB,
     ARCHIVE_JOB,
     GET_JOB_REQUEST,
-    GET_ALL_JOBS
+    GET_ALL_JOBS,
+    UPDATE_KANBAN_STATUS
 } from './types'
 import { returnErrors } from './errorActions'
 import { tokenConfig } from '../actions/authActions'
@@ -106,6 +107,20 @@ export const archiveJob = (id) => (dispatch, getState) => {
         })
     }).catch(error => {
         returnErrors(error.response.data, error.response.status, 'ARCHIVE_JOB_FAIL')
+    })
+}
+
+
+export const updateKanbanStatus = (id, userID, applicationStatus) => (dispatch, getState) => {
+    axios.put(`/jobs/update-application-status/${id}`, { userID, applicationStatus }, tokenConfig(getState)).then(res => {
+        dispatch({
+            type: UPDATE_KANBAN_STATUS,
+            payload: res.data
+        })
+    }).catch(error => {
+        dispatch(
+            returnErrors(error.response.data, error.response.status, 'UPDATE_KANBAN_STATUS_FAIL')
+        );
     })
 }
 

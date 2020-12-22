@@ -263,6 +263,10 @@ router.post('/reset-password', (res, req) => {
     })
 })
 
+
+// @desc    Update Password
+// @route   PUT /users/update-password
+// @access  Public
 router.put('/update-password', (res, req) => {
 
     const newPassword = res.body.password
@@ -423,28 +427,6 @@ router.post('/clear-notifications', passport.authenticate('jwt', { session: fals
     })
 })
 
-// @desc    Update kanbanStatus
-// @route   PUT /users/update-kanbanstatus/:id
-// @access  Private
-router.put('/update-kanbanstatus', passport.authenticate('jwt', { session: false }), (res, req) => {
-
-    const { kanbanStatus, id } = res.body
-
-    User.findById(id, null, (error, user) => {
-        if (error) {
-            throw new Error(error)
-        }
-        else {
-            user.kanbanStatus = kanbanStatus
-            user.save().then(user => {
-                req.status(200).json(user)
-            }).catch(error => {
-                throw new Error(error)
-            })
-        }
-    })
-})
-
 // @desc    Apply for a job
 // @route   PUT /users/apply-job/:id
 // @access  Private
@@ -459,16 +441,22 @@ router.put('/apply-job/:id', passport.authenticate('jwt', { session: false }), (
         if (error) {
             throw new Error(error)
         } else {
-            const hasApplied = job.candidates.includes(currentUser)
+            const hasApplied = job.candidates.includes(candidate => candidate.user === currentUser)
             if (!hasApplied) {
-                job.candidates.push(currentUser)
+                const updatedUserApplied = {
+                    status: 'Applied',
+                    user: currentUser
+                }
+                job.candidates.push(updatedUserApplied)
                 const { _id } = job.createdBy
                 User.findById(_id, null, (error, user) => {
                     if (error) {
                         throw new Error(error)
                     } else {
-                        user.notifications.push({ message: `${fullName} has applied to ${job.jobTitle} role.`, messageType: 'Job Application' })
-                        user.save()
+                        if (user.notifyWhenCandidateApplies) {
+                            user.notifications.push({ message: `${fullName} has applied to ${job.jobTitle} role.`, messageType: 'Job Application' })
+                            user.save()
+                        }
                     }
                 })
             }
@@ -519,22 +507,5 @@ router.put('/apply-job/:id', passport.authenticate('jwt', { session: false }), (
         }
     }).populate('createdBy')
 })
-
-
-// @desc    Send a feedback for a specific job
-// @route   post /users/send-feedback/
-// @access  Private
-// router.get('/send-feedback', passport.authenticate('jwt', { session: false }), (res, req) => {
-//     const { _id } = res.user
-//     Job.find({ createdBy: _id, status: 'archived' }, 'candidates', (error, jobs) => {
-//         if (error) {
-//             throw new Error(error)
-//         } else {
-//             const users = jobs.filter(user)
-//             console.log(users)
-//             return req.status(200).json(users)
-//         }
-//     }).populate('candidates')
-// })
 
 module.exports = router;

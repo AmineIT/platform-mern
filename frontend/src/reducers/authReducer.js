@@ -8,7 +8,6 @@ import {
     REGISTER_SUCCESS,
     REGISTER_FAIL,
     UPDATE_STEPS,
-    UPDATE_KANBAN_STATUS,
     APPLY_JOB,
     FETCH_NOTIFICATIONS,
     CLEAR_NOTIFICATIONS,
@@ -74,11 +73,6 @@ export default function (state = initialState, action) {
                 isLoading: false
             };
         case UPDATE_STEPS:
-            return {
-                ...state,
-                ...action.payload
-            }
-        case UPDATE_KANBAN_STATUS:
             return {
                 ...state,
                 ...action.payload

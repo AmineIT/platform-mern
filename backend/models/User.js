@@ -71,10 +71,6 @@ const UserSchema = new mongoose.Schema({
         type: Boolean,
         default: true
     },
-    kanbanStatus: {
-        type: String,
-        default: 'Applied'
-    },
     brandColor: {
         type: String,
         default: '#000000'

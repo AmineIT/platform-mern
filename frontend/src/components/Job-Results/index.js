@@ -5,7 +5,6 @@ import moment from 'moment'
 import DashboardFooter from '../Dashboard-Footer'
 import { fetchJob } from '../../actions/jobActions'
 import { GlobalStyle, Container, JobDetails, HeaderContainer, FlexWrapper, JobTitle } from './style'
-import Logo from '../../images/selfstarter-logo/selfstarter-logo.svg'
 import { RiArrowLeftLine } from 'react-icons/ri'
 import LoadingScreen from '../Loading-Screen'
 import KanbanTemplate from './KanbanComponent'
@@ -22,36 +21,7 @@ const JobResultsComponent = () => {
         dispatch(fetchJob(id))
     }, [dispatch, id])
 
-    let kanbanData = []
     const candidates = job.candidates
-
-    if (job.candidates && candidates.length !== 0) {
-        kanbanData = candidates.map(items => {
-            const {
-                aboutMe,
-                currentJobRole,
-                fullName,
-                _id,
-                kanbanStatus,
-                profileImage,
-                email,
-                phoneNumber,
-                candidateWorkExperience,
-                candidateEducation } = { ...items }
-            return {
-                aboutMe,
-                currentJobRole,
-                fullName,
-                _id,
-                kanbanStatus,
-                profileImage,
-                email,
-                phoneNumber,
-                candidateWorkExperience,
-                candidateEducation
-            }
-        })
-    }
 
     return (
         <>
@@ -81,7 +51,7 @@ const JobResultsComponent = () => {
                             </FlexWrapper>
                         </JobDetails>
 
-                        <KanbanTemplate kanbanData={kanbanData} />
+                        <KanbanTemplate kanbanData={candidates} />
 
                         <DashboardFooter />
 
