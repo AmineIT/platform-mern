@@ -17,7 +17,6 @@ const AccountSettings = ({ user }) => {
     const dispatch = useDispatch()
     const [showPasswordField, setShowPasswordField] = useState(false)
     const [passwordShown, setPasswordShown] = useState(false)
-    const [isLoading, setIsLoading] = useState(false)
 
     const validationSchema = Yup.object({
         fullName: Yup.string().trim().required('Please type your full name.'),
@@ -54,7 +53,7 @@ const AccountSettings = ({ user }) => {
             setFieldError('confirmPassword', 'Please confirm your new password.')
             setFieldValue('password', null)
         }
-    }, [showPasswordField])
+    }, [showPasswordField, setFieldError, setFieldValue])
 
     const togglePassword = () => {
         setPasswordShown(passwordShown ? false : true)

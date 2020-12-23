@@ -165,3 +165,80 @@ export const CTAWrapper = styled.div`
         font-size: 14px;
     }
 `
+
+export const InfoSection = styled.div`
+    display: flex;
+    justify-content: start;
+
+    & .avatar {
+        margin-right: ${theme.spacing.twentyFour};
+    }
+
+    & h1 {
+        ${theme.h6};
+        margin-bottom: -10px;
+    }
+
+    & p {
+        font-size: 14px;
+        color: ${theme.colors.primaryGrey}
+    }
+
+    & .email, .phone {
+        color: ${theme.colors.primaryColor}
+    }
+`
+
+export const ModalImagePlaceholder = styled.div`
+    background-color: ${theme.colors.lightBlue};
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    width: 96px;
+    height: 96px;
+
+    & p {
+        font-weight: 700;
+        color: ${theme.colors.primaryColor};
+        font-size: 22px;
+    }
+`
+
+export const WorkExperience = styled.div`
+    padding-left: ${theme.spacing.eight};
+    border-bottom: 1px solid ${theme.colors.lightGrey};
+
+    &:last-of-type {
+        border-bottom: none;
+    }
+
+    & .columns {
+        margin-bottom: 0;
+    }
+
+    & .column {
+        flex-grow: 0;
+        flex-basis: auto;
+        margin-bottom: -10px;
+    }
+
+    & .experience-info {
+        display: flex;
+        align-items: center;
+
+        & p {
+            color: ${theme.colors.primaryGrey};
+            font-family: ${theme.font.basisProMedium}
+        }
+
+        & svg {
+            margin-top: -2px;
+            margin-right: 5px;
+        }
+    }
+
+    & .description {
+        line-height: 1.5
+    }
+`

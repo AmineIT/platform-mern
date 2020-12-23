@@ -70,7 +70,7 @@ const UpdateAssessmentComponent = () => {
             setFieldValue('_id', _id)
             dispatch(addQuestionForEditing(questions.map(question => question)))
         }
-    }, [companyAssessment])
+    }, [companyAssessment, setFieldValue, dispatch])
 
     const editAssessment = () => {
         if (values.assessmentTitle === '') {

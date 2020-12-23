@@ -113,7 +113,7 @@ const CompanySettings = ({ user }) => {
             crop.width,
             crop.height
         );
-    }, [completedCrop])
+    }, [completedCrop, pixelRatio])
 
     const updateImage = () => {
         if (!completedCrop || !previewCanvasRef.current || !imgRef.current) {

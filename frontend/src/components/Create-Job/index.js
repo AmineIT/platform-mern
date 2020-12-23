@@ -2,7 +2,8 @@ import React, { useState, useEffect, useRef } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import { createJob, saveJobAsDraft } from '../../actions/jobActions'
-import { useFormik } from 'formik'
+import { fetchCompanyAssessments } from '../../actions/assessmentActions'
+import { useFormik, getIn } from 'formik'
 import * as Yup from 'yup'
 import moment from 'moment-timezone'
 import ReactQuill from 'react-quill'
@@ -20,10 +21,16 @@ import {
     Label,
     CheckBox,
     AssessmentSection,
-    CTABlock
+    CTABlock,
+    AssessmentCard,
+    ModalContent,
+    ModalHeading,
+    AssessmentCheckBox,
+    AssessmentCTA
 } from './style'
 import Button from '../Button'
 import DashboardFooter from '../Dashboard-Footer'
+import Modal from '../Modal-Component'
 
 import { RiArrowLeftLine } from 'react-icons/ri'
 import { BsCalendar } from 'react-icons/bs'
@@ -39,6 +46,7 @@ const CreateJobComponent = () => {
     const ref = useRef()
     const dispatch = useDispatch()
     const user = useSelector(state => state.auth.user)
+    const { assessments } = useSelector(state => state.assessments)
 
     const editStyle = () => {
         let doc = document.documentElement;
@@ -58,6 +66,10 @@ const CreateJobComponent = () => {
             window.removeEventListener('scroll', editStyle)
         }
     }, [])
+
+    useEffect(() => {
+        dispatch(fetchCompanyAssessments())
+    }, [dispatch])
 
     const modules = {
         toolbar: [
@@ -89,6 +101,11 @@ const CreateJobComponent = () => {
     const [region, setRegion] = useState('')
     const [isLoading, setIsLoading] = useState(false)
     const [isDraftLoading, setIsDraftLoading] = useState(false)
+    const [showModal, setShowModal] = useState(false)
+    const [assessmentChosen, setAssessmentChosen] = useState({
+        title: '',
+        questionNumber: ''
+    })
 
     const onDateChange = (date) => {
         const timezone = moment.tz(date, 'Etc/UTC').format()
@@ -113,7 +130,10 @@ const CreateJobComponent = () => {
         jobDepartment: Yup.string().trim().required('Please select a department.'),
         employmentType: Yup.string().trim().required('Please select your employment type.'),
         country: Yup.string().trim().required('Please select a country.'),
-        city: Yup.string().trim().required('Please select a city.')
+        city: Yup.string().trim().required('Please select a city.'),
+        assessment: Yup.object().shape({
+            id: Yup.string().trim().required('Please add an assessment to your job.')
+        })
     })
 
     const formik = useFormik({
@@ -131,7 +151,10 @@ const CreateJobComponent = () => {
             city: '',
             expiredAt: '',
             createdBy: user._id,
-            status: ''
+            status: '',
+            assessment: {
+                id: ''
+            }
         },
         validationSchema,
         validateOnMount: true
@@ -148,6 +171,7 @@ const CreateJobComponent = () => {
             setFieldTouched('employmentType', true)
             setFieldTouched('country', true)
             setFieldTouched('city', true)
+            setFieldTouched('assessment.id', true)
             return
         }
         values.status = 'published'
@@ -180,6 +204,7 @@ const CreateJobComponent = () => {
             setFieldTouched('employmentType', true)
             setFieldTouched('country', true)
             setFieldTouched('city', true)
+            setFieldTouched('assessment.id', true)
             return
         }
         values.status = 'draft'
@@ -204,6 +229,23 @@ const CreateJobComponent = () => {
                 state: { jobCreated: true }
             })
         }, 2000)
+    }
+
+    const selectAssessment = () => {
+        if (values.assessment.id === '') {
+            setFieldTouched('assessment.id', true)
+            return
+        }
+        setShowModal(false)
+    }
+
+    const handleAssessmentChange = e => {
+        setFieldValue('assessment.id', e.target.value)
+        assessments.map(assessment => {
+            if (assessment._id === e.target.value) {
+                setAssessmentChosen({ title: assessment.assessmentTitle, questionNumber: assessment.questions.length })
+            }
+        })
     }
 
     return (
@@ -422,13 +464,79 @@ const CreateJobComponent = () => {
                     </div>
                 </FieldControl>
 
-                <AssessmentSection>
+                <AssessmentSection onClick={() => setShowModal(true)}>
                     <div>
-                        <h1>Add an assessment to your application</h1>
-                        <p>Focus on the most relevant questions to keep candidates motivated throughout the process.</p>
-                        <Button light size='small' fit='stretched'>Add an assessment</Button>
+                        <h1>{values.assessment.id !== '' ? assessmentChosen.title : 'Add an assessment to your application'}</h1>
+                        <p>{values.assessment.id !== '' ? `${assessmentChosen.questionNumber} No. of Questions` : 'Focus on the most relevant questions to keep candidates motivated throughout the process.'}</p>
+                        <Button light size='small' fit='stretched'>
+                            {values.assessment.id !== '' ? 'Choose another assessment' : 'Add an assessment'}
+                        </Button>
                     </div>
                 </AssessmentSection>
+                {
+                    getIn(errors, 'assessment.id') && getIn(touched, 'assessment.id') ?
+                        <p className="help is-danger mt-1">{errors.assessment.id}</p>
+                        : null
+                }
+
+                <Modal show={showModal} onClose={() => setShowModal(false)}>
+                    <ModalContent>
+                        <LogoContainer style={{ marginBottom: '24px' }}>
+                            <img src={`http://localhost:5000/${user.profileImage}`} alt='Company Logo' />
+                        </LogoContainer>
+                        <ModalHeading className='modal-heading'>Choose from one of your assessments</ModalHeading>
+                        {
+                            assessments.map(assessment => (
+                                <AssessmentCard brandColor={user.brandColor} key={assessment._id}>
+                                    <AssessmentCheckBox brandColor={user.brandColor}>
+                                        <input
+                                            type="radio"
+                                            id={assessment.assessmentTitle}
+                                            name="radio-group"
+                                            value={assessment._id}
+                                            onChange={e => handleAssessmentChange(e)}
+                                            onBlur={handleBlur('assessment.id')} />
+                                        <label htmlFor={assessment.assessmentTitle}>{assessment.assessmentTitle} ({assessment.questions.length} Questions)</label>
+                                    </AssessmentCheckBox>
+                                    <AssessmentCTA>
+                                        <Button
+                                            size='tiny'
+                                            style={{ backgroundColor: user.brandColor, color: '#ffffff', border: `1px solid #ffffff` }}
+                                            align='right'
+                                            to={`/assessment/preview/${assessment._id}`}>Preview</Button>
+
+                                        <Button
+                                            size='tiny'
+                                            style={{ backgroundColor: user.brandColor, color: '#ffffff', border: `1px solid #ffffff` }}
+                                            to={`/assessment/update/${assessment._id}`}>Edit</Button>
+                                    </AssessmentCTA>
+                                </AssessmentCard>
+                            ))
+                        }
+                        {
+                            getIn(errors, 'assessment.id') && getIn(touched, 'assessment.id') ?
+                                <p className="help is-danger mt-1">{errors.assessment.id}</p>
+                                : null
+                        }
+                        <AssessmentCTA style={{ justifyContent: 'center', marginTop: '32px' }}>
+                            <Button
+                                primary
+                                size='small'
+                                fit='stretched'
+                                onClick={selectAssessment}
+                                align='right'>
+                                Select assessment
+                            </Button>
+                            <Button
+                                outline
+                                size='small'
+                                fit='stretched'
+                                to='/assessment/create'>
+                                Create new assessment
+                            </Button>
+                        </AssessmentCTA>
+                    </ModalContent>
+                </Modal>
 
                 <CTABlock ref={ref}>
                     <Button

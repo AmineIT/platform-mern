@@ -52,15 +52,15 @@ const CreateAssessmentComponent = () => {
         validateOnMount: true
     })
 
+    const { handleChange, handleBlur, touched, errors, values, setFieldValue, setFieldTouched } = formik
+    const { assessmentTitle } = values
+
     useEffect(() => {
         if (questionsArray.length > 0) {
             setQuestions(questionsArray)
             setFieldValue('questions', questionsArray)
         }
-    }, [questionsArray])
-
-    const { handleChange, handleBlur, touched, errors, values, setFieldValue, setFieldTouched } = formik
-    const { assessmentTitle } = values
+    }, [questionsArray, setFieldValue])
 
     const publishAssessment = () => {
         if (values.assessmentTitle === '') {

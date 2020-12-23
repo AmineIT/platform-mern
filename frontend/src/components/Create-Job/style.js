@@ -202,8 +202,90 @@ export const AssessmentSection = styled.div`
     }
 `
 
+export const ModalContent = styled.div`
+    display: block;
+`
+
+export const ModalHeading = styled.h1`
+    ${theme.h5};
+    color: ${theme.colors.black};
+    margin-bottom: ${theme.spacing.twentyFour};
+`
+
+export const AssessmentCard = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: ${theme.spacing.thirtyTwo};
+    margin-bottom: ${theme.spacing.sixTeen};
+    background-color: ${({ brandColor }) => brandColor ? brandColor : '#ffffff'};
+    border: 1px solid ${({ brandColor }) => brandColor ? brandColor : theme.colors.lightGrey};
+    color: ${({ brandColor }) => brandColor ? '#ffffff' : '#000000'};
+    border-radius: 4px;
+    cursor: pointer;
+`
+
+export const AssessmentCheckBox = styled.div`
+    
+    & [type="radio"]:checked, [type="radio"]:not(:checked) {
+        position: absolute;
+        left: -9999px;
+    }
+
+    & [type="radio"]:checked + label, [type="radio"]:not(:checked) + label {
+        position: relative;
+        padding-left: 28px;
+        cursor: pointer;
+        line-height: 20px;
+        display: inline-block;
+        color: ${({ brandColor }) => brandColor ? '#ffffff' : '#000000'};
+    }
+
+    & [type="radio"]:checked + label:before, [type="radio"]:not(:checked) + label:before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 18px;
+        height: 18px;
+        border: 1px solid #ddd;
+        border-radius: 100%;
+        background: #fff;
+    }
+    
+    & [type="radio"]:checked + label:after, [type="radio"]:not(:checked) + label:after {
+        content: '';
+        width: 12px;
+        height: 12px;
+        background: ${({ brandColor }) => brandColor ? brandColor : theme.colors.primaryColor};
+        position: absolute;
+        top: 3px;
+        left: 3px;
+        border-radius: 100%;
+        -webkit-transition: all 0.2s ease;
+        transition: all 0.2s ease;
+    }
+
+    & [type="radio"]:not(:checked) + label:after {
+        opacity: 0;
+        -webkit-transform: scale(0);
+        transform: scale(0);
+    }
+
+    & [type="radio"]:checked + label:after {
+        opacity: 1;
+        -webkit-transform: scale(1);
+        transform: scale(1);
+    }
+`
+
+export const AssessmentCTA = styled.div`
+    display: flex;
+    align-items: center;
+`
+
 export const CTABlock = styled.div`
-    position: ${({position}) => position === 'absolute' ? 'absolute' : 'fixed'};
+    position: ${({ position }) => position === 'absolute' ? 'absolute' : 'fixed'};
     bottom: 30px;
     width: 1000px;
     height: 100px;

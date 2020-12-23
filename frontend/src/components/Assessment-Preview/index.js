@@ -21,7 +21,6 @@ import {
     RadioWrapper,
     Label
 } from './style'
-import Logo from '../../images/selfstarter-logo/selfstarter-logo.svg'
 import { RiArrowLeftLine } from 'react-icons/ri'
 import { BsInfoCircle } from 'react-icons/bs'
 

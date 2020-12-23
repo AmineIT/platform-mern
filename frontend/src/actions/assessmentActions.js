@@ -59,6 +59,7 @@ export const removeQuestion = (id) => (dispatch) => {
         payload: id
     })
 }
+
 // Remove question (Update Page)
 export const removeQuestionFromEditing = (id) => (dispatch) => {
     dispatch({

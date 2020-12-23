@@ -47,10 +47,12 @@ const JobSchema = new mongoose.Schema({
             ref: 'User'
         }
     }],
-    assessment: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Assessment'
-    }],
+    assessment: {
+        id: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Assessment'
+        }
+    },
     country: {
         type: String,
         required: true

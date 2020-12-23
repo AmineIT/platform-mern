@@ -73,7 +73,7 @@ const UserSchema = new mongoose.Schema({
     },
     brandColor: {
         type: String,
-        default: '#000000'
+        default: '#1C65E3'
     },
     notifyWhenCandidateApplies: {
         type: Boolean,
