@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import { createJob, saveJobAsDraft } from '../../actions/jobActions'
 import { fetchCompanyAssessments } from '../../actions/assessmentActions'
-import { useFormik, getIn } from 'formik'
+import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import moment from 'moment-timezone'
 import ReactQuill from 'react-quill'
@@ -131,9 +131,7 @@ const CreateJobComponent = () => {
         employmentType: Yup.string().trim().required('Please select your employment type.'),
         country: Yup.string().trim().required('Please select a country.'),
         city: Yup.string().trim().required('Please select a city.'),
-        assessment: Yup.object().shape({
-            id: Yup.string().trim().required('Please add an assessment to your job.')
-        })
+        assessment: Yup.string().trim().required('Please add an assessment to your job.')
     })
 
     const formik = useFormik({
@@ -152,9 +150,7 @@ const CreateJobComponent = () => {
             expiredAt: '',
             createdBy: user._id,
             status: '',
-            assessment: {
-                id: ''
-            }
+            assessment: ''
         },
         validationSchema,
         validateOnMount: true
@@ -171,7 +167,7 @@ const CreateJobComponent = () => {
             setFieldTouched('employmentType', true)
             setFieldTouched('country', true)
             setFieldTouched('city', true)
-            setFieldTouched('assessment.id', true)
+            setFieldTouched('assessment', true)
             return
         }
         values.status = 'published'
@@ -204,7 +200,7 @@ const CreateJobComponent = () => {
             setFieldTouched('employmentType', true)
             setFieldTouched('country', true)
             setFieldTouched('city', true)
-            setFieldTouched('assessment.id', true)
+            setFieldTouched('assessment', true)
             return
         }
         values.status = 'draft'
@@ -232,15 +228,15 @@ const CreateJobComponent = () => {
     }
 
     const selectAssessment = () => {
-        if (values.assessment.id === '') {
-            setFieldTouched('assessment.id', true)
+        if (values.assessment === '') {
+            setFieldTouched('assessment', true)
             return
         }
         setShowModal(false)
     }
 
     const handleAssessmentChange = e => {
-        setFieldValue('assessment.id', e.target.value)
+        setFieldValue('assessment', e.target.value)
         assessments.map(assessment => {
             if (assessment._id === e.target.value) {
                 setAssessmentChosen({ title: assessment.assessmentTitle, questionNumber: assessment.questions.length })
@@ -466,18 +462,14 @@ const CreateJobComponent = () => {
 
                 <AssessmentSection onClick={() => setShowModal(true)}>
                     <div>
-                        <h1>{values.assessment.id !== '' ? assessmentChosen.title : 'Add an assessment to your application'}</h1>
-                        <p>{values.assessment.id !== '' ? `${assessmentChosen.questionNumber} No. of Questions` : 'Focus on the most relevant questions to keep candidates motivated throughout the process.'}</p>
+                        <h1>{values.assessment !== '' ? assessmentChosen.title : 'Add an assessment to your application'}</h1>
+                        <p>{values.assessment !== '' ? `${assessmentChosen.questionNumber} No. of Questions` : 'Focus on the most relevant questions to keep candidates motivated throughout the process.'}</p>
                         <Button light size='small' fit='stretched'>
-                            {values.assessment.id !== '' ? 'Choose another assessment' : 'Add an assessment'}
+                            {values.assessment !== '' ? 'Choose another assessment' : 'Add an assessment'}
                         </Button>
                     </div>
                 </AssessmentSection>
-                {
-                    getIn(errors, 'assessment.id') && getIn(touched, 'assessment.id') ?
-                        <p className="help is-danger mt-1">{errors.assessment.id}</p>
-                        : null
-                }
+                {touched.assessment && errors.assessment ? <p className="help is-danger mt-1">{errors.assessment}</p> : null}
 
                 <Modal show={showModal} onClose={() => setShowModal(false)}>
                     <ModalContent>
@@ -495,7 +487,7 @@ const CreateJobComponent = () => {
                                             name="radio-group"
                                             value={assessment._id}
                                             onChange={e => handleAssessmentChange(e)}
-                                            onBlur={handleBlur('assessment.id')} />
+                                            onBlur={handleBlur('assessment')} />
                                         <label htmlFor={assessment.assessmentTitle}>{assessment.assessmentTitle} ({assessment.questions.length} Questions)</label>
                                     </AssessmentCheckBox>
                                     <AssessmentCTA>
@@ -513,11 +505,8 @@ const CreateJobComponent = () => {
                                 </AssessmentCard>
                             ))
                         }
-                        {
-                            getIn(errors, 'assessment.id') && getIn(touched, 'assessment.id') ?
-                                <p className="help is-danger mt-1">{errors.assessment.id}</p>
-                                : null
-                        }
+                        {touched.assessment && errors.assessment ? <p className="help is-danger mt-1">{errors.assessment}</p> : null}
+
                         <AssessmentCTA style={{ justifyContent: 'center', marginTop: '32px' }}>
                             <Button
                                 primary

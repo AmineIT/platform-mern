@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useHistory, useParams } from "react-router-dom"
 import { updateJob, fetchJob } from '../../actions/jobActions'
+import { fetchCompanyAssessments } from '../../actions/assessmentActions'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import moment from 'moment'
@@ -20,7 +21,12 @@ import {
     Label,
     CheckBox,
     AssessmentSection,
-    CTABlock
+    CTABlock,
+    ModalContent,
+    ModalHeading,
+    AssessmentCard,
+    AssessmentCheckBox,
+    AssessmentCTA
 } from '../Create-Job/style'
 import Button from '../Button'
 import DashboardFooter from '../Dashboard-Footer'
@@ -31,6 +37,7 @@ import { BsCalendar } from 'react-icons/bs'
 
 import 'react-quill/dist/quill.snow.css'
 import 'react-calendar/dist/Calendar.css'
+import Modal from '../Modal-Component';
 
 toast.configure();
 
@@ -42,11 +49,12 @@ const UpdateJobComponent = () => {
     const user = useSelector(state => state.auth.user)
     const companyJob = useSelector(state => state.jobs.companyJob)
     const dispatch = useDispatch()
+    const { assessments } = useSelector(state => state.assessments)
 
     const editStyle = () => {
         let doc = document.documentElement;
         let top = (window.pageYOffset || doc.scrollTop) - (doc.clientTop || 0);
-        if (top >= 1080 && Object.keys(companyJob).length !== 0) {
+        if (top >= 1080) {
             ref.current.style.position = 'absolute';
             ref.current.style.bottom = '130px';
         } else {
@@ -58,6 +66,10 @@ const UpdateJobComponent = () => {
     useEffect(() => {
         dispatch(fetchJob(id))
     }, [dispatch, id])
+
+    useEffect(() => {
+        dispatch(fetchCompanyAssessments())
+    }, [dispatch])
 
     useEffect(() => {
         window.addEventListener('scroll', editStyle)
@@ -97,6 +109,11 @@ const UpdateJobComponent = () => {
     const [isLoading, setIsLoading] = useState(false)
     const [isDraftLoading, setIsDraftLoading] = useState(false)
     const [isArchivedLoading, setIsArchivedLoading] = useState(false)
+    const [showModal, setShowModal] = useState(false)
+    const [assessmentChosen, setAssessmentChosen] = useState({
+        title: '',
+        questionNumber: ''
+    })
 
     const onDateChange = (date) => {
         const timezone = moment.tz(date, 'Etc/UTC').format()
@@ -126,20 +143,7 @@ const UpdateJobComponent = () => {
 
     const formik = useFormik({
         initialValues: {
-            jobTitle: companyJob.jobTitle || '',
-            jobDescription: companyJob.jobDescription || '',
-            jobRequirement: companyJob.jobRequirement || '',
-            minRequirement: companyJob.minRequirement || '',
-            salary: companyJob.salary || '',
-            salaryCurrency: companyJob.salaryCurrency || 'AED',
-            showSalary: companyJob.showSalary || [],
-            jobDepartment: companyJob.jobDepartment || '',
-            employmentType: companyJob.employmentType || '',
-            country: companyJob.country || '',
-            city: companyJob.city || '',
-            expiredAt: companyJob.expiredAt || '',
-            createdBy: user._id,
-            status: companyJob.status || '',
+            ...companyJob,
             jobId: id
         },
         validationSchema,
@@ -148,6 +152,13 @@ const UpdateJobComponent = () => {
     })
 
     const { handleChange, handleBlur, touched, errors, setFieldTouched, values, setFieldValue } = formik
+
+    useEffect(() => {
+        setAssessmentChosen({
+            title: assessmentChosen.title === '' && values.assessment ? values.assessment.assessmentTitle : assessmentChosen.title,
+            questionNumber: assessmentChosen.questionNumber === '' && values.assessment ? values.assessment.questions.length : assessmentChosen.questionNumber
+        })
+    }, [values.assessment])
 
     const publishJob = () => {
         if (Object.keys(errors).length > 0) {
@@ -231,6 +242,24 @@ const UpdateJobComponent = () => {
             history.push('/jobs')
         }, 2000)
     }
+
+    const selectAssessment = () => {
+        if (values.assessment === '') {
+            setFieldTouched('assessment', true)
+            return
+        }
+        setShowModal(false)
+    }
+
+    const handleAssessmentChange = e => {
+        setFieldValue('assessment', e.target.value)
+        assessments.map(assessment => {
+            if (assessment._id === e.target.value) {
+                setAssessmentChosen({ title: assessment.assessmentTitle, questionNumber: assessment.questions.length })
+            }
+        })
+    }
+    
 
     return (
         <>
@@ -343,7 +372,7 @@ const UpdateJobComponent = () => {
                                         </div>
                                     </div>
                                     <label className="checkbox mt-4">
-                                        <CheckBox onChange={handleChange('showSalary')} checked={values.showSalary && values.showSalary[0] === 'show' ? 'checked' : null} name='showSalary' type='checkbox' value='show' id='salary-ad' />
+                                        <CheckBox onChange={handleChange('showSalary')} defaultCheked={values.showSalary && values.showSalary[0] === 'show' ? 'checked' : null} name='showSalary' type='checkbox' value='show' id='salary-ad' />
                                         <Label htmlFor='salary-ad'>Show on job ad</Label>
                                     </label>
                                 </div>
@@ -459,13 +488,71 @@ const UpdateJobComponent = () => {
                             </div>
                         </FieldControl>
 
-                        <AssessmentSection>
+                        <AssessmentSection onClick={() => setShowModal(true)}>
                             <div>
-                                <h1>Add an assessment to your application</h1>
-                                <p>Focus on the most relevant questions to keep candidates motivated throughout the process.</p>
-                                <Button light size='small' fit='stretched'>Add an assessment</Button>
+                                <h1>{values.assessment !== '' ? assessmentChosen.title : 'Add an assessment to your application'}</h1>
+                                <p>{values.assessment !== '' ? `${assessmentChosen.questionNumber} No. of Questions` : 'Focus on the most relevant questions to keep candidates motivated throughout the process.'}</p>
+                                <Button light size='small' fit='stretched'>
+                                    {values.assessment ? 'Choose another assessment' : 'Add an assessment'}
+                                </Button>
                             </div>
                         </AssessmentSection>
+
+                        <Modal show={showModal} onClose={() => setShowModal(false)}>
+                            <ModalContent>
+                                <LogoContainer style={{ marginBottom: '24px' }}>
+                                    <img src={`http://localhost:5000/${user.profileImage}`} alt='Company Logo' />
+                                </LogoContainer>
+                                <ModalHeading className='modal-heading'>Choose from one of your assessments</ModalHeading>
+                                {
+                                    assessments.map(assessment => (
+                                        <AssessmentCard brandColor={user.brandColor} key={assessment._id}>
+                                            <AssessmentCheckBox brandColor={user.brandColor}>
+                                                <input
+                                                    type="radio"
+                                                    id={assessment.assessmentTitle}
+                                                    name="radio-group"
+                                                    value={assessment._id}
+                                                    onChange={e => handleAssessmentChange(e)}
+                                                    onBlur={handleBlur('assessment')} />
+                                                <label htmlFor={assessment.assessmentTitle}>{assessment.assessmentTitle} ({assessment.questions.length} Questions)</label>
+                                            </AssessmentCheckBox>
+                                            <AssessmentCTA>
+                                                <Button
+                                                    size='tiny'
+                                                    style={{ backgroundColor: user.brandColor, color: '#ffffff', border: `1px solid #ffffff` }}
+                                                    align='right'
+                                                    to={`/assessment/preview/${assessment._id}`}>Preview</Button>
+
+                                                <Button
+                                                    size='tiny'
+                                                    style={{ backgroundColor: user.brandColor, color: '#ffffff', border: `1px solid #ffffff` }}
+                                                    to={`/assessment/update/${assessment._id}`}>Edit</Button>
+                                            </AssessmentCTA>
+                                        </AssessmentCard>
+                                    ))
+                                }
+                                {touched.assessment && errors.assessment ? <p className="help is-danger mt-1">{errors.assessment}</p> : null}
+
+                                <AssessmentCTA style={{ justifyContent: 'center', marginTop: '32px' }}>
+                                    <Button
+                                        primary
+                                        size='small'
+                                        fit='stretched'
+                                        onClick={selectAssessment}
+                                        align='right'>
+                                        Select assessment
+                            </Button>
+                                    <Button
+                                        outline
+                                        size='small'
+                                        fit='stretched'
+                                        to='/assessment/create'>
+                                        Create new assessment
+                            </Button>
+                                </AssessmentCTA>
+                            </ModalContent>
+                        </Modal>
 
                         <CTABlock ref={ref}>
                             {

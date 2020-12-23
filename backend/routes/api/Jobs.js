@@ -56,9 +56,9 @@ router.post('/fetch-company-jobs', passport.authenticate('jwt', { session: false
 // @route   GET /jobs/fetch-job/:id
 // @access  Private
 router.get('/fetch-job/:id', passport.authenticate('jwt', { session: false }), (res, req) => {
-    Job.findById(res.params.id).populate('candidates.user').exec((error, job) => {
+    Job.findById(res.params.id).populate('candidates.user').populate('assessment').exec((error, job) => {
         if (error) {
-            throw new Error('Error has occured!')
+            throw new Error(error)
         }
         else {
             req.json(job)
@@ -86,7 +86,8 @@ router.put('/update-job/:id', passport.authenticate('jwt', { session: false }), 
         expiredAt,
         createdBy,
         status,
-        candidates
+        candidates,
+        assessment
     } = res.body
 
     Job.findById(res.params.id, null, (error, job) => {
@@ -109,6 +110,7 @@ router.put('/update-job/:id', passport.authenticate('jwt', { session: false }), 
             job.createdBy = createdBy
             job.status = status
             job.candidates = candidates
+            job.assessment = assessment
             job.createdAt = Date.now()
 
             job.save().then(job => {
