@@ -67,16 +67,10 @@ const JobSchema = new mongoose.Schema({
         type: String,
         default: 'draft'
     },
-    // applicationStatus: [{
-    //     status: {
-    //         type: String,
-    //         default: ''
-    //     },
-    //     candidate: {
-    //         type: mongoose.Schema.Types.ObjectId,
-    //         ref: 'User'
-    //     }
-    // }],
+    feedbackSent: {
+        type: Boolean,
+        default: false
+    },
     createdAt: {
         type: Date,
         default: Date.now

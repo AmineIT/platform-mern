@@ -34,6 +34,7 @@
     "react-dom": "^16.14.0",
     "react-dropdown": "^1.9.0",
     "react-dropzone": "^11.2.3",
+    "react-html-parser": "^2.0.2",
     "react-icons": "^3.11.0",
     "react-image-crop": "^8.6.6",
     "react-lottie": "^1.2.3",

@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { fetchCompanyAssessments } from '../actions/assessmentActions'
+import { userAuth } from '../actions/authActions'
 
 import DashboardLayout from '../components/Dashboard-Layout'
 import CompanyAssessmentComponent from '../components/Company-Assessment'
@@ -13,6 +14,10 @@ const CompanyAssessmentsPage = () => {
 
     useEffect(() => {
         dispatch(fetchCompanyAssessments())
+    }, [dispatch])
+
+    useEffect(() => {
+        dispatch(userAuth())
     }, [dispatch])
 
     return (

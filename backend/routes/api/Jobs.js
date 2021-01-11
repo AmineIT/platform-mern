@@ -3,7 +3,10 @@ const router = express.Router();
 const passport = require('passport');
 const passportConfig = require('../../config/passport');
 const Joi = require('joi');
+const sgMail = require('@sendgrid/mail');
 const Job = require('../../models/Job');
+
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 // @desc    Create new job
 // @route   POST /jobs/create-job/
@@ -170,7 +173,7 @@ router.post('/archive-job/:id', passport.authenticate('jwt', { session: false })
 })
 
 // @desc    Update Application Status
-// @route   PUT /users/update-kanbanstatus/:id
+// @route   PUT /jobs/update-application-status/:id
 // @access  Private
 router.put('/update-application-status/:id', passport.authenticate('jwt', { session: false }), (res, req) => {
 
@@ -189,10 +192,108 @@ router.put('/update-application-status/:id', passport.authenticate('jwt', { sess
                 }).catch(error => {
                     throw new Error(error)
                 })
-            } else {
-                req.status(400).json({ message: 'nothing found' })
             }
         })
+    })
+
+})
+
+// @desc    Send Feedback of an Application
+// @route   post /jobs/send-feedback/:id
+// @access  Private
+router.post('/send-feedback', passport.authenticate('jwt', { session: false }), (req, res) => {
+
+    Job.aggregate([
+        { $match: { status: 'archived', feedbackSent: false } },
+        {
+            $project: {
+                "feedbackSent": "$feedbackSent",
+                "jobTitle": '$jobTitle',
+                "createdBy": '$createdBy',
+                "companyName": "$companyName",
+                candidates: {
+                    $filter: {
+                        input: '$candidates',
+                        as: 'data',
+                        cond: { $eq: ['$$data.status', 'Applied'] }
+                    }
+                }
+            },
+        },
+        { $unwind: "$candidates" },
+        { $lookup: { from: 'users', localField: 'candidates.user', foreignField: '_id', as: 'talents' } },
+        { $unwind: "$talents" },
+        { $unwind: "$createdBy" },
+        { $lookup: { from: 'users', localField: 'createdBy', foreignField: '_id', as: 'employer' } },
+        { $unwind: "$employer" },
+        {
+            $group: {
+                _id: '$_id',
+                createdBy: { '$mergeObjects': '$employer' },
+                feedbackSent: { '$first': '$feedbackSent' },
+                jobTitle: { '$first': '$jobTitle' },
+                candidates: { $push: '$talents' }
+            }
+        }
+    ]).exec((error, job) => {
+        if (error) {
+            throw new Error(error)
+        } else {
+            if (job.length > 0) {
+                job.map(data => {
+
+                    const { _id, candidates, jobTitle, createdBy: { feedbackMessage: { subjectLine, messageBody }, companyName } } = data
+                    let personalizations = []
+
+                    for (let index in candidates) {
+                        personalizations[index] = candidates[index]
+                    }
+
+                    for (let index in personalizations) {
+                        personalizations[index] = {
+                            to: personalizations[index].email,
+                            from: 'support@selfstarter.app',
+                            template_id: 'd-ea1ae551aa0b4e26be32cf1f2889b2a4',
+                            dynamic_template_data: {
+                                jobTitle,
+                                subjectLine,
+                                companyName,
+                                candidateName: personalizations[index].fullName
+                            }
+                        }
+                    }
+
+                    // Send the feedback with the personalized msg object
+                    personalizations.map(msg => {
+                        sgMail.send(msg).then(() => {
+                            console.log('Feedback was sent!!!!')
+                        }).catch(error => {
+                            console.log(error)
+                        })
+                    })
+
+                    // Update the feedbackSent property in the jobs document
+                    Job.find({ _id: { $in: _id } }).exec((error, jobs) => {
+                        if (error) {
+                            throw new Error(error)
+                        } else {
+                            jobs.map(job => {
+                                job.feedbackSent = true
+                                job.save().then(result => {
+                                    res.json(result)
+                                }).catch(error => {
+                                    if (error) {
+                                        throw new Error(error)
+                                    }
+                                })
+                            })
+                        }
+                    })
+                })
+            } else {
+                res.json([])
+            }
+        }
     })
 
 })

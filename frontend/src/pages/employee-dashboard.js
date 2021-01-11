@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { userAuth, applyJob } from '../actions/authActions'
 import { fetchAllJobs } from '../actions/jobActions'
+import ReactHtmlParser from 'react-html-parser'
 import Button from '../components/Button'
 
 const EmployeeDashboardPage = () => {
@@ -35,7 +36,7 @@ const EmployeeDashboardPage = () => {
                             <div className="content">
                                 <h3>{job.jobTitle}</h3>
                                 <div>
-                                    {job.jobDescription}
+                                    {ReactHtmlParser(job.jobDescription)}
                                 </div>
                                 {
                                     applied.includes(job._id) ? (

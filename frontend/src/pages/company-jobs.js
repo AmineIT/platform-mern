@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { getCompanyJobs } from '../actions/jobActions'
+import { userAuth } from '../actions/authActions'
 
 import DashboardLayout from '../components/Dashboard-Layout'
 import CompanyJobs from '../components/Company-Jobs'
@@ -15,6 +16,10 @@ const CompanyJobsPage = () => {
     useEffect(() => {
         dispatch(getCompanyJobs(user._id))
     }, [dispatch, user._id])
+
+    useEffect(() => {
+        dispatch(userAuth())
+    }, [dispatch])
 
     return (
         <DashboardLayout active from='jobs'>
