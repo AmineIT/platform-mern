@@ -1,4 +1,4 @@
-# SelfStarter Platform Mern
+# Assessment Platform Mern
 Selfstarter Platform Using MERN Stack
 
 ## Available Scripts
